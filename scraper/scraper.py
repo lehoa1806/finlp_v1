@@ -22,10 +22,10 @@ class Scraper:
     def __init__(
         self,
         browser: WebDriver = None,
-        headless: bool = True,
         **kwargs,
     ) -> None:
-        self.browser = browser or self.get_browser(headless)
+        self.headless = kwargs.get('headless', Config().headless)
+        self.browser = browser or self.get_browser(self.headless)
         self.timeout = kwargs.get('timeout') or 60
         self.browser_type = kwargs.get('browser_type') or Config().browser_type
 

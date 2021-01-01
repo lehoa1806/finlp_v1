@@ -6,7 +6,7 @@ from common.config import Config
 
 class Browser:
     def __init__(self, options=None, capabilities=None, **kwargs):
-        headless = kwargs.get('headless') or Config().headless
+        headless = kwargs.get('headless', Config().headless)
         options = options or self.get_options(headless)
         self.browser = self.get_browser(options=options,
                                         capabilities=capabilities)

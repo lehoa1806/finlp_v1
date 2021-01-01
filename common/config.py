@@ -11,3 +11,7 @@ class Config(metaclass=Singleton):
     @property
     def browser_type(self) -> BrowserType:
         return BrowserType.CHROME
+
+    @property
+    def cipher_key(self) -> str:
+        return ''

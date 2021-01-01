@@ -2,10 +2,8 @@ import base64
 import logging
 from typing import Union
 
-from .singleton import Singleton
 
-
-class CipherHelper(metaclass=Singleton):
+class CipherHelper:
     def __init__(self, secret_key: str) -> None:
         """
         Util tool to encrypt, decrypt sensitive data

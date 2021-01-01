@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 import boto3
 from botocore.config import Config
 
-from common.setting import AWS_REGION
+from common.common import AWS_REGION
 
 from .table import Table
 
@@ -44,5 +44,5 @@ class Database:
         return Database(boto_client=dynamo_client)
 
     # Load table:
-    def load_xxxxyyyy_table(self) -> Table:
-        return self.load_table(table_name='fingerprinting_identity')
+    def load_configuration_table(self) -> Table:
+        return self.load_table(table_name='global_configuration')

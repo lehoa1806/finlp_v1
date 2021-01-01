@@ -1,12 +1,12 @@
 
 from selenium.webdriver.remote.webdriver import WebDriver
 
-from common.config import Config
+from common.setting import Setting
 
 
 class Browser:
     def __init__(self, options=None, capabilities=None, **kwargs):
-        headless = kwargs.get('headless', Config().headless)
+        headless = kwargs.get('headless', Setting().headless)
         options = options or self.get_options(headless)
         self.browser = self.get_browser(options=options,
                                         capabilities=capabilities)

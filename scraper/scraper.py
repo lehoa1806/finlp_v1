@@ -6,7 +6,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
-from common.config import Config
+from common.setting import Setting
 from scraper.drivers.chrome import Chrome
 from scraper.drivers.firefox import Firefox
 
@@ -24,10 +24,12 @@ class Scraper:
         browser: WebDriver = None,
         **kwargs,
     ) -> None:
-        self.headless = kwargs.get('headless', Config().headless)
+        self.headless = kwargs.get('headless', Setting().headless)
         self.browser = browser or self.get_browser(self.headless)
         self.timeout = kwargs.get('timeout') or 60
-        self.browser_type = kwargs.get('browser_type') or Config().browser_type
+        self.browser_type = (
+            kwargs.get('browser_type') or Setting().browser_type
+        )
 
     def __del__(self):
         if self.browser:
@@ -116,7 +118,9 @@ class Scraper:
     def find_elements_by_xpath(self, xpath: str) -> List[WebElement]:
         """
         Find multiple elements by their xpath.
-          element = self.find_elements_by_xpath("//div[contains(@class, 'foo')]")
+          element = self.find_elements_by_xpath(
+              "//div[contains(@class, 'foo')]"
+          )
         :param xpath: The xpath locator of the element
         :return: list of WebElements
         """

@@ -56,3 +56,12 @@ class ConfigDB:
     @cached_property
     def browser_type(self):
         return self.scraper.get('configs', {}).get('browser_type')
+
+    ########
+    @cached_property
+    def google_credentials_path(self) -> str:
+        return self.scraper.get('configs', {}).get('google_credentials_path')
+
+    @cached_property
+    def google_token_path(self) -> str:
+        return self.scraper.get('configs', {}).get('google_token_path')

@@ -61,3 +61,12 @@ class Env:
     @cached_property
     def postgresql_creds_code(self):
         return self.get_environment_variable('POSTGRESQL_CREDS_CODE')
+
+    ########
+    @cached_property
+    def google_credentials_path(self) -> str:
+        return self.get_environment_variable('GOOGLE_CREDENTIALS_PATH')
+
+    @cached_property
+    def google_token_path(self) -> str:
+        return self.get_environment_variable('GOOGLE_TOKEN_PATH')

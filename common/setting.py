@@ -84,3 +84,12 @@ class Setting(metaclass=Singleton):
     @cached_property
     def postgresql_database(self) -> Tuple:
         return self.get_attribute('postgresql_database')
+
+    ####
+    @cached_property
+    def google_credentials_path(self) -> str:
+        return self.get_attribute('google_credentials_path')
+
+    @cached_property
+    def google_token_path(self) -> str:
+        return self.get_attribute('google_token_path')

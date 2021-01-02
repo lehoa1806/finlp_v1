@@ -2,10 +2,10 @@ import logging
 
 from common.argument_parser import ArgumentParser
 from workflow.consumer import Consumer
+from workflow.job import Job
 from workflow.pipeline import Pipeline
 from workflow.serial_producer import SerialProducer
 from workflow.stage import Stage
-from workflow.worker import Worker
 
 
 def get_stream(x: int = 10):
@@ -31,11 +31,11 @@ class SimpleConsumer(Consumer):
         logging.info(item.get('sum'))
 
 
-class SimpleWorker(Worker):
+class SimpleJob(Job):
     def parse_args(self):
         parser = ArgumentParser()
         parser.add_argument(
-           '--length',
+           'length',
            type=int,
            required=True,
            help='Length of the testing stream',
@@ -58,12 +58,6 @@ class SimpleWorker(Worker):
 
 
 if __name__ == "__main__":
-    # Step by step
-    # stream = SerialProducer(get_stream()).stream
-    # result = SimpleStage().run(stream)
-    # SimpleConsumer().consume(result)
-    # 1 5 9 13 17 21 25 29 33 37
-
     # Call the worker
-    SimpleWorker().main()
+    SimpleJob().main()
     # 1 5 9 13 17 21 25 29 33 37

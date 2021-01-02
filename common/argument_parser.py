@@ -18,12 +18,20 @@ class ArgumentParser(argparse.ArgumentParser):
         )
         args = self.parse_args(namespace=argparse.Namespace())
         # Set log
+        fmt = '%(asctime)s.%(msecs)03d %(name)s [%(levelname)s]: %(message)s'
         logging.basicConfig(
-            format='%(asctime)s.%(msecs)03d %(name)s [%(levelname)s]: %(message)s',
+            format=fmt,
             datefmt='%Y-%m-%d %I:%M:%S',
             level=logging.DEBUG if args.debug else logging.INFO,
         )
         return args
+
+    def add_argument(self, *args, **kwargs):
+        if args and isinstance(args[0], str) and not args[0].startswith('--'):
+            args_list = list(args)
+            args_list[0] = f'--{ args_list[0]}'
+            args = tuple(args_list)
+        super().add_argument(*args, **kwargs)
 
     def get_local_date(
         self,

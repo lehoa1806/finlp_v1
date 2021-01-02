@@ -1,6 +1,6 @@
 from typing import Dict
 
-from aws.dynamodb.database import Database
+from aws_apis.dynamodb.database import Database
 from tools.functools import cached_property
 
 

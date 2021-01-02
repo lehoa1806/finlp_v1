@@ -2,7 +2,7 @@ from configparser import ConfigParser, ExtendedInterpolation
 from typing import Dict
 
 from common.common import GLOBAL_ENV
-from tools.functools import cached_property
+from common.functools import cached_property
 
 
 class ConfigFile:

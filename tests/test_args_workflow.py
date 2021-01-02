@@ -1,6 +1,6 @@
 import logging
 
-from tools.argument_parser import ArgumentParser
+from common.argument_parser import ArgumentParser
 from workflow.consumer import Consumer
 from workflow.pipeline import Pipeline
 from workflow.serial_producer import SerialProducer

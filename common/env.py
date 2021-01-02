@@ -1,6 +1,6 @@
 import os
 
-from tools.functools import cached_property
+from common.functools import cached_property
 
 
 class Env:

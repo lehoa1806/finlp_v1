@@ -24,10 +24,22 @@ def is_stale(element: WebElement) -> bool:
     """
     try:
         _ = element.size
-        logging.error(element.size)
         return False
     except StaleElementReferenceException:
         return True
+
+
+@contextmanager
+def wait_for_change(element: WebElement):
+    """
+    A context to wait for the element to be changed
+    :param element: WebDriver
+    """
+    yield
+    wait_time = 60
+    while not is_stale(element) and wait_time > 0:
+        time.sleep(1)
+        wait_time -= 1
 
 
 @contextmanager

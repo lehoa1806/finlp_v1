@@ -24,6 +24,8 @@ class Chrome(Browser):
             options.add_argument('--remote-debugging-port=9222')
         options.add_argument('--dns-prefetch-disable')
         options.add_argument('--window-size=1920,1080')
+        options.add_experimental_option(
+            'excludeSwitches', ['enable-automation'])
         return options
 
     def get_browser(self, options, capabilities) -> WebDriver:

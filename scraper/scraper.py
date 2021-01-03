@@ -280,8 +280,17 @@ class Scraper:
     def wait_for_css_visibility(self, css_selector: str) -> WebElement:
         """
         Find an element and wait for it to be visible using its css_selector.
-          element = self.wait_for_visibility(css_selector)
+          element = self.wait_for_css_visibility(css_selector)
         :param css_selector: CSS selector string, ex: 'a.nav#home'
         :return: WebElement
         """
         return self.wait_for_visibility(CSSLocator(css_selector))
+
+    def wait_for_class_visibility(self, name: str) -> WebElement:
+        """
+        Find an element and wait for it to be visible using its css_selector.
+          element = self.wait_for_class_visibility(name)
+        :param name: The class name of the element, ex: 'foo'
+        :return: WebElement
+        """
+        return self.wait_for_visibility(ClassNameLocator(name))

@@ -30,38 +30,43 @@ class ConfigDB:
         return self.scraper.get('secret_keys', {}).get('i3investor_creds_code')
 
     @cached_property
-    def slack_token_code(self):
+    def slack_token_code(self) -> str:
         return self.scraper.get('secret_keys', {}).get('slack_token_code')
 
     @cached_property
-    def postgresql_creds_code(self):
+    def postgresql_creds_code(self) -> str:
         return self.scraper.get('secret_keys', {}).get('postgresql_creds_code')
 
     @cached_property
-    def postgresql_host(self):
+    def postgresql_host(self) -> str:
         return self.scraper.get('configs', {}).get('postgresql_host')
 
     @cached_property
-    def postgresql_port(self):
-        return self.scraper.get('configs', {}).get('postgresql_port')
+    def postgresql_port(self) -> int:
+        return int(self.scraper.get('configs', {}).get('postgresql_port'))
 
     @cached_property
-    def postgresql_database(self):
+    def postgresql_database(self) -> str:
         return self.scraper.get('configs', {}).get('postgresql_database')
 
     @cached_property
-    def headless(self):
-        return self.scraper.get('configs', {}).get('headless')
+    def headless(self) -> bool:
+        headless = self.scraper.get('configs', {}).get('headless')
+        if isinstance(headless, bool):
+            return headless
+        elif isinstance(headless, str):
+            return headless in {'True', 'true'}
+        return bool(headless)
 
     @cached_property
-    def browser_type(self):
+    def browser_type(self) -> str:
         return self.scraper.get('configs', {}).get('browser_type')
 
     ########
     @cached_property
     def google_credentials_path(self) -> str:
-        return self.scraper.get('configs', {}).get('google_credentials_path')
+        return str(self.scraper.get('configs', {}).get('google_credentials_path'))
 
     @cached_property
     def google_token_path(self) -> str:
-        return self.scraper.get('configs', {}).get('google_token_path')
+        return str(self.scraper.get('configs', {}).get('google_token_path'))

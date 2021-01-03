@@ -37,31 +37,36 @@ class ConfigFile:
         return self.scraper.get('i3investor_creds_code')
 
     @cached_property
-    def slack_token_code(self):
+    def slack_token_code(self) -> str:
         return self.scraper.get('slack_token_code')
 
     @cached_property
-    def postgresql_creds_code(self):
+    def postgresql_creds_code(self) -> str:
         return self.scraper.get('postgresql_creds_code')
 
     @cached_property
-    def postgresql_host(self):
+    def postgresql_host(self) -> str:
         return self.scraper.get('postgresql_host')
 
     @cached_property
-    def postgresql_port(self):
-        return self.scraper.get('postgresql_port')
+    def postgresql_port(self) -> int:
+        return int(self.scraper.get('postgresql_port'))
 
     @cached_property
-    def postgresql_database(self):
+    def postgresql_database(self) -> str:
         return self.scraper.get('postgresql_database')
 
     @cached_property
-    def headless(self):
-        return self.scraper.get('headless')
+    def headless(self) -> bool:
+        headless = self.scraper.get('headless')
+        if isinstance(headless, bool):
+            return headless
+        elif isinstance(headless, str):
+            return headless in {'True', 'true'}
+        return bool(headless)
 
     @cached_property
-    def browser_type(self):
+    def browser_type(self) -> str:
         return self.scraper.get('browser_type')
 
     ########

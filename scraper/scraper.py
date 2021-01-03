@@ -54,14 +54,18 @@ class Scraper:
             return Firefox(headless=headless).browser
 
     @do_and_sleep
-    def short_sleep(self, long: bool = False) -> None:
+    def short_sleep(self) -> None:
         pass
 
-    @do_and_sleep(long=True)
-    def long_sleep(self, long: bool = False) -> None:
+    @do_and_sleep(level=2)
+    def long_sleep(self) -> None:
         pass
 
-    @do_and_sleep(long=True)
+    @do_and_sleep(level=4)
+    def deep_sleep(self) -> None:
+        pass
+
+    @do_and_sleep(level=1)
     def load_url(self, url: str) -> None:
         logging.info(f'Start loading the page from URL: {url}')
         with wait_for_page_load(browser=self.browser):

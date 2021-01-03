@@ -44,20 +44,20 @@ def wait_for_page_load(browser: WebDriver):
         wait_time -= 1
 
 
-def do_and_sleep(func=None, *, long: bool = False):
+def do_and_sleep(func=None, *, level: int = 0):
     """
     A decorator to perform a sleep after executing a function
     :param func: Function to be decorated
-    :param long: bool
+    :param level: int
     """
     if func is None:
-        return partial(do_and_sleep, long=long)
+        return partial(do_and_sleep, level=level)
 
     @functools.wraps(func)
     def wrapper_do_and_sleep(*args, **kwargs):
         value = func(*args, **kwargs)
         sort_delay = random.randint(1, 9)
-        long_delay = random.randint(2, 4) * int(long)
+        long_delay = random.randint(2, 4) * level
         delay = 0.1 * sort_delay + long_delay
         logging.info('Sleep in {} seconds'.format(delay))
         time.sleep(delay)

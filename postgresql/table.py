@@ -48,7 +48,7 @@ class Table:
         logging.info(f'Inserting {len(items)} records to {self.name}.')
         command = (
             f'INSERT INTO {self.name} ({columns_to_insert}) '
-            f'VALUES {values_to_insert}'
+            f'VALUES {values_to_insert} ON CONFLICT DO NOTHING'
         )
         self.connection.execute(command)
 
@@ -66,6 +66,18 @@ class Table:
                 break
             records_to_insert.append(record_to_insert)
         self.batch_insert(records_to_insert)
+
+    def insert_each(self, batch_size: int = 100) -> Generator:
+        batch_generator = None
+        while True:
+            if batch_generator is None:
+                batch_generator = self.batch_insert_generator(batch_size)
+                batch_generator.send(None)
+            record_to_delete = yield
+            try:
+                batch_generator.send(record_to_delete)
+            except StopIteration:
+                batch_generator = None
 
     def batch_delete(self, items: List[Dict]) -> None:
         """
@@ -112,23 +124,14 @@ class Table:
             records_to_delete.append(record_to_delete)
         self.batch_delete(records_to_delete)
 
-    @classmethod
-    def send_record_to_batch(cls, generator: Generator) -> Generator:
+    def delete_each(self, batch_size: int = 100) -> Generator:
         batch_generator = None
         while True:
             if batch_generator is None:
-                batch_generator = generator
+                batch_generator = self.batch_delete_generator(batch_size)
                 batch_generator.send(None)
             record_to_delete = yield
             try:
                 batch_generator.send(record_to_delete)
             except StopIteration:
                 batch_generator = None
-
-    def insert_each(self, batch_size: int = 100) -> Generator:
-        generator = self.batch_insert_generator(batch_size)
-        return self.send_record_to_batch(generator)
-
-    def delete_each(self, batch_size: int = 100) -> Generator:
-        generator = self.batch_delete_generator(batch_size)
-        return self.send_record_to_batch(generator)

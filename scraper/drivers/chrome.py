@@ -13,12 +13,12 @@ class Chrome(Browser):
         **kwargs,
     ):
         capabilities = capabilities or DesiredCapabilities.CHROME
-        super().__init__(options, capabilities, **kwargs)
+        super().__init__(options=options, capabilities=capabilities, **kwargs)
 
     def get_options(self, headless: False) -> Options:
         options = Options()
         if headless:
-            options.add_argument('-headless')
+            options.add_argument('--headless')
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument('--remote-debugging-port=9222')
@@ -27,5 +27,5 @@ class Chrome(Browser):
         return options
 
     def get_browser(self, options, capabilities) -> WebDriver:
-        return WebDriver(chrome_options=options,
+        return WebDriver(options=options,
                          desired_capabilities=capabilities)

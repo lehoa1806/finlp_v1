@@ -17,7 +17,7 @@ class PostgresBatchInsert(Consumer):
     def setup(self, item: Dict) -> None:
         database = Database.load_default_database()
         table = database.load_table(self.table_name)
-        self.bulk_insert = table.delete_each(self.batch_size)
+        self.bulk_insert = table.insert_each(self.batch_size)
         self.bulk_insert.send(None)
 
     def process(self, item: Dict) -> None:

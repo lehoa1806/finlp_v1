@@ -25,14 +25,14 @@ class Scraper:
         **kwargs,
     ) -> None:
         self.headless = kwargs.get('headless', Setting().headless)
-        self.browser = browser or self.get_browser(self.headless)
-        self.timeout = kwargs.get('timeout') or 60
         self.browser_type = (
             kwargs.get('browser_type') or Setting().browser_type
         )
+        self.browser = browser or self.get_browser(self.headless)
+        self.timeout = kwargs.get('timeout') or 60
 
     def __del__(self):
-        if self.browser:
+        if hasattr(self, 'browser') and self.browser:
             self.browser.close()
             self.browser = None
 
@@ -40,7 +40,7 @@ class Scraper:
         return self
 
     def __exit__(self, exc_type, exc_value, tb):
-        if self.browser:
+        if hasattr(self, 'browser') and self.browser:
             self.browser.quit()
             self.browser = None
 
@@ -66,7 +66,7 @@ class Scraper:
         logging.info(f'Start loading the page from URL: {url}')
         with wait_for_page_load(browser=self.browser):
             self.browser.get(url)
-            logging.info(f'Page was loaded: {url}')
+        logging.info(f'Page was loaded: {url}')
 
     def find_element(self, locator: Tuple) -> WebElement:
         """
@@ -250,7 +250,7 @@ class Scraper:
         :return: WebElement
         """
         return WebDriverWait(self.browser, self.timeout).until(
-            ec.presence_of_element_located(*locator))
+            ec.presence_of_element_located(locator))
 
     def wait_for_visibility(self, locator: Tuple) -> WebElement:
         """
@@ -262,14 +262,22 @@ class Scraper:
         :return: WebElement
         """
         return WebDriverWait(self.browser, self.timeout).until(
-            ec.visibility_of_element_located(*locator))
+            ec.visibility_of_element_located(locator))
 
     def wait_for_css_presence(self, css_selector: str) -> WebElement:
         """
-        Find an element and wait for it to be present using its locator (a
-        tuple of (By, Path)).
+        Find an element and wait for it to be present using its css_selector.
           element = self.wait_for_css_presence(css_selector)
         :param css_selector: CSS selector string, ex: 'a.nav#home'
         :return: WebElement
         """
-        return self.wait_for_presence(*CSSLocator(css_selector))
+        return self.wait_for_presence(CSSLocator(css_selector))
+
+    def wait_for_css_visibility(self, css_selector: str) -> WebElement:
+        """
+        Find an element and wait for it to be visible using its css_selector.
+          element = self.wait_for_visibility(css_selector)
+        :param css_selector: CSS selector string, ex: 'a.nav#home'
+        :return: WebElement
+        """
+        return self.wait_for_visibility(CSSLocator(css_selector))

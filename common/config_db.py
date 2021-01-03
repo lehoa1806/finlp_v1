@@ -2,6 +2,7 @@ from typing import Dict
 
 from aws_apis.dynamodb.database import Database
 from common.functools import cached_property
+from scraper.common import BrowserType
 
 
 class ConfigDB:
@@ -59,8 +60,9 @@ class ConfigDB:
         return bool(headless)
 
     @cached_property
-    def browser_type(self) -> str:
-        return self.scraper.get('configs', {}).get('browser_type')
+    def browser_type(self) -> BrowserType:
+        return BrowserType(
+            self.scraper.get('configs', {}).get('browser_type', 'Chrome'))
 
     ########
     @cached_property

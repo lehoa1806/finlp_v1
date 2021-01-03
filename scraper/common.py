@@ -24,6 +24,7 @@ def is_stale(element: WebElement) -> bool:
     """
     try:
         _ = element.size
+        logging.error(element.size)
         return False
     except StaleElementReferenceException:
         return True
@@ -36,11 +37,11 @@ def wait_for_page_load(browser: WebDriver):
     :param browser: WebDriver
     """
     old_html = browser.find_element_by_tag_name('html')
+    yield
     wait_time = 60
-    while is_stale(old_html) or wait_time > 0:
+    while not is_stale(old_html) and wait_time > 0:
         time.sleep(1)
         wait_time -= 1
-    yield
 
 
 def do_and_sleep(func=None, *, long: bool = False):

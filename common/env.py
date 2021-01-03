@@ -1,6 +1,7 @@
 import os
 
 from common.functools import cached_property
+from scraper.common import BrowserType
 
 
 class Env:
@@ -40,11 +41,12 @@ class Env:
         return headless in {'True', 'true'}
 
     @cached_property
-    def browser_type(self) -> str:
+    def browser_type(self) -> BrowserType:
         """
         SCRAPER_BROWSER_TYPE: CHROME or FIREFOX
         """
-        return self.get_environment_variable('SCRAPER_BROWSER_TYPE')
+        return BrowserType(
+            self.get_environment_variable('SCRAPER_BROWSER_TYPE', 'Chrome'))
 
     # PostgreSQL
     @cached_property

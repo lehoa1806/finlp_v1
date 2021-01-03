@@ -11,19 +11,6 @@ class Browser:
         self.browser = self.get_browser(options=options,
                                         capabilities=capabilities)
 
-    def __del__(self):
-        if self.browser:
-            self.browser.close()
-            self.browser = None
-
-    def __enter__(self):
-        return self.browser
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if self.browser:
-            self.browser.quit()
-            self.browser = None
-
     def get_options(self, headless):
         raise NotImplementedError
 

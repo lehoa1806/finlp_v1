@@ -25,19 +25,20 @@ class Setting(metaclass=Singleton):
                 return attr
         return None
 
-    def decrypt(self, encrypted: str, default=None) -> Any:
+    def decrypt_json(self, encrypted: str, default=None) -> Any:
         try:
-            creds_json = self.cipher_helper.decrypt(encrypted)
-            creds = json.loads(creds_json)
+            decrypted = self.cipher_helper.decrypt(encrypted)
+            loaded = json.loads(decrypted)
+            data = type(default)(loaded) if default is not None else loaded
         except (json.decoder.JSONDecodeError, TypeError):
-            creds = default
-        return creds if isinstance(creds, type(default)) else default
+            data = default
+        return data if isinstance(data, type(default)) else default
 
     def parse_credentials(self, encrypted: str) -> Tuple:
         """
         SCRAPER_CREDENTIALS: '(username, password)'
         """
-        return self.decrypt(encrypted, tuple())
+        return self.decrypt_json(encrypted, tuple())
 
     @cached_property
     def cipher_key(self) -> str:
@@ -69,20 +70,20 @@ class Setting(metaclass=Singleton):
         return self.parse_credentials(encrypted)
 
     @cached_property
-    def slack_token(self) -> Tuple:
+    def slack_token(self) -> str:
         encrypted = self.get_attribute('slack_token_code')
-        return self.decrypt(encrypted)
+        return self.decrypt_json(encrypted, str)
 
     @cached_property
-    def postgresql_host(self) -> Tuple:
+    def postgresql_host(self) -> str:
         return self.get_attribute('postgresql_host')
 
     @cached_property
-    def postgresql_port(self) -> Tuple:
+    def postgresql_port(self) -> int:
         return self.get_attribute('postgresql_port')
 
     @cached_property
-    def postgresql_database(self) -> Tuple:
+    def postgresql_database(self) -> str:
         return self.get_attribute('postgresql_database')
 
     ####

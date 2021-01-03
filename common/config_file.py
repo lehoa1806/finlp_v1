@@ -3,6 +3,7 @@ from typing import Dict
 
 from common.common import GLOBAL_ENV
 from common.functools import cached_property
+from scraper.common import BrowserType
 
 
 class ConfigFile:
@@ -66,8 +67,8 @@ class ConfigFile:
         return bool(headless)
 
     @cached_property
-    def browser_type(self) -> str:
-        return self.scraper.get('browser_type')
+    def browser_type(self) -> BrowserType:
+        return BrowserType(self.scraper.get('browser_type', 'Chrome'))
 
     ########
     @cached_property

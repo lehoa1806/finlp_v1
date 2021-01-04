@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from aws_apis.dynamodb.database import Database
 from common.functools import cached_property
@@ -16,6 +16,8 @@ class ConfigDB:
             partition_key='scraper',
             attributes_to_get=['configs', 'secret_keys']
         )
+        print('ConfigDB')
+        print(config)
         return config
 
     @cached_property
@@ -44,20 +46,20 @@ class ConfigDB:
 
     @cached_property
     def postgresql_port(self) -> int:
-        return int(self.scraper.get('configs', {}).get('postgresql_port'))
+        return self.scraper.get('configs', {}).get('postgresql_port')
 
     @cached_property
     def postgresql_database(self) -> str:
         return self.scraper.get('configs', {}).get('postgresql_database')
 
     @cached_property
-    def headless(self) -> bool:
+    def headless(self) -> Optional[bool]:
         headless = self.scraper.get('configs', {}).get('headless')
         if isinstance(headless, bool):
             return headless
         elif isinstance(headless, str):
             return headless in {'True', 'true'}
-        return bool(headless)
+        return headless
 
     @cached_property
     def browser_type(self) -> BrowserType:
@@ -67,8 +69,16 @@ class ConfigDB:
     ########
     @cached_property
     def google_credentials_path(self) -> str:
-        return str(self.scraper.get('configs', {}).get('google_credentials_path'))
+        return self.scraper.get('configs', {}).get('google_credentials_path')
 
     @cached_property
     def google_token_path(self) -> str:
-        return str(self.scraper.get('configs', {}).get('google_token_path'))
+        return self.scraper.get('configs', {}).get('google_token_path')
+
+    @cached_property
+    def email_receiver(self) -> str:
+        return self.scraper.get('configs', {}).get('email_receiver')
+
+    @cached_property
+    def email_sender(self) -> str:
+        return self.scraper.get('configs', {}).get('email_sender')

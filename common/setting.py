@@ -81,7 +81,7 @@ class Setting(metaclass=Singleton):
 
     @cached_property
     def postgresql_port(self) -> int:
-        return self.get_attribute('postgresql_port')
+        return int(self.get_attribute('postgresql_port'))
 
     @cached_property
     def postgresql_database(self) -> str:
@@ -95,3 +95,11 @@ class Setting(metaclass=Singleton):
     @cached_property
     def google_token_path(self) -> str:
         return self.get_attribute('google_token_path')
+
+    @cached_property
+    def email_receiver(self) -> str:
+        return self.get_attribute('email_receiver')
+
+    @cached_property
+    def email_sender(self) -> str:
+        return self.get_attribute('email_sender')

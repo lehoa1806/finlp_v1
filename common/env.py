@@ -54,8 +54,8 @@ class Env:
         return self.get_environment_variable('POSTGRESQL_HOST')
 
     @cached_property
-    def postgresql_port(self) -> int:
-        return int(self.get_environment_variable('POSTGRESQL_PORT'))
+    def postgresql_port(self) -> str:
+        return self.get_environment_variable('POSTGRESQL_PORT')
 
     @cached_property
     def postgresql_database(self) -> str:
@@ -73,3 +73,11 @@ class Env:
     @cached_property
     def google_token_path(self) -> str:
         return self.get_environment_variable('GOOGLE_TOKEN_PATH')
+
+    @cached_property
+    def email_receiver(self) -> str:
+        return self.get_environment_variable('GOOGLE_EMAIL_SENDER')
+
+    @cached_property
+    def email_sender(self) -> str:
+        return self.get_environment_variable('GOOGLE_EMAIL_RECEIVER')

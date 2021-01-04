@@ -1,5 +1,5 @@
 from configparser import ConfigParser, ExtendedInterpolation
-from typing import Dict
+from typing import Dict, Optional
 
 from common.common import GLOBAL_ENV
 from common.functools import cached_property
@@ -21,6 +21,8 @@ class ConfigFile:
     @cached_property
     def scraper(self) -> Dict:
         try:
+            print('ConfigFile')
+            print(dict(self.parser['scraper']))
             return dict(self.parser['scraper'])
         except KeyError:
             return {}
@@ -51,20 +53,20 @@ class ConfigFile:
 
     @cached_property
     def postgresql_port(self) -> int:
-        return int(self.scraper.get('postgresql_port'))
+        return self.scraper.get('postgresql_port')
 
     @cached_property
     def postgresql_database(self) -> str:
         return self.scraper.get('postgresql_database')
 
     @cached_property
-    def headless(self) -> bool:
+    def headless(self) -> Optional[bool]:
         headless = self.scraper.get('headless')
         if isinstance(headless, bool):
             return headless
         elif isinstance(headless, str):
             return headless in {'True', 'true'}
-        return bool(headless)
+        return headless
 
     @cached_property
     def browser_type(self) -> BrowserType:
@@ -78,3 +80,11 @@ class ConfigFile:
     @cached_property
     def google_token_path(self) -> str:
         return self.scraper.get('google_token_path')
+
+    @cached_property
+    def email_receiver(self) -> str:
+        return self.scraper.get('email_receiver')
+
+    @cached_property
+    def email_sender(self) -> str:
+        return self.scraper.get('email_sender')

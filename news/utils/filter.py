@@ -1,4 +1,4 @@
-from typing import Iterable, List, Set
+from typing import Dict, Iterable, List, Set
 
 from postgresql.database import Database
 
@@ -35,12 +35,13 @@ class Filter:
             for com in self.database.query(query, ('stock',))
         ]
 
-    def get_search_keys(self) -> List[str]:
-        query = 'SELECT search_key FROM search_keys;'
-        return [
-            item.get('search_key', '')
-            for item in self.database.query(query, ('search_key',))
-        ]
+    def get_search_keys(self) -> Dict[str, str]:
+        query = 'SELECT search_key, priority FROM search_keys;'
+        keys = ('search_key', 'priority')
+        return {
+            item.get('search_key'): item.get('priority', 0)
+            for item in self.database.query(query, keys)
+        }
 
     @classmethod
     def lower_all(cls, input_list: Iterable[str]) -> List[str]:

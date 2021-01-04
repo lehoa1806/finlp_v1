@@ -28,11 +28,12 @@ class Setting(metaclass=Singleton):
     def decrypt_json(self, encrypted: str, default=None) -> Any:
         try:
             decrypted = self.cipher_helper.decrypt(encrypted)
+            if isinstance(default, str):
+                return decrypted
             loaded = json.loads(decrypted)
-            data = type(default)(loaded) if default is not None else loaded
+            return type(default)(loaded) if default is not None else loaded
         except (json.decoder.JSONDecodeError, TypeError):
-            data = default
-        return data if isinstance(data, type(default)) else default
+            return default
 
     def parse_credentials(self, encrypted: str) -> Tuple:
         """
@@ -72,7 +73,7 @@ class Setting(metaclass=Singleton):
     @cached_property
     def slack_token(self) -> str:
         encrypted = self.get_attribute('slack_token_code')
-        return self.decrypt_json(encrypted, str)
+        return self.decrypt_json(encrypted, '')
 
     @cached_property
     def postgresql_host(self) -> str:

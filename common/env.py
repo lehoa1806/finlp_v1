@@ -19,7 +19,7 @@ class Env:
 
     @cached_property
     def config_file(self) -> str:
-        return self.get_environment_variable('CONFIG_FILE', '')
+        return self.get_environment_variable('FINLP_CONFIG_FILE', '')
 
     @cached_property
     def rakuten_creds_code(self) -> str:

@@ -18,9 +18,9 @@ class SlackBot:
     def get_channels(
         self,
     ) -> Iterator[Tuple[str, str]]:
-        response = self.client.channels_list()
+        response = self.client.conversations_list()
         for channel in response['channels']:
-            if channel['is_member']:
+            if channel['is_channel']:
                 yield channel['name'], channel['id']
 
     def get_users(

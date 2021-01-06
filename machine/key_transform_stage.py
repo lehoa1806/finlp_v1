@@ -19,6 +19,6 @@ class KeyTransformStage(Stage):
             raise ValueError(f'Length mismatch: {self.original_columns} vs '
                              f'{self.new_columns}')
         item = deepcopy(item)
-        for in_key, out_key in zip(self.input_columns, self.output_columns):
+        for in_key, out_key in zip(self.original_columns, self.new_columns):
             item[out_key] = item.pop(in_key, None)
         yield item

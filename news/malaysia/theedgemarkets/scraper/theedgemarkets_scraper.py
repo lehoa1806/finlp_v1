@@ -17,7 +17,7 @@ class TheEdgeMarketsScraper(Scraper):
     def get_articles_board(self) -> WebElement:
         try:
             main_content_class = 'main-content-inner'
-            main_content_el = self.find_element_by_class_name(
+            main_content_el = self.wait_for_class_visibility(
                 main_content_class)
             content_class = 'views-view-grid'
             content_el = main_content_el.find_element_by_class_name(
@@ -88,7 +88,7 @@ class TheEdgeMarketsScraper(Scraper):
         self.load_url(url)
         try:
             main_content_class = 'main-content-inner'
-            main_content_el = self.find_element_by_class_name(
+            main_content_el = self.wait_for_class_visibility(
                 main_content_class)
             block_content_el = main_content_el.find_element_by_css_selector(
                 'div.content-main > div > div > div > div.block-content > '

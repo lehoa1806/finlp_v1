@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 from common.functools import cached_property
 from scraper.common import BrowserType
@@ -81,3 +82,16 @@ class Env:
     @cached_property
     def email_sender(self) -> str:
         return self.get_environment_variable('GOOGLE_EMAIL_RECEIVER')
+
+    @cached_property
+    def malaysia_channels(self) -> Dict:
+        """
+        Config data is a string like "channel_1:1;channel_2:2;channel_3:3;"
+        :return: Dict
+        """
+        channels = self.get_environment_variable(
+            'MALAYSIA_CHANNELS', '').split(';')
+        return {
+            int(channel.split(':')[1]): channel.split(':')[0]
+            for channel in channels
+        }

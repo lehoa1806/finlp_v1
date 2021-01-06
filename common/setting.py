@@ -1,5 +1,5 @@
 import json
-from typing import Any, Tuple
+from typing import Any, Dict, Tuple
 
 from common.cipher import CipherHelper
 from common.common import AWS_REGION, GLOBAL_ENV
@@ -103,3 +103,7 @@ class Setting(metaclass=Singleton):
     @cached_property
     def email_sender(self) -> str:
         return self.get_attribute('email_sender')
+
+    @cached_property
+    def malaysia_channels(self) -> Dict:
+        return self.get_attribute('malaysia_channels')

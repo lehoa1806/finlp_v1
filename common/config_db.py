@@ -19,6 +19,14 @@ class ConfigDB:
         return config
 
     @cached_property
+    def default(self) -> Dict:
+        default = self.config_table.get_item(
+            partition_key='default',
+            attributes_to_get=['malaysia_channels']
+        )
+        return default
+
+    @cached_property
     def cipher_key(self) -> str:
         return self.scraper.get('secret_keys', {}).get('cipher_key')
 
@@ -80,3 +88,8 @@ class ConfigDB:
     @cached_property
     def email_sender(self) -> str:
         return self.scraper.get('configs', {}).get('email_sender')
+
+    @cached_property
+    def malaysia_channels(self) -> Dict:
+        channels = self.default.get('malaysia_channels', {})
+        return {int(v): k for k, v in channels.items()}

@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from enum import Enum
 
 import pytz
 
@@ -23,6 +24,13 @@ FROM
 ORDER BY
   news_date DESC;
 '''
+
+
+class Subscription(Enum):
+    EXCLUDE = -1
+    HOLDING = 0
+    HOT = 1
+    TOTAL = 100
 
 
 def get_time(

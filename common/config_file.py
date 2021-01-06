@@ -26,6 +26,13 @@ class ConfigFile:
             return {}
 
     @cached_property
+    def default(self) -> Dict:
+        try:
+            return dict(self.parser['default'])
+        except KeyError:
+            return {}
+
+    @cached_property
     def cipher_key(self) -> str:
         return self.scraper.get('cipher_key')
 
@@ -86,3 +93,15 @@ class ConfigFile:
     @cached_property
     def email_sender(self) -> str:
         return self.scraper.get('email_sender')
+
+    @cached_property
+    def malaysia_channels(self) -> Dict:
+        """
+        Config data is a string like "channel_1:1;channel_2:2;channel_3:3;"
+        :return: Dict
+        """
+        channels = self.default.get('malaysia_channels', '').split(';')
+        return {
+            int(channel.split(':')[1]): channel.split(':')[0]
+            for channel in channels
+        }

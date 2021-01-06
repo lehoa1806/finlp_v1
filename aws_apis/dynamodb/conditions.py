@@ -22,8 +22,6 @@ class Condition:
         raise NotImplementedError
 
     def __call__(self):
-        print(self.key)
-        print(self.value)
         if self.operator == 'and':
             return reduce(lambda x, y: x() & y(), self.condition)
         elif self.operator == 'or':

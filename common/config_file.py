@@ -21,8 +21,6 @@ class ConfigFile:
     @cached_property
     def scraper(self) -> Dict:
         try:
-            print('ConfigFile')
-            print(dict(self.parser['scraper']))
             return dict(self.parser['scraper'])
         except KeyError:
             return {}

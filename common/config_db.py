@@ -16,8 +16,6 @@ class ConfigDB:
             partition_key='scraper',
             attributes_to_get=['configs', 'secret_keys']
         )
-        print('ConfigDB')
-        print(config)
         return config
 
     @cached_property

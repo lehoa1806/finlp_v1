@@ -1,9 +1,9 @@
 from experiential.news.filter import Filter
-from news.malaysia.freemalaysiatoday.articles_getting_stage import \
+from experiential.news.freemalaysiatoday.articles_getting_stage import \
     ArticlesGettingStage
+from experiential.news.news_job import ScraperJob
 from news.malaysia.freemalaysiatoday.scraper.freemalaysiatoday_scraper import \
     FreeMalaysiaTodayScraper
-from news.malaysia.scraper_job import ScraperJob
 from workflow.pipeline import Pipeline
 
 from ..article_filtering_stage import ArticleFilteringStage

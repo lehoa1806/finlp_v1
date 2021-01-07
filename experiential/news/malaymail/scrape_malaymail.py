@@ -1,5 +1,5 @@
 from experiential.news.filter import Filter
-from experiential.news.scraper_job import ScraperJob
+from experiential.news.news_job import ScraperJob
 from news.malaysia.malaymail.scraper.malaymail_scraper import MalayMailScraper
 from workflow.pipeline import Pipeline
 

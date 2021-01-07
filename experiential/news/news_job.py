@@ -74,8 +74,8 @@ class ScraperJob(Job):
                     new_columns=[
                         'Subscription',
                         'Time',
-                        'category',
                         'Category',
+                        'Title',
                         'Source',
                         'Content',
                         'Url',

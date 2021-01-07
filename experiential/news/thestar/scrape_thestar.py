@@ -1,5 +1,5 @@
 from experiential.news.filter import Filter
-from experiential.news.scraper_job import ScraperJob
+from experiential.news.news_job import ScraperJob
 from workflow.pipeline import Pipeline
 
 from ..article_filtering_stage import ArticleFilteringStage

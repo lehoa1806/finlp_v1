@@ -31,6 +31,7 @@ class Subscription(Enum):
     HOLDING = 0
     HOT = 1
     TOTAL = 100
+    ANNOUNCEMENT = 1000
 
 
 def get_time(

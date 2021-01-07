@@ -1,5 +1,5 @@
 from experiential.news.filter import Filter
-from experiential.news.scraper_job import ScraperJob
+from experiential.news.news_job import ScraperJob
 from experiential.news.theedgemarkets.articles_getting_stage import \
     ArticlesGettingStage
 from news.malaysia.theedgemarkets.scraper.theedgemarkets_scraper import \

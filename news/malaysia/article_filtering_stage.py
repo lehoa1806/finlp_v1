@@ -1,8 +1,8 @@
 from typing import Dict, Iterator
 
 from common.rule import Rule
-from experiential.filter import Subscription
-from experiential.news.filter import Filter
+from news.malaysia.filter import Filter
+from news.utils.filter import Subscription
 from workflow.stage import Stage
 
 

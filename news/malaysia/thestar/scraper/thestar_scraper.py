@@ -1,4 +1,3 @@
-import logging
 from typing import Dict, Iterator, List
 
 from selenium.common.exceptions import NoSuchElementException
@@ -35,52 +34,7 @@ class TheStarScraper(Scraper):
                 'url': url,
                 'estimated_time': estimated_time,
             })
-        for article in articles:
-            data = self.read_article(article['url'])
-            date = data['date']
-            time = data['time']
-            estimated_time = article['estimated_time']
-            if not estimated_time.endswith(' ago'):
-                logging.info('This article is too old: {} !'.format(
-                    estimated_time))
-                return
-            estimated_time = estimated_time[:-4]
-            if not time:
-                logging.info('This article is older than 1 day: {} !'.format(
-                    estimated_time))
-                return
-                '''
-                try:
-                    time_delta = int(estimated_time[:-1])
-                    time_unit = estimated_time[-1:]
-                except ValueError:
-                    logging.error('Can not parse article time: {}!'.format(
-                        estimated_time))
-                    return
-                if time_unit == 'm':
-                    delta_time = timedelta(minutes=time_delta)
-                elif estimated_time.endswith('h'):
-                    delta_time = timedelta(hours=time_delta)
-                elif estimated_time.endswith('d'):
-                    delta_time = timedelta(days=time_delta)
-                else:
-                    logging.warning('Can not parse article time: {} !'.format(
-                        estimated_time))
-                    return
-                time = (
-                    datetime.now(pytz.timezone(MY_TIMEZONE)) - delta_time
-                ).strftime('%I:%M %p')
-                '''
-            elif not time.startswith('1'):
-                time = '0{}'.format(time)
-
-            yield {
-                'time': '{} {}'.format(date, time),
-                'category': article['category'],
-                'title': article['title'],
-                'url': article['url'],
-                'content': data['content'],
-            }
+        yield from articles
 
     def read_article(
         self,

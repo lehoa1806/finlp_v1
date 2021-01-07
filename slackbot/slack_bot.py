@@ -1,4 +1,7 @@
+import logging
+import time
 from typing import Dict, Iterator, Tuple
+from urllib.error import URLError
 
 from slack.web.client import WebClient
 from slack.web.slack_response import SlackResponse
@@ -9,6 +12,9 @@ from .slack_message import SlackMessage
 
 
 class SlackBot:
+    MAX_RETRY = 5
+    RETRY_INTERVAL = 0.5
+
     def __init__(
         self,
     ) -> None:
@@ -36,8 +42,20 @@ class SlackBot:
         message: SlackMessage,
     ) -> SlackResponse:
         message = message.to_message()
-        response = self.client.chat_postMessage(
-            channel=self.channels[channel],
-            **message.to_dict(),
-        )
-        return response
+        retry = 0
+        while True:
+            try:
+                retry += 1
+                return self.client.chat_postMessage(
+                    channel=self.channels[channel],
+                    **message.to_dict(),
+                )
+            except URLError as err:
+                if retry <= self.MAX_RETRY:
+                    logging.error(
+                        f'Failed to send data (error={err}). Retrying...')
+                else:
+                    logging.warning(
+                        f'Failed to send data (error={err}). Stopped...')
+                    break
+            time.sleep(self.RETRY_INTERVAL)

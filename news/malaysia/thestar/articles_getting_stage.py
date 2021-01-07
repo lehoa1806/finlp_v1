@@ -1,12 +1,11 @@
 import logging
-from datetime import datetime
 from typing import Any, Dict, Iterator
 
+from aws_apis.dynamodb.database import Database
+from common.url_tracker import UrlTracker
+from news.malaysia.thestar.scraper.thestar_scraper import TheStarScraper
 from news.utils.common import MY_TIMEZONE, get_time
-from postgresql.database import Database
 from workflow.stage import Stage
-
-from .scraper.thestar_scraper import TheStarScraper
 
 TIME_FORMAT = '%A, %d %b %Y %I:%M %p'
 
@@ -16,45 +15,50 @@ class ArticlesGettingStage(Stage):
         self,
         scraper: TheStarScraper,
         max_pages_to_load: int = 10,
-        get_known: bool = False,
     ) -> None:
         super().__init__('The Star Getting')
         self.scraper = scraper
         self.max_pages_to_load = max_pages_to_load
-        self.get_known = get_known
-        self.database = Database.load_default_database()
-
-    def is_known_article(self, date: datetime, title: str) -> bool:
-        if self.get_known:
-            return False
-
-        query = (
-            'SELECT 1 FROM articles '
-            'WHERE article_date = \'{}\' '
-            'AND article_name = \'{}\''
-        ).format(date, title.replace('\'', '\'\''),)
-        keys = ('exists', )
-        response = list(self.database.query(query, keys))
-        if len(response) > 0:
-            logging.warning('This is a known article: {}!!!'.format(title))
-        return len(response) > 0
+        self.page_tracker = UrlTracker(Database.load_database())
 
     def process(self, item: Dict) -> Iterator[Dict[str, Any]]:
         for page in range(1, self.max_pages_to_load):
             for article in self.scraper.get_articles(page):
-                time_str = article.get('time', '')
-                article_date = get_time(time_str, TIME_FORMAT, MY_TIMEZONE)
-                if (
-                    self.is_known_article(article_date, article['title']) or
-                    article_date < item['start_time']
-                ):
+                with self.page_tracker.track(article['url']) as url:
+                    if url is None:
+                        logging.warning('Many known articles. Stopped ...')
+                        return
+                    elif url == '':
+                        logging.warning(
+                            f'Known article: {article["url"]}. Ignored ...')
+                        continue
+                data = self.scraper.read_article(article['url'])
+                date = data['date']
+                time = data['time']
+                estimated_time = article['estimated_time']
+                if not estimated_time.endswith(' ago'):
+                    logging.warning('This article is too old: {} !'.format(
+                        estimated_time))
                     return
-                if article_date < item['end_time']:
+                estimated_time = estimated_time[:-4]
+                if not time:
+                    logging.warning(
+                        'This article is older than 1 day: {} !'.format(
+                            estimated_time))
+                    return
+                elif not time.startswith('1'):
+                    time = '0{}'.format(time)
+
+                time_str = '{} {}'.format(date, time)
+                datetime = get_time(time_str, TIME_FORMAT, MY_TIMEZONE)
+                if datetime < item['start_time']:
+                    logging.warning('Old articles. Stopped ...')
+                    return
+                elif datetime < item['end_time']:
                     yield {
-                        'datetime': article_date,
-                        'time': article['time'],
+                        'datetime': datetime,
                         'title': article['title'],
                         'category': article['category'],
-                        'content': article['content'],
+                        'content': data['content'],
                         'url': article['url'],
                     }

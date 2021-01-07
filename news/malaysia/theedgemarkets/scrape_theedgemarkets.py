@@ -1,30 +1,28 @@
-from news.malaysia.scraper_job import ScraperJob
+from news.malaysia.filter import Filter
+from news.malaysia.news_job import ScraperJob
+from news.malaysia.theedgemarkets.articles_getting_stage import \
+    ArticlesGettingStage
+from news.malaysia.theedgemarkets.scraper.theedgemarkets_scraper import \
+    TheEdgeMarketsScraper
 from workflow.pipeline import Pipeline
 
-from .articles_filtering_stage import ArticleFilteringStage
-from .articles_getting_stage import ArticlesGettingStage
-from .articles_reading_stage import ArticleReadingStage
-from .scraper.theedgemarkets_scraper import TheEdgeMarketsScraper
+from ..article_filtering_stage import ArticleFilteringStage
 
 
 class Worker(ScraperJob):
     @property
     def pipeline(self) -> Pipeline:
-        scraper = TheEdgeMarketsScraper(headless=self.args.headless)
         return Pipeline(
             stage=ArticlesGettingStage(
-                scraper=scraper,
-                max_pages_to_load=10,
-                get_known=self.args.get_known,
+                scraper=TheEdgeMarketsScraper(headless=self.args.headless),
             )
         ).add_stage(
-            stage=ArticleReadingStage(
-                scraper=scraper,
+            stage=ArticleFilteringStage(
+                ft=Filter(),
+                source='theedgemarkets.com',
             )
-        ).add_stage(
-            stage=ArticleFilteringStage()
         )
 
 
 if __name__ == "__main__":
-    Worker(table='articles').main()
+    Worker(table='malaysia_articles').main()

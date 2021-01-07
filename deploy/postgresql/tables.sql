@@ -1,3 +1,4 @@
+-- malaysia_announcements
 CREATE TABLE IF NOT EXISTS "malaysia_announcements" (
   "modified" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "datetime" TIMESTAMP WITH TIME ZONE,
@@ -44,4 +45,17 @@ CREATE TABLE IF NOT EXISTS "malaysia_search_keys" (
   "search_key" TEXT UNIQUE NOT NULL,
   "subscription" INT,
   CONSTRAINT "malaysia_search_keys_search_key" PRIMARY KEY ("search_key")
+);
+
+-- temp tables
+CREATE TABLE public.malaysia_news2email_all (
+  "news_id" SERIAL NOT NULL,
+  "modified" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "datetime" TIMESTAMP WITH TIME ZONE,
+  "category" TEXT,
+  "title" TEXT NOT NULL,
+  "source" TEXT,
+  "url" TEXT UNIQUE NOT NULL,
+  "content" TEXT,
+  CONSTRAINT malaysia_news2email_news_id PRIMARY KEY (news_id)
 );

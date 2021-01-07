@@ -1,4 +1,4 @@
-from experiential.filter import Filter as Ft
+from news.utils.filter import Filter as Ft
 
 
 class Filter(Ft):

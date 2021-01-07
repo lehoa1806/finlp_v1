@@ -1,13 +1,12 @@
-import json
 import logging
-from datetime import datetime
 from typing import Any, Dict, Iterator
 
-from news.utils.common import MY_TIMEZONE, get_time
-from postgresql.database import Database
+from aws_apis.dynamodb.database import Database
+from common.url_tracker import UrlTracker
+from news.malaysia.i3investor.scraper.i3investor_scraper import \
+    I3investorScraper
+from news.utils.common import MY_TIMEZONE, Subscription, get_time
 from workflow.stage import Stage
-
-from .scraper.i3investor_scraper import I3investorScraper
 
 TIME_FORMAT = '%d/%m/%Y'
 
@@ -16,41 +15,24 @@ class PriceTargetGettingStage(Stage):
     def __init__(
         self,
         scraper: I3investorScraper,
-        get_known: bool = False,
     ) -> None:
         super().__init__('I3investor Price Target')
         self.scraper = scraper
-        self.get_known = get_known
-        self.database = Database.load_default_database()
-
-    def is_known_announcement(
-        self,
-        time: datetime,
-        source: str,
-        company: str,
-        title: str,
-        url: str,
-    ) -> bool:
-        if self.get_known:
-            return False
-        query = (
-            'SELECT announcement_detail FROM announcements '
-            'WHERE announcement_date = \'{}\' '
-            'AND announcement_source = \'{}\' '
-            'AND announcement_company = \'{}\' '
-            'AND announcement_title = \'{}\' '
-            'AND announcement_url = \'{}\''
-        ).format(time, source, company.replace('\'', '\'\''),
-                 title.replace('\'', '\'\''), url)
-        keys = ('announcement_detail', )
-        response = list(self.database.query(query, keys))
-        if len(response) > 0:
-            logging.warning('This is a known announcement: {}!!!'.format(
-                response[0].get('announcement_detail')))
-        return len(response) > 0
+        self.page_tracker = UrlTracker(Database.load_database())
 
     def process(self, item: Dict) -> Iterator[Dict[str, Any]]:
         for announcement in self.scraper.get_price_targets():
+            announcement_url = announcement['Url']
+            with self.page_tracker.track(announcement_url) as url:
+                if url is None:
+                    logging.warning('Many known articles. Stopped ...')
+                    return
+                elif url == '':
+                    logging.warning(
+                        f'Known article: {announcement_url}. Ignored ...')
+                    continue
+            self.scraper.short_sleep()  # Avoid stressing DynamoDB
+
             time_str = announcement['Date']
             time = get_time(time_str, TIME_FORMAT, MY_TIMEZONE)
             stock_name = announcement['Stock Name']
@@ -59,31 +41,25 @@ class PriceTargetGettingStage(Stage):
             price_change = announcement['Upside/Downside']
             price_action = announcement['Price Call']
             source = announcement['Source']
-            url = announcement['Url']
             title = 'Price target of {} was changed: to {}'.format(
                 stock_name, price_target
             )
 
-            if self.is_known_announcement(
-                    time, source, stock_name, title, url):
-                continue
-            elif time < item['start_time']:
+            if time < item['start_time']:
+                logging.warning('Old articles. Stopped ...')
                 return
             if time < item['end_time']:
+                description = (
+                    f'Last Price: {last_price}, Price Target {price_target},'
+                    f' Upside/Downside: {price_change},'
+                    f' Price Call: {price_action}, Source: {source}'
+                )
                 yield {
-                    'date_added': datetime.utcnow(),
-                    'announcement_date': time,
-                    'announcement_source': source,
-                    'announcement_company': stock_name,
-                    'announcement_title': title,
-                    'announcement_url': url,
-                    'announcement_detail': json.dumps({
-                        'time': time_str,
-                        'title': title,
-                        'description':
-                            'Last Price: {}, Price Target {}, Upside/Downside:'
-                            ' {}, Price Call: {}, Source: {}'.format(
-                                last_price, price_target, price_change,
-                                price_action, source),
-                    })
+                    'subscription': Subscription.HOT,
+                    'datetime': time,
+                    'company': stock_name,
+                    'title': title,
+                    'source': source,
+                    'url': announcement_url,
+                    'description': description,
                 }

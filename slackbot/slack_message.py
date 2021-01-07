@@ -1,7 +1,7 @@
 from typing import List, Optional, Union
 
 from slack.web.classes.blocks import (BlockElement, ContextBlock, DividerBlock,
-                                      ImageBlock, SectionBlock)
+                                      HeaderBlock, ImageBlock, SectionBlock)
 from slack.web.classes.messages import Message
 from slack.web.classes.objects import TextObject
 
@@ -33,6 +33,15 @@ class SlackMessage:
 
     def add_divider(self) -> 'SlackMessage':
         self.blocks.append(DividerBlock())
+        return self
+
+    def add_header(
+        self,
+        text: str,
+    ) -> 'SlackMessage':
+        self.blocks.append(
+            HeaderBlock(text=TextObject(text=text, subtype='plain_text'))
+        )
         return self
 
     def add_image(

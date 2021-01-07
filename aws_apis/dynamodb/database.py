@@ -47,5 +47,5 @@ class Database:
     def load_configuration_table(self) -> Table:
         return self.load_table(table_name='global_configuration')
 
-    def get_url_tracking_table(self) -> Table:
-        return self.load_table(table_name='url_tracking')
+    def get_tracking_table(self) -> Table:
+        return self.load_table(table_name='global_tracking')

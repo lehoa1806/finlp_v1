@@ -4,7 +4,6 @@ import random
 import time
 from contextlib import contextmanager
 from enum import Enum
-from functools import partial, wraps
 
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -63,7 +62,7 @@ def do_and_sleep(func=None, *, level: int = 0):
     :param level: int
     """
     if func is None:
-        return partial(do_and_sleep, level=level)
+        return functools.partial(do_and_sleep, level=level)
 
     @functools.wraps(func)
     def wrapper_do_and_sleep(*args, **kwargs):
@@ -75,28 +74,3 @@ def do_and_sleep(func=None, *, level: int = 0):
         time.sleep(delay)
         return value
     return wrapper_do_and_sleep
-
-
-def logged(func=None, *, level=logging.DEBUG, name=None, message=None):
-    """
-    A decorator to print logs
-    :param func: Function to be decorated
-    :param level: Log level
-    :param name: Logger name
-    :param message: message
-    """
-    if func is None:
-        return partial(logged, level=level, name=name, message=message)
-    logger = logging.getLogger(name)
-
-    @wraps(func)
-    def wrapper_logged(*args, **kwargs):
-        if level == logging.DEBUG and not message:
-            logger.log(level, f'Leave: {func.__name__}')
-        else:
-            logger.log(level, message)
-        value = func(*args, **kwargs)
-        if level == logging.DEBUG and not message:
-            logger.log(level, f'Leave: {func.__name__}')
-        return value
-    return wrapper_logged

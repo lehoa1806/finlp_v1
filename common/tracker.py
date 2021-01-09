@@ -6,8 +6,8 @@ from aws_apis.dynamodb.database import Database
 class Tracker:
     def __init__(self, database: Database) -> None:
         self.table = database.get_tracking_table()
-        self.pkey = 'track_id'
-        self.skey = 'track_type'
+        self.pkey = self.table.schema['partition_key']
+        self.skey = self.table.schema.get('sort_key')
 
     @property
     def tracker(self):
@@ -22,5 +22,6 @@ class Tracker:
     def save(self, data: Dict) -> None:
         if self.pkey not in data:
             raise ValueError('Track ID needs to be specified')
-        data.update({self.skey: self.tracker})
+        elif self.skey and self.tracker not in [None, '']:
+            data.update({self.skey: self.tracker})
         self.table.put_item(data)

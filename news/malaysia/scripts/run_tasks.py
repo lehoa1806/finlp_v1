@@ -1,7 +1,8 @@
+import logging
 from argparse import Namespace
 
 from common.argument_parser import ArgumentParser
-from common.decorators import slack_notify
+from common.decorators import do_and_sleep, slack_notify
 from news.utils.common import MY_TIMEZONE
 
 from ..bursamalaysia.announcement_scraping_task import \
@@ -14,6 +15,11 @@ from ..malaymail.malaymail_scraping_task import MalayMailScrapingTask
 from ..theedgemarkets.theedgemarkets_scraping_task import \
     TheEdgeMarketsScrapingTask
 from ..thestar.thestar_scraping_task import TheStarScrapingTask
+
+
+@do_and_sleep(level=60)
+def sleep():
+    pass
 
 
 class Script:
@@ -51,6 +57,7 @@ class Script:
                 headless=self.args.headless
             )
         )
+        sleep()
 
         slack_notify(
             FreeMalaysiaTodayScrapingTask.process_task(
@@ -61,6 +68,7 @@ class Script:
                 headless=self.args.headless
             )
         )
+        sleep()
 
         slack_notify(
             I3investorPriceTargetTask.process_task(
@@ -71,6 +79,7 @@ class Script:
                 headless=self.args.headless
             )
         )
+        sleep()
 
         slack_notify(
             MalayMailScrapingTask.process_task(
@@ -81,6 +90,7 @@ class Script:
                 headless=self.args.headless
             )
         )
+        sleep()
 
         slack_notify(
             TheEdgeMarketsScrapingTask.process_task(
@@ -91,6 +101,7 @@ class Script:
                 headless=self.args.headless
             )
         )
+        sleep()
 
         slack_notify(
             TheStarScrapingTask.process_task(
@@ -101,7 +112,12 @@ class Script:
                 headless=self.args.headless
             )
         )
+        sleep()
 
 
 if __name__ == "__main__":
-    Script().main()
+    while True:
+        try:
+            Script().main()
+        except KeyboardInterrupt:
+            logging.info('Stop Malaysia scrappers')

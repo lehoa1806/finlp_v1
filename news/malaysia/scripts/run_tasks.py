@@ -1,5 +1,8 @@
 import logging
 from argparse import Namespace
+from datetime import datetime
+
+import pytz
 
 from common.argument_parser import ArgumentParser
 from common.decorators import do_and_sleep, slack_notify
@@ -8,8 +11,8 @@ from news.utils.common import MY_TIMEZONE
 from ..bursamalaysia.announcement_scraping_task import \
     BursaMalaysiaAnnouncement
 from ..filter import Filter
-from ..freemalaysiatoday.freemalaysiatoday_scraping_task import \
-    FreeMalaysiaTodayScrapingTask
+# from ..freemalaysiatoday.freemalaysiatoday_scraping_task import \
+#    FreeMalaysiaTodayScrapingTask
 from ..i3investor.i3investor_price_target_task import I3investorPriceTargetTask
 from ..malaymail.malaymail_scraping_task import MalayMailScrapingTask
 from ..theedgemarkets.theedgemarkets_scraping_task import \
@@ -17,13 +20,19 @@ from ..theedgemarkets.theedgemarkets_scraping_task import \
 from ..thestar.thestar_scraping_task import TheStarScrapingTask
 
 
-@do_and_sleep(level=60)
+@do_and_sleep(level=10)
 def sleep():
     pass
 
 
 class Script:
     def __init__(self) -> None:
+        local = pytz.timezone(MY_TIMEZONE)
+        now = datetime.now()
+        self.start_time = local.localize(
+            datetime(now.year, now.month, now.day - 1, 23))
+        self.end_time = local.localize(
+            datetime(now.year, now.month, now.day, 23, 59, 59))
         self.args = self.parse_args()
         self.filter = Filter()
 
@@ -31,14 +40,6 @@ class Script:
     def parse_args(cls) -> Namespace:
         parser = ArgumentParser(
             description='Script to scrape articles from Malaysia NewsPapers',
-        )
-        parser.add_date_input(
-            'start-time',
-            timezone=MY_TIMEZONE,
-        )
-        parser.add_date_input(
-            'end-time',
-            timezone=MY_TIMEZONE,
         )
         parser.add_argument(
             'headless', action='store_true',
@@ -52,13 +53,13 @@ class Script:
             BursaMalaysiaAnnouncement.process_task(
                 ft=self.filter,
                 table='malaysia_announcements',
-                start_time=self.args.start_time,
-                end_time=self.args.end_time,
+                start_time=self.start_time,
+                end_time=self.end_time,
                 headless=self.args.headless
             )
         )
         sleep()
-
+        '''
         slack_notify(
             FreeMalaysiaTodayScrapingTask.process_task(
                 ft=self.filter,
@@ -69,13 +70,13 @@ class Script:
             )
         )
         sleep()
-
+        '''
         slack_notify(
             I3investorPriceTargetTask.process_task(
                 ft=self.filter,
                 table='malaysia_articles',
-                start_time=self.args.start_time,
-                end_time=self.args.end_time,
+                start_time=self.start_time,
+                end_time=self.end_time,
                 headless=self.args.headless
             )
         )
@@ -85,8 +86,8 @@ class Script:
             MalayMailScrapingTask.process_task(
                 ft=self.filter,
                 table='malaysia_articles',
-                start_time=self.args.start_time,
-                end_time=self.args.end_time,
+                start_time=self.start_time,
+                end_time=self.end_time,
                 headless=self.args.headless
             )
         )
@@ -96,8 +97,8 @@ class Script:
             TheEdgeMarketsScrapingTask.process_task(
                 ft=self.filter,
                 table='malaysia_articles',
-                start_time=self.args.start_time,
-                end_time=self.args.end_time,
+                start_time=self.start_time,
+                end_time=self.end_time,
                 headless=self.args.headless
             )
         )
@@ -107,8 +108,8 @@ class Script:
             TheStarScrapingTask.process_task(
                 ft=self.filter,
                 table='malaysia_articles',
-                start_time=self.args.start_time,
-                end_time=self.args.end_time,
+                start_time=self.start_time,
+                end_time=self.end_time,
                 headless=self.args.headless
             )
         )

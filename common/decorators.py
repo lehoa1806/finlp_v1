@@ -47,12 +47,12 @@ def logged(func=None, *, level=logging.DEBUG, name=None, message=None):
     @functools.wraps(func)
     def wrapper_logged(*args, **kwargs):
         if level == logging.DEBUG and not message:
-            logger.log(level, f'Leave: {func.__name__}')
+            logger.log(level, f'Leave: {func.__qualname__}')
         else:
             logger.log(level, message)
         value = func(*args, **kwargs)
         if level == logging.DEBUG and not message:
-            logger.log(level, f'Leave: {func.__name__}')
+            logger.log(level, f'Leave: {func.__qualname__}')
         return value
     return wrapper_logged
 
@@ -71,10 +71,10 @@ def slack_notify(func=None, *, func_type=None):
     @functools.wraps(func)
     def wrapper_alarm(*args, **kwargs):
         track_info = table.get_item(
-            partition_key=func.__name__,
+            partition_key=func.__qualname__,
             sort_key=func_type,
         ) or {
-            'track_id': func.__name__,
+            'track_id': func.__qualname__,
             'track_type': func_type,
         } if func_type is not None else {}
 
@@ -84,9 +84,9 @@ def slack_notify(func=None, *, func_type=None):
             value = func(*args, **kwargs)
             if len(warn) <= 0 and status.get('last_status') == 'failed':
                 message = SlackMessage(
-                    title=f'Slack notification: {func.__name__}',
+                    title=f'Slack notification: {func.__qualname__}',
                 ).add_header(
-                    text=f':shamrock:   {func.__name__} is back to normal   :shamrock:',
+                    text=f':shamrock:   {func.__qualname__} is back to normal   :shamrock:',
                 ).add_divider()
                 slack_bot.chat_post(
                     channel='development',
@@ -98,9 +98,9 @@ def slack_notify(func=None, *, func_type=None):
                     table.put_item(item=track_info)
             elif len(warn) > 0 and status.get('last_status') != 'failed':
                 message = SlackMessage(
-                    title=f'Slack notification: {func.__name__}',
+                    title=f'Slack notification: {func.__qualname__}',
                 ).add_header(
-                    text=f':bomb:   {func.__name__} failed   :bomb:',
+                    text=f':bomb:   {func.__qualname__} failed   :bomb:',
                 ).add_context(
                     elements=[TextObject(
                         text=f':pushpin: Description: \n*{warn[0].message}*',
@@ -117,9 +117,9 @@ def slack_notify(func=None, *, func_type=None):
                     table.put_item(item=track_info)
             elif len(warn) > 0 and status.get('last_status') == 'failed':
                 message = SlackMessage(
-                    title=f'Slack notification: {func.__name__}',
+                    title=f'Slack notification: {func.__qualname__}',
                 ).add_header(
-                    text=f':boom:   {func.__name__} failed again   :boom:',
+                    text=f':boom:   {func.__qualname__} failed again   :boom:',
                 ).add_divider()
                 slack_bot.chat_post(
                     channel='development',

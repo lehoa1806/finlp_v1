@@ -49,69 +49,57 @@ class Script:
         return parser.arguments
 
     def main(self):
-        slack_notify(
-            BursaMalaysiaAnnouncement.process_task(
-                ft=self.filter,
-                table='malaysia_announcements',
-                start_time=self.start_time,
-                end_time=self.end_time,
-                headless=self.args.headless
-            )
+        slack_notify(BursaMalaysiaAnnouncement.process_task, func_type='task')(
+            ft=self.filter,
+            table='malaysia_announcements',
+            start_time=self.start_time,
+            end_time=self.end_time,
+            headless=self.args.headless
         )
         sleep()
         '''
-        slack_notify(
-            FreeMalaysiaTodayScrapingTask.process_task(
-                ft=self.filter,
-                table='malaysia_articles',
-                start_time=self.args.start_time,
-                end_time=self.args.end_time,
-                headless=self.args.headless
-            )
+        slack_notify(FreeMalaysiaTodayScrapingTask.process_task, func_type='task')(
+            ft=self.filter,
+            table='malaysia_articles',
+            start_time=self.args.start_time,
+            end_time=self.args.end_time,
+            headless=self.args.headless
         )
         sleep()
         '''
-        slack_notify(
-            I3investorPriceTargetTask.process_task(
-                ft=self.filter,
-                table='malaysia_articles',
-                start_time=self.start_time,
-                end_time=self.end_time,
-                headless=self.args.headless
-            )
+        slack_notify(I3investorPriceTargetTask.process_task, func_type='task')(
+            ft=self.filter,
+            table='malaysia_articles',
+            start_time=self.start_time,
+            end_time=self.end_time,
+            headless=self.args.headless
         )
         sleep()
 
-        slack_notify(
-            MalayMailScrapingTask.process_task(
-                ft=self.filter,
-                table='malaysia_articles',
-                start_time=self.start_time,
-                end_time=self.end_time,
-                headless=self.args.headless
-            )
+        slack_notify(MalayMailScrapingTask.process_task, func_type='task')(
+            ft=self.filter,
+            table='malaysia_articles',
+            start_time=self.start_time,
+            end_time=self.end_time,
+            headless=self.args.headless
         )
         sleep()
 
-        slack_notify(
-            TheEdgeMarketsScrapingTask.process_task(
-                ft=self.filter,
-                table='malaysia_articles',
-                start_time=self.start_time,
-                end_time=self.end_time,
-                headless=self.args.headless
-            )
+        slack_notify(TheEdgeMarketsScrapingTask.process_task, func_type='task')(
+            ft=self.filter,
+            table='malaysia_articles',
+            start_time=self.start_time,
+            end_time=self.end_time,
+            headless=self.args.headless
         )
         sleep()
 
-        slack_notify(
-            TheStarScrapingTask.process_task(
-                ft=self.filter,
-                table='malaysia_articles',
-                start_time=self.start_time,
-                end_time=self.end_time,
-                headless=self.args.headless
-            )
+        slack_notify(TheStarScrapingTask.process_task, func_type='task')(
+            ft=self.filter,
+            table='malaysia_articles',
+            start_time=self.start_time,
+            end_time=self.end_time,
+            headless=self.args.headless
         )
         sleep()
 
@@ -122,3 +110,4 @@ if __name__ == "__main__":
             Script().main()
         except KeyboardInterrupt:
             logging.info('Stop Malaysia scrappers')
+            break

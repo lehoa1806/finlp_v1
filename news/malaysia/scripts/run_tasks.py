@@ -69,7 +69,7 @@ class Script:
         '''
         slack_notify(I3investorPriceTargetTask.process_task, func_type='task')(
             ft=self.filter,
-            table='malaysia_articles',
+            table='malaysia_announcements',
             start_time=self.start_time,
             end_time=self.end_time,
             headless=self.args.headless

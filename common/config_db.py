@@ -20,11 +20,7 @@ class ConfigDB:
 
     @cached_property
     def default(self) -> Dict:
-        default = self.config_table.get_item(
-            partition_key='default',
-            attributes_to_get=['malaysia_channels']
-        )
-        return default
+        return self.config_table.get_item(partition_key='default')
 
     @cached_property
     def cipher_key(self) -> str:
@@ -92,4 +88,9 @@ class ConfigDB:
     @cached_property
     def malaysia_channels(self) -> Dict:
         channels = self.default.get('malaysia_channels', {})
+        return {int(v): k for k, v in channels.items()}
+
+    @cached_property
+    def vietnam_channels(self) -> Dict:
+        channels = self.default.get('vietnam_channels', {})
         return {int(v): k for k, v in channels.items()}

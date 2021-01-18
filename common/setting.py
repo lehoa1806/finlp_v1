@@ -107,3 +107,7 @@ class Setting(metaclass=Singleton):
     @cached_property
     def malaysia_channels(self) -> Dict:
         return self.get_attribute('malaysia_channels')
+
+    @cached_property
+    def vietnam_channels(self) -> Dict:
+        return self.get_attribute('vietnam_channels')

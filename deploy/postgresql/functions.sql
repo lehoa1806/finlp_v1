@@ -12,3 +12,18 @@ CREATE TRIGGER "insert_malaysia_news2email_all" AFTER INSERT ON "public"."malays
 EXECUTE PROCEDURE "public"."insert_malaysia_news2email_all" ( );
 
 GRANT USAGE, SELECT ON SEQUENCE "malaysia_news2email_all_news_id_seq" TO xxxxx_user;
+
+-- trigger to insert new articles to vietnam_news2email_all
+CREATE OR REPLACE FUNCTION "public"."insert_vietnam_news2email_all" ( ) RETURNS "pg_catalog"."trigger" AS $BODY$
+  BEGIN
+    INSERT INTO "vietnam_news2email_all" ( "modified", "datetime", "category", "title", "source", "url" )
+  VALUES
+  ( NEW."modified", NEW."datetime", NEW."category", NEW."title", NEW."source", NEW."url" );
+  RETURN NEW;
+END;
+$BODY$ LANGUAGE plpgsql VOLATILE COST 100;
+
+CREATE TRIGGER "insert_vietnam_news2email_all" AFTER INSERT ON "public"."vietnam_articles" FOR EACH ROW
+EXECUTE PROCEDURE "public"."insert_vietnam_news2email_all" ( );
+
+GRANT USAGE, SELECT ON SEQUENCE "vietnam_news2email_all_news_id_seq" TO xxxxx_user;

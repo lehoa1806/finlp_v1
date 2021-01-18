@@ -5,6 +5,7 @@ from enum import Enum
 import pytz
 
 MY_TIMEZONE = 'Asia/Kuala_Lumpur'
+VN_TIMEZONE = 'Asia/Ho_Chi_Minh'
 NEWS_QUERY = '''
 SELECT
   news_id,

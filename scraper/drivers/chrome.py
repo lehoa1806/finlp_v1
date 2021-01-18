@@ -26,6 +26,8 @@ class Chrome(Browser):
         options.add_argument('--window-size=1920,1080')
         options.add_experimental_option(
             'excludeSwitches', ['enable-automation'])
+        options.add_experimental_option('useAutomationExtension', False)
+
         return options
 
     def get_browser(self, options, capabilities) -> WebDriver:

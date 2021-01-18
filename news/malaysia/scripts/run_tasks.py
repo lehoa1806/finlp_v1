@@ -1,11 +1,12 @@
 import logging
 from argparse import Namespace
 from datetime import datetime
+from time import sleep
 
 import pytz
 
 from common.argument_parser import ArgumentParser
-from common.decorators import do_and_sleep, slack_notify
+from common.decorators import slack_notify
 from news.utils.common import MY_TIMEZONE
 
 from ..bursamalaysia.announcement_scraping_task import \
@@ -20,19 +21,26 @@ from ..theedgemarkets.theedgemarkets_scraping_task import \
 from ..thestar.thestar_scraping_task import TheStarScrapingTask
 
 
-@do_and_sleep(level=10)
-def sleep():
-    pass
-
-
 class Script:
     def __init__(self) -> None:
-        local = pytz.timezone(MY_TIMEZONE)
+        local_timezone = pytz.timezone(MY_TIMEZONE)
         now = datetime.now()
-        self.start_time = local.localize(
-            datetime(now.year, now.month, now.day - 1, 23))
-        self.end_time = local.localize(
-            datetime(now.year, now.month, now.day, 23, 59, 59))
+        local_now = now.replace(tzinfo=pytz.utc).astimezone(local_timezone)
+        local_year = local_now.year
+        local_month = local_now.month
+        local_day = local_now.day
+        hot_time_start = local_timezone.localize(
+            datetime(local_year, local_month, local_day, 8))
+        hot_time_end = local_timezone.localize(
+            datetime(local_year, local_month, local_day, 19))
+        if hot_time_start < local_now < hot_time_end:
+            self.cooldown = 300
+        else:
+            self.cooldown = 3600
+        self.start_time = local_timezone.localize(
+            datetime(local_year, local_month, local_day - 1, 23))
+        self.end_time = local_timezone.localize(
+            datetime(local_year, local_month, local_day, 23, 59, 59))
         self.args = self.parse_args()
         self.filter = Filter()
 
@@ -56,7 +64,8 @@ class Script:
             end_time=self.end_time,
             headless=self.args.headless
         )
-        sleep()
+        sleep(5)
+
         '''
         slack_notify(FreeMalaysiaTodayScrapingTask.process_task, func_type='task')(
             ft=self.filter,
@@ -65,8 +74,9 @@ class Script:
             end_time=self.args.end_time,
             headless=self.args.headless
         )
-        sleep()
+        sleep(5)
         '''
+
         slack_notify(I3investorPriceTargetTask.process_task, func_type='task')(
             ft=self.filter,
             table='malaysia_announcements',
@@ -74,7 +84,7 @@ class Script:
             end_time=self.end_time,
             headless=self.args.headless
         )
-        sleep()
+        sleep(5)
 
         slack_notify(MalayMailScrapingTask.process_task, func_type='task')(
             ft=self.filter,
@@ -83,7 +93,7 @@ class Script:
             end_time=self.end_time,
             headless=self.args.headless
         )
-        sleep()
+        sleep(5)
 
         slack_notify(TheEdgeMarketsScrapingTask.process_task, func_type='task')(
             ft=self.filter,
@@ -92,7 +102,7 @@ class Script:
             end_time=self.end_time,
             headless=self.args.headless
         )
-        sleep()
+        sleep(5)
 
         slack_notify(TheStarScrapingTask.process_task, func_type='task')(
             ft=self.filter,
@@ -101,7 +111,7 @@ class Script:
             end_time=self.end_time,
             headless=self.args.headless
         )
-        sleep()
+        sleep(self.cooldown)
 
 
 if __name__ == "__main__":

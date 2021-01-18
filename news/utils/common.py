@@ -49,7 +49,9 @@ def get_time(
     try:
         return local.localize(datetime.strptime(time, time_format))
     except ValueError:
-        return local.localize(datetime.strptime(time, sub_format))
+        if sub_format:
+            return local.localize(datetime.strptime(time, sub_format))
+    return local.localize(datetime.utcnow())
 
 
 def get_local_date(date_string: str, timezone: str) -> datetime:

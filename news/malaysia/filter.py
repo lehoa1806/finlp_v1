@@ -1,7 +1,7 @@
-from news.utils.filter import Filter as Ft
+from news.utils import filter
 
 
-class Filter(Ft):
+class Filter(filter.Filter):
     @property
     def stock_info_table(self) -> str:
         """

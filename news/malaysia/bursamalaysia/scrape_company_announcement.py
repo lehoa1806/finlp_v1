@@ -1,12 +1,11 @@
-from news.malaysia.announcement_job import ScraperJob
-from news.malaysia.bursamalaysia.announcements_getting_stage import \
-    AnnouncementsGettingStage
-from news.malaysia.bursamalaysia.scraper.bursamalaysia_scraper import \
-    BursaMalaysiaScraper
 from workflow.pipeline import Pipeline
 
+from ..workflow import AnnouncementScraperJob
+from .announcements_getting_stage import AnnouncementsGettingStage
+from .scraper.bursamalaysia_scraper import BursaMalaysiaScraper
 
-class Worker(ScraperJob):
+
+class Worker(AnnouncementScraperJob):
     @property
     def pipeline(self) -> Pipeline:
         return Pipeline(
@@ -18,4 +17,4 @@ class Worker(ScraperJob):
 
 
 if __name__ == "__main__":
-    Worker(table='malaysia_announcements').main()
+    Worker().main()

@@ -1,12 +1,12 @@
+from news.article_filtering_stage import ArticleFilteringStage
 from workflow.pipeline import Pipeline
 
-from ..article_filtering_stage import ArticleFilteringStage
-from ..news_task import NewsTask
+from ..workflow import NewsScraperTask
 from .articles_getting_stage import ArticlesGettingStage
 from .scraper.freemalaysiatoday_scraper import FreeMalaysiaTodayScraper
 
 
-class FreeMalaysiaTodayScrapingTask(NewsTask):
+class FreeMalaysiaTodayScrapingTask(NewsScraperTask):
     @property
     def pipeline(self) -> Pipeline:
         return Pipeline(

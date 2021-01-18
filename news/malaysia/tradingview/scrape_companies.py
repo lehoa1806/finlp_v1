@@ -25,7 +25,7 @@ class Worker(Job):
     @property
     def consumer(self) -> PostgresBatchInsert:
         return PostgresBatchInsert(
-            table_name='companies',
+            table_name='malaysia_companies',
             batch_size=10,
         )
 

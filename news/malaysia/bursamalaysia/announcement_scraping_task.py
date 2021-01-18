@@ -1,11 +1,11 @@
 from workflow.pipeline import Pipeline
 
-from ..announcement_task import AnnouncementTask
+from ..workflow import AnnouncementScraperTask
 from .announcements_getting_stage import AnnouncementsGettingStage
 from .scraper.bursamalaysia_scraper import BursaMalaysiaScraper
 
 
-class BursaMalaysiaAnnouncement(AnnouncementTask):
+class BursaMalaysiaAnnouncement(AnnouncementScraperTask):
     @property
     def pipeline(self) -> Pipeline:
         return Pipeline(

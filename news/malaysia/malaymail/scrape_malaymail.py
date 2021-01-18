@@ -1,13 +1,13 @@
+from news.article_filtering_stage import ArticleFilteringStage
 from news.malaysia.filter import Filter
 from news.malaysia.malaymail.scraper.malaymail_scraper import MalayMailScraper
-from news.malaysia.news_job import ScraperJob
 from workflow.pipeline import Pipeline
 
-from ..article_filtering_stage import ArticleFilteringStage
+from ..workflow import NewsScraperJob
 from .articles_getting_stage import ArticlesGettingStage
 
 
-class Worker(ScraperJob):
+class Worker(NewsScraperJob):
     @property
     def pipeline(self) -> Pipeline:
         return Pipeline(
@@ -23,4 +23,4 @@ class Worker(ScraperJob):
 
 
 if __name__ == "__main__":
-    Worker(table='malaysia_articles').main()
+    Worker().main()

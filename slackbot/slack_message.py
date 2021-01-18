@@ -12,12 +12,12 @@ class SlackMessage:
         title: str
     ):
         self.title = title
-        self.blocks = []
+        self.blocks: List = []
 
     def add_section(
         self,
         text: Union[str, TextObject] = None,
-        block_id: Optional[str] = None,
+        block_id: str = None,
         fields: List[str] = None,
         accessory: Optional[BlockElement] = None,
         section: Optional[SectionBlock] = None,

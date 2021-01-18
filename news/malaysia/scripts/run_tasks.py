@@ -24,7 +24,7 @@ from ..thestar.thestar_scraping_task import TheStarScrapingTask
 class Script:
     def __init__(self) -> None:
         local_timezone = pytz.timezone(MY_TIMEZONE)
-        now = datetime.now()
+        now = datetime.utcnow()
         local_now = now.replace(tzinfo=pytz.utc).astimezone(local_timezone)
         local_year = local_now.year
         local_month = local_now.month
@@ -59,7 +59,6 @@ class Script:
     def main(self):
         slack_notify(BursaMalaysiaAnnouncement.process_task, func_type='task')(
             ft=self.filter,
-            table='malaysia_announcements',
             start_time=self.start_time,
             end_time=self.end_time,
             headless=self.args.headless
@@ -79,7 +78,6 @@ class Script:
 
         slack_notify(I3investorPriceTargetTask.process_task, func_type='task')(
             ft=self.filter,
-            table='malaysia_announcements',
             start_time=self.start_time,
             end_time=self.end_time,
             headless=self.args.headless
@@ -88,7 +86,6 @@ class Script:
 
         slack_notify(MalayMailScrapingTask.process_task, func_type='task')(
             ft=self.filter,
-            table='malaysia_articles',
             start_time=self.start_time,
             end_time=self.end_time,
             headless=self.args.headless
@@ -97,7 +94,6 @@ class Script:
 
         slack_notify(TheEdgeMarketsScrapingTask.process_task, func_type='task')(
             ft=self.filter,
-            table='malaysia_articles',
             start_time=self.start_time,
             end_time=self.end_time,
             headless=self.args.headless
@@ -106,7 +102,6 @@ class Script:
 
         slack_notify(TheStarScrapingTask.process_task, func_type='task')(
             ft=self.filter,
-            table='malaysia_articles',
             start_time=self.start_time,
             end_time=self.end_time,
             headless=self.args.headless

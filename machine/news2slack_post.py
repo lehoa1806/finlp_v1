@@ -9,12 +9,16 @@ from slackbot.slack_message import SlackMessage
 
 
 class News2SlackPost(SlackChatPost):
+    @property
+    def channels(self) -> Dict:
+        raise NotImplementedError
+
     def process(self, item: Dict) -> None:
         """
         Post messages to Slack channel.
         :param item: Dict
         """
-        channel = self.setting.malaysia_channels.get(
+        channel = self.channels.get(
             item.get('Subscription', Subscription.TOTAL).value)
         time = item.get('Time')
         title = item.get('Title')

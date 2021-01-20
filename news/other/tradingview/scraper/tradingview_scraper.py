@@ -1,29 +1,19 @@
 from typing import Any, Dict, List
 
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.remote.webelement import WebElement
 
 from scraper.scraper import Scraper
 
 
 class TradingViewScraper(Scraper):
-    def load_page(self, url: str) -> None:
-        self.load_url(url)
-
-    def get_malaysia_industry_board(self) -> WebElement:
-        url = 'https://www.tradingview.com/markets/stocks-malaysia/' \
-              'sectorandindustry-industry/'
-        self.load_page(url)
-        try:
-            content_pane_class = 'tv-screener__content-pane'
-            return self.find_element_by_class_name(content_pane_class)
-        except NoSuchElementException:
-            raise NoSuchElementException('Failed to get Industry board')
-
     def get_industries(self) -> List[Dict[str, Any]]:
         industries: List[Dict[str, Any]] = []
         try:
-            content_pane = self.get_malaysia_industry_board()
+            content_pane_class = 'tv-screener__content-pane'
+            content_pane = self.find_element_by_class_name(content_pane_class)
+        except NoSuchElementException:
+            raise NoSuchElementException('Failed to get Industry board')
+        try:
             industry_table = content_pane.find_element_by_css_selector(
                 'table > tbody')
             industry_rows = industry_table.find_elements_by_css_selector('tr')
@@ -44,7 +34,7 @@ class TradingViewScraper(Scraper):
     def get_companies(self) -> List[Dict[str, Any]]:
         companies: List[Dict[str, Any]] = []
         for industry in self.get_industries():
-            self.load_page(industry.get('industry_url'))
+            self.load_url(industry.get('industry_url'))
             try:
                 panel_class = 'tv-screener__content-pane'
                 self.wait_for_class_visibility(panel_class)

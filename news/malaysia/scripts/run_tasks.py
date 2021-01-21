@@ -57,7 +57,11 @@ class Script:
         return parser.arguments
 
     def main(self):
-        slack_notify(BursaMalaysiaAnnouncement.process_task, func_type='task')(
+        slack_notify(
+            BursaMalaysiaAnnouncement.process_task,
+            func_type='task',
+            name='BursaMalaysiaAnnouncement.process_task',
+        )(
             ft=self.filter,
             start_time=self.start_time,
             end_time=self.end_time,
@@ -66,17 +70,25 @@ class Script:
         sleep(5)
 
         '''
-        slack_notify(FreeMalaysiaTodayScrapingTask.process_task, func_type='task')(
+        slack_notify(
+            FreeMalaysiaTodayScrapingTask.process_task,
+            func_type='task',
+            name='FreeMalaysiaTodayScrapingTask.process_task',
+        )(
             ft=self.filter,
             table='malaysia_articles',
-            start_time=self.args.start_time,
-            end_time=self.args.end_time,
+            start_time=self.start_time,
+            end_time=self.end_time,
             headless=self.args.headless
         )
         sleep(5)
         '''
 
-        slack_notify(I3investorPriceTargetTask.process_task, func_type='task')(
+        slack_notify(
+            I3investorPriceTargetTask.process_task,
+            func_type='task',
+            name='I3investorPriceTargetTask.process_task',
+        )(
             ft=self.filter,
             start_time=self.start_time,
             end_time=self.end_time,
@@ -84,7 +96,11 @@ class Script:
         )
         sleep(5)
 
-        slack_notify(MalayMailScrapingTask.process_task, func_type='task')(
+        slack_notify(
+            MalayMailScrapingTask.process_task,
+            func_type='task',
+            name='MalayMailScrapingTask.process_task',
+        )(
             ft=self.filter,
             start_time=self.start_time,
             end_time=self.end_time,
@@ -92,7 +108,11 @@ class Script:
         )
         sleep(5)
 
-        slack_notify(TheEdgeMarketsScrapingTask.process_task, func_type='task')(
+        slack_notify(
+            TheEdgeMarketsScrapingTask.process_task,
+            func_type='task',
+            name='TheEdgeMarketsScrapingTask.process_task',
+        )(
             ft=self.filter,
             start_time=self.start_time,
             end_time=self.end_time,
@@ -100,7 +120,11 @@ class Script:
         )
         sleep(5)
 
-        slack_notify(TheStarScrapingTask.process_task, func_type='task')(
+        slack_notify(
+            TheStarScrapingTask.process_task,
+            func_type='task',
+            name='TheStarScrapingTask.process_task',
+        )(
             ft=self.filter,
             start_time=self.start_time,
             end_time=self.end_time,

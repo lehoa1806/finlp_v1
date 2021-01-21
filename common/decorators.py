@@ -32,13 +32,21 @@ def do_and_sleep(func=None, *, level: int = 0):
     return wrapper_do_and_sleep
 
 
-def logged(func=None, *, level=logging.DEBUG, name=None, message=None):
+def logged(
+    func=None,
+    *,
+    level=logging.DEBUG,
+    name=None,
+    message=None,
+    func_name=None,
+):
     """
     A decorator to print logs
     :param func: Function to be decorated
     :param level: Log level
     :param name: Logger name
     :param message: message
+    :param func_name: a customized name of the function
     """
     if func is None:
         return functools.partial(logged, level=level, name=name, message=message)
@@ -46,22 +54,24 @@ def logged(func=None, *, level=logging.DEBUG, name=None, message=None):
 
     @functools.wraps(func)
     def wrapper_logged(*args, **kwargs):
+        f_name = func_name or func.__qualname__
         if level == logging.DEBUG and not message:
-            logger.log(level, f'Leave: {func.__qualname__}')
+            logger.log(level, f'Leave: {f_name}')
         else:
             logger.log(level, message)
         value = func(*args, **kwargs)
         if level == logging.DEBUG and not message:
-            logger.log(level, f'Leave: {func.__qualname__}')
+            logger.log(level, f'Leave: {f_name}')
         return value
     return wrapper_logged
 
 
-def slack_notify(func=None, *, func_type=None):
+def slack_notify(func=None, *, func_type=None, name=None):
     """
     A decorator to print logs
     :param func: Function to be decorated
     :param func_type: type of function to be decorated (task, job, function)
+    :param name: type of function to be decorated (task, job, function)
     """
     if func is None:
         return functools.partial(slack_notify, func_type=func_type)
@@ -70,11 +80,12 @@ def slack_notify(func=None, *, func_type=None):
 
     @functools.wraps(func)
     def wrapper_alarm(*args, **kwargs):
+        func_name = name or func.__qualname__
         track_info = table.get_item(
-            partition_key=func.__qualname__,
+            partition_key=func_name,
             sort_key=func_type,
         ) or {
-            'track_id': func.__qualname__,
+            'track_id': func_name,
             'track_type': func_type,
         } if func_type is not None else {}
 
@@ -84,9 +95,9 @@ def slack_notify(func=None, *, func_type=None):
             value = func(*args, **kwargs)
             if len(warn) <= 0 and status.get('last_status') == 'failed':
                 message = SlackMessage(
-                    title=f'Slack notification: {func.__qualname__}',
+                    title=f'Slack notification: {func_name}',
                 ).add_header(
-                    text=f':shamrock:   {func.__qualname__} is back to normal   :shamrock:',
+                    text=f':shamrock:   {func_name} is back to normal   :shamrock:',
                 ).add_divider()
                 slack_bot.chat_post(
                     channel='development',
@@ -98,9 +109,9 @@ def slack_notify(func=None, *, func_type=None):
                     table.put_item(item=track_info)
             elif len(warn) > 0 and status.get('last_status') != 'failed':
                 message = SlackMessage(
-                    title=f'Slack notification: {func.__qualname__}',
+                    title=f'Slack notification: {func_name}',
                 ).add_header(
-                    text=f':bomb:   {func.__qualname__} failed   :bomb:',
+                    text=f':bomb:   {func_name} failed   :bomb:',
                 ).add_context(
                     elements=[TextObject(
                         text=f':pushpin: Description: \n*{warn[0].message}*',
@@ -117,9 +128,9 @@ def slack_notify(func=None, *, func_type=None):
                     table.put_item(item=track_info)
             elif len(warn) > 0 and status.get('last_status') == 'failed':
                 message = SlackMessage(
-                    title=f'Slack notification: {func.__qualname__}',
+                    title=f'Slack notification: {func_name}',
                 ).add_header(
-                    text=f':boom:   {func.__qualname__} failed again   :boom:',
+                    text=f':boom:   {func_name} failed again   :boom:',
                 ).add_divider()
                 slack_bot.chat_post(
                     channel='development',

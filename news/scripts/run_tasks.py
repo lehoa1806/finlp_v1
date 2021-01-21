@@ -24,6 +24,7 @@ from news.utils.common import MY_TIMEZONE, VN_TIMEZONE
 from news.vietnam.dautucophieu.analysis_scraping_task import \
     DauTuCoPhieuAnnouncement
 from news.vietnam.filter import Filter as VietnamFilter
+from news.vietnam.fireant_vn.fireant_scraping_task import FireAntTask
 
 
 class Worker:
@@ -167,6 +168,18 @@ class Worker:
             DauTuCoPhieuAnnouncement.process_task,
             func_type='task',
             name='DauTuCoPhieuAnnouncement.process_task',
+        )(
+            ft=vietnam_filter,
+            start_time=start_time,
+            end_time=end_time,
+            headless=self.args.headless
+        )
+        sleep(5)
+
+        slack_notify(
+            FireAntTask.process_task,
+            func_type='task',
+            name='FireAntTask.process_task',
         )(
             ft=vietnam_filter,
             start_time=start_time,

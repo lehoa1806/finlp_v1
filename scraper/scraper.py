@@ -295,3 +295,12 @@ class Scraper:
         :return: WebElement
         """
         return self.wait_for_visibility(ClassNameLocator(name))
+
+    @do_and_sleep(level=2)
+    def scroll(self) -> None:
+        """
+        Scroll down the page
+        """
+        self.browser.execute_script(
+            "window.scrollTo(0,document.body.scrollHeight)"
+        )

@@ -5,7 +5,7 @@ from .analysis_getting_stage import AnalysisGettingStage
 from .scraper.dtcp_scraper import DauTuCoPhieuScraper
 
 
-class BursaMalaysiaAnnouncement(AnnouncementScraperTask):
+class DauTuCoPhieuAnnouncement(AnnouncementScraperTask):
     @property
     def pipeline(self) -> Pipeline:
         return Pipeline(

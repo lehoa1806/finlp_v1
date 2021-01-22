@@ -25,6 +25,7 @@ from news.vietnam.dautucophieu.analysis_scraping_task import \
     DauTuCoPhieuAnnouncement
 from news.vietnam.filter import Filter as VietnamFilter
 from news.vietnam.fireant_vn.fireant_scraping_task import FireAntTask
+from news.vietnam.tinnhanhchungkhoan.tnck_scraping_task import TNCKTask
 
 
 class Worker:
@@ -180,6 +181,17 @@ class Worker:
             FireAntTask.process_task,
             func_type='task',
             name='FireAntTask.process_task',
+        )(
+            ft=vietnam_filter,
+            start_time=start_time,
+            end_time=end_time,
+            headless=self.args.headless
+        )
+        sleep(5)
+        slack_notify(
+            TNCKTask.process_task,
+            func_type='task',
+            name='TNCKTask.process_task',
         )(
             ft=vietnam_filter,
             start_time=start_time,

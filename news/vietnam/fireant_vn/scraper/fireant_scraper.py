@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Dict, Iterator
 
 import pytz
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 from news.utils.common import VN_TIMEZONE
 from scraper.elements.button import Button
@@ -23,7 +23,7 @@ class FireAntScraper(Scraper):
                 'div.bp3-dialog-header > button'
             ))
             close.click_and_wait()
-        except NoSuchElementException:
+        except (NoSuchElementException,  TimeoutException):
             pass
         try:
             popup = self.wait_for_css_presence(
@@ -33,7 +33,7 @@ class FireAntScraper(Scraper):
                 'div.bp3-dialog-header > button'
             ))
             close.click_and_wait()
-        except NoSuchElementException:
+        except (NoSuchElementException,  TimeoutException):
             pass
 
     def get_articles(self) -> Iterator[Dict[str, str]]:

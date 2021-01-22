@@ -34,6 +34,7 @@ create {{ grains.boxname.lower() }} security group:
             bash -c 'echo "deb http://repo.saltstack.com/py3/ubuntu/20.04/amd64/latest focal main" > /etc/apt/sources.list.d/saltstack.list'
             apt-get -y update
             apt-get -y install salt-minion python3 python3-pip git awscli
+            snap remove amazon-ssm-agent
             sudo -u {{ pillar.user_name }} git clone {{ pillar.project_code }} {{ pillar.project }}
             cd {{ pillar.project_home }}
             sudo -u {{ pillar.user_name }} git submodule update --recursive

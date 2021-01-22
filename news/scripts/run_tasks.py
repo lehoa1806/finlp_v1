@@ -21,6 +21,7 @@ from news.malaysia.theedgemarkets.theedgemarkets_scraping_task import \
     TheEdgeMarketsScrapingTask
 from news.malaysia.thestar.thestar_scraping_task import TheStarScrapingTask
 from news.utils.common import MY_TIMEZONE, VN_TIMEZONE
+from news.vietnam.cafef_vn.cafef_scraping_task import CafefTask
 from news.vietnam.dautucophieu.analysis_scraping_task import \
     DauTuCoPhieuAnnouncement
 from news.vietnam.filter import Filter as VietnamFilter
@@ -188,10 +189,23 @@ class Worker:
             headless=self.args.headless
         )
         sleep(5)
+
         slack_notify(
             TNCKTask.process_task,
             func_type='task',
             name='TNCKTask.process_task',
+        )(
+            ft=vietnam_filter,
+            start_time=start_time,
+            end_time=end_time,
+            headless=self.args.headless
+        )
+        sleep(5)
+
+        slack_notify(
+            CafefTask.process_task,
+            func_type='task',
+            name='CafefTask.process_task',
         )(
             ft=vietnam_filter,
             start_time=start_time,

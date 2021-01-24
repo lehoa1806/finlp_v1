@@ -1,9 +1,12 @@
+import logging
 import re
 from datetime import datetime, timedelta
 from typing import Dict, Iterator
 
 import pytz
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import (NoSuchElementException,
+                                        StaleElementReferenceException,
+                                        TimeoutException)
 
 from news.utils.common import VN_TIMEZONE
 from scraper.elements.button import Button
@@ -51,8 +54,8 @@ class FireAntScraper(Scraper):
                     break
             except NoSuchElementException:
                 pass
-        try:
-            for article in articles:
+        for article in articles:
+            try:
                 element_class = article.get_attribute('class')
                 if 'bp3-card' in element_class:
                     continue
@@ -108,5 +111,7 @@ class FireAntScraper(Scraper):
                     'category': category,
                     'url': url,
                 }
-        except NoSuchElementException:
-            raise NoSuchElementException('Failed to get Articles row')
+            except StaleElementReferenceException as error:
+                logging.exception(error)
+            except NoSuchElementException:
+                raise NoSuchElementException('Failed to get Articles row')

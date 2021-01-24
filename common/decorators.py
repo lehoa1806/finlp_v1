@@ -45,8 +45,8 @@ def logged(
     :param func: Function to be decorated
     :param level: Log level
     :param name: Logger name
-    :param message: message
-    :param func_name: a customized name of the function
+    :param message: Message
+    :param func_name: A customized name of the function
     """
     if func is None:
         return functools.partial(logged, level=level, name=name, message=message)
@@ -68,10 +68,10 @@ def logged(
 
 def slack_notify(func=None, *, func_type=None, name=None):
     """
-    A decorator to print logs
+    A decorator to send execution status to slack
     :param func: Function to be decorated
-    :param func_type: type of function to be decorated (task, job, function)
-    :param name: type of function to be decorated (task, job, function)
+    :param func_type: Type of function to be decorated (task, job, function)
+    :param name: A customized name of the function
     """
     if func is None:
         return functools.partial(slack_notify, func_type=func_type)

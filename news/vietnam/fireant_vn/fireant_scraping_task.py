@@ -10,6 +10,6 @@ class FireAntTask(NewsScraperTask):
     def pipeline(self) -> Pipeline:
         return Pipeline(
             stage=FireAntGettingStage(
-                scraper=FireAntScraper(headless=self.headless),
+                scraper=FireAntScraper(headless=self.headless, timeout=15),
             )
         )

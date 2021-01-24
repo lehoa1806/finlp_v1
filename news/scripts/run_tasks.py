@@ -76,6 +76,7 @@ class Worker:
         while True:
             sleep(300)
             now = datetime.utcnow()
+            utc_local = now.astimezone(pytz.utc)
             _nows = [
                 now.replace(tzinfo=pytz.utc).astimezone(_timezone)
                 for _timezone in _timezones
@@ -97,15 +98,15 @@ class Worker:
 
             is_weekend = all(_dt.weekday() in [5, 6] for _dt in _local_dates)
 
-            if rest_time_start <= now or now <= rest_time_end:
+            if rest_time_start <= utc_local or utc_local <= rest_time_end:
                 _rested_time += 300
                 if _rested_time > 7200:
                     break
-            elif night_time_start <= now <= night_time_end or is_weekend:
+            elif night_time_start <= utc_local <= night_time_end or is_weekend:
                 _rested_time += 300
                 if _rested_time > 2400:
                     break
-            elif working_time_start <= now <= working_time_end:
+            elif working_time_start <= utc_local <= working_time_end:
                 break
 
     def malaysia(self):

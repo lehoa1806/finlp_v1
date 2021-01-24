@@ -93,18 +93,17 @@ class Worker:
             _date_max = max(_local_dates).astimezone(pytz.utc)
 
             rest_time_end = working_time_start = _date_min + timedelta(hours=8)
-            working_time_end = night_time_start = _date_max + timedelta(hours=19)
+            working_time_end = night_time_start = _date_max + timedelta(hours=17)
             night_time_end = rest_time_start = _date_max + timedelta(hours=23)
 
             is_weekend = all(_dt.weekday() in [5, 6] for _dt in _local_dates)
-
             if rest_time_start <= utc_local or utc_local <= rest_time_end:
                 _rested_time += 300
-                if _rested_time > 7200:
+                if _rested_time >= 10800:
                     break
             elif night_time_start <= utc_local <= night_time_end or is_weekend:
                 _rested_time += 300
-                if _rested_time > 2400:
+                if _rested_time >= 3600:
                     break
             elif working_time_start <= utc_local <= working_time_end:
                 break

@@ -1,3 +1,4 @@
+import subprocess
 from datetime import datetime
 
 from news.utils.filter import Filter
@@ -48,3 +49,10 @@ class ScraperTask(Task):
     ) -> None:
         cls(ft=ft, start_time=start_time, end_time=end_time,
             headless=headless, **kwargs).main()
+
+    def teardown(self) -> None:
+        cmd = 'pkill -9 chrome'
+        subprocess.check_call(cmd.split())
+        cmd = 'pkill -9 chromedriver'
+        subprocess.check_call(cmd.split())
+        super().teardown()

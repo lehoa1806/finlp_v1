@@ -34,8 +34,8 @@ class ConfigDB:
 
     def reset_repo_updated(self) -> None:
         if self.repo_updated:
-            self.dynamic['configs']['git']['repo_updated'] = False
-            self.config_table.put_item(self.dynamic)
+            self._dynamic['configs']['git']['repo_updated'] = False
+            self.config_table.put_item(self._dynamic)
 
     @cached_property
     def cipher_key(self) -> str:

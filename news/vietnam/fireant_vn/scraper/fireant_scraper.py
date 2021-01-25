@@ -93,18 +93,24 @@ class FireAntScraper(Scraper):
                 _year = local_now.year
                 _month = local_now.month
                 _day = local_now.day
-                if re.compile(r'^Khoảng [0-9]* tiếng$').match(time):
-                    times = time.split(' ')
+                if re.compile(r'^\d* phút').match(time):
+                    times = time.split()
+                    timestamp = (
+                        local_now - timedelta(minutes=int(times[0]))
+                    ).strftime('%-d/%-m/%Y %H:%M:%S')
+                elif re.compile(r'^Khoảng \d* tiếng$').match(time):
+                    times = time.split()
                     timestamp = (
                         local_now - timedelta(hours=int(times[1]))
                     ).strftime('%-d/%-m/%Y %H:%M:%S')
-                elif re.compile(r'^Hôm qua lúc [0-9]*:[0-9]{2}$').match(time):
+                elif re.compile(r'^Hôm qua lúc \d*:\d{2}$').match(time):
                     timestamp = f'{_day}/{_month}/{_year} {time[12:]}:00'
-                elif re.compile(r'^([0-9]|/)* lúc [0-9]*:[0-9]{2}$').match(time):
+                elif re.compile(r'^(\d|/)* lúc \d*:\d{2}$').match(time):
                     times = time.split(' lúc ')
                     timestamp = f'{times[0]}/{_year} {times[1]}:00'
                 else:
                     timestamp = local_now.strftime('%-d/%-m/%Y %H:%M:%S')
+
                 yield {
                     'datetime': timestamp,
                     'title': title,

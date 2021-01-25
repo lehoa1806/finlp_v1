@@ -1,3 +1,4 @@
+from news.article_filtering_stage import ArticleFilteringStage
 from workflow.pipeline import Pipeline
 
 from ..workflow import NewsScraperTask
@@ -11,5 +12,11 @@ class CafefTask(NewsScraperTask):
         return Pipeline(
             stage=CafefGettingStage(
                 scraper=CafefScraper(headless=self.headless),
+            )
+        ).add_stage(
+            stage=ArticleFilteringStage(
+                ft=self.filter,
+                source='cafef.vn',
+                pass_through=True,
             )
         )

@@ -11,7 +11,15 @@ class ArticleFilteringStage(Stage):
         self,
         ft: Filter,
         source: str,
+        pass_through: bool = False,
     ) -> None:
+        """
+        Init function
+        :param ft: Filter
+        :param source: Traffic source (site url)
+        :param pass_through: If it is set to True, all articles will be posted
+         to Slack
+        """
         super().__init__()
         self.holding_rule = Rule({
             'contains_any': [{'content': ft.holding_keys},
@@ -28,6 +36,7 @@ class ArticleFilteringStage(Stage):
                              {'title': ft.common_keys}]
         })
         self.source = source
+        self.pass_through = pass_through
 
     def process(self, item: Dict) -> Iterator:
         content = item['content']
@@ -64,7 +73,7 @@ class ArticleFilteringStage(Stage):
                 'content': content,
                 'url': item['url'],
             }
-        elif self.common_rule({
+        elif self.pass_through or self.common_rule({
             'category': category_to_filter,
             'content': content_to_filter,
             'title': title_to_filter,

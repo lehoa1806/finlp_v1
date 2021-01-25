@@ -21,13 +21,11 @@ class TTCKScraper(Scraper):
         now = datetime.utcnow()
         local_now = now.replace(tzinfo=pytz.utc).astimezone(
             local_timezone)
-        print(time)
         if re.compile(r'^\d* giờ trước$').match(time):
             return (
                 local_now - timedelta(hours=int(time[:-10]))
             ).strftime('%d/%m/%Y %H:%M:%S')
         elif re.compile(r'^\d{2}/\d{2}/\d{4} \d{2}:\d{2}$').match(time):
-
             return f'{time}:00'
         else:
             return local_now.strftime('%d/%m/%Y %H:%M:%S')

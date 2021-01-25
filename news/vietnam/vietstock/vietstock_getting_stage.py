@@ -3,7 +3,7 @@ from typing import Dict, Iterator
 
 from aws_apis.dynamodb.database import Database
 from common.url_tracker import UrlTracker
-from news.utils.common import VN_TIMEZONE, Subscription, get_time
+from news.utils.common import VN_TIMEZONE, get_time
 from workflow.stage import Stage
 
 from .scraper.vietstock_scraper import VietStockScraper
@@ -39,11 +39,9 @@ class VietStockGettingStage(Stage):
                 return
             elif time < item['end_time']:
                 yield {
-                    'subscription': Subscription.TOTAL,
                     'datetime': time,
                     'title': article['title'],
                     'category': article['category'],
                     'content': '',
                     'url': article['url'],
-                    'source': 'vietstock.vn',
                 }

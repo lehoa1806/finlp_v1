@@ -49,9 +49,9 @@ class Filter:
         """
         query = f'SELECT stock_id, short_name FROM {self.stock_info_table};'
         return {
-            item['stock_id'].lower(): item['short_name'].lower()
+            item['id'].lower(): (item.get('name') or item['id']).lower()
             for item in self.database.query(
-                query=query, keys=('stock_id', 'short_name'))
+                query=query, keys=('id', 'name'))
         }
 
     @cached_property

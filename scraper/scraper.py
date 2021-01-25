@@ -302,5 +302,13 @@ class Scraper:
         Scroll down the page
         """
         self.browser.execute_script(
-            "window.scrollTo(0,document.body.scrollHeight)"
+            'window.scrollTo(0,document.body.scrollHeight)'
         )
+
+    @do_and_sleep(level=1)
+    def force_click(self, element: WebElement) -> None:
+        """
+        Click on an element that is present but having a permanent overlay
+        :param element: Element will be clicked
+        """
+        self.browser.execute_script('arguments[0].click();', element)

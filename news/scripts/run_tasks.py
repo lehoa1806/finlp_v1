@@ -27,6 +27,7 @@ from news.vietnam.dautucophieu.analysis_scraping_task import \
 from news.vietnam.filter import Filter as VietnamFilter
 from news.vietnam.fireant_vn.fireant_scraping_task import FireAntTask
 from news.vietnam.tinnhanhchungkhoan.tnck_scraping_task import TNCKTask
+from news.vietnam.vietstock.vietstock_scraping_task import VietStockTask
 
 
 class Worker:
@@ -74,6 +75,7 @@ class Worker:
         _rested_time = 0
         shifts = [TimeShift(timezone) for timezone in timezones]
         while True:
+            logging.info('Sleep 300s ...')
             sleep(300)
             current_shifts = [shift.current for shift in shifts]
             if all(shift == TimeShift.REST for shift in current_shifts):
@@ -215,6 +217,18 @@ class Worker:
             CafefTask.process_task,
             func_type='task',
             name='CafefTask.process_task',
+        )(
+            ft=vietnam_filter,
+            start_time=start_time,
+            end_time=end_time,
+            headless=self.args.headless
+        )
+        sleep(5)
+
+        slack_notify(
+            VietStockTask.process_task,
+            func_type='task',
+            name='VietStockTask.process_task',
         )(
             ft=vietnam_filter,
             start_time=start_time,

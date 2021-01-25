@@ -1,6 +1,7 @@
 import logging
 from typing import List, Tuple
 
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as ec
@@ -312,3 +313,11 @@ class Scraper:
         :param element: Element will be clicked
         """
         self.browser.execute_script('arguments[0].click();', element)
+
+    @do_and_sleep
+    def mouse_over(self, element: WebElement) -> None:
+        """
+        Perform a mouse over action on the giving element.
+        :param element: WebElement
+        """
+        ActionChains(self.browser).move_to_element(element).perform()

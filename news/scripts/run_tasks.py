@@ -1,6 +1,6 @@
 import logging
 from argparse import Namespace
-from datetime import datetime, timedelta
+from datetime import datetime
 from time import sleep
 from typing import Dict, List
 
@@ -20,7 +20,7 @@ from news.malaysia.malaymail.malaymail_scraping_task import \
 from news.malaysia.theedgemarkets.theedgemarkets_scraping_task import \
     TheEdgeMarketsScrapingTask
 from news.malaysia.thestar.thestar_scraping_task import TheStarScrapingTask
-from news.utils.common import MY_TIMEZONE, VN_TIMEZONE
+from news.utils.common import MY_TIMEZONE, VN_TIMEZONE, TimeShift
 from news.vietnam.cafef_vn.cafef_scraping_task import CafefTask
 from news.vietnam.dautucophieu.analysis_scraping_task import \
     DauTuCoPhieuAnnouncement
@@ -72,40 +72,20 @@ class Worker:
         :return: None
         """
         _rested_time = 0
-        _timezones = [pytz.timezone(timezone) for timezone in timezones]
+        shifts = [TimeShift(timezone) for timezone in timezones]
         while True:
             sleep(300)
-            now = datetime.utcnow()
-            utc_local = now.astimezone(pytz.utc)
-            _nows = [
-                now.replace(tzinfo=pytz.utc).astimezone(_timezone)
-                for _timezone in _timezones
-            ]
-            _date_elements = [
-                {'day': _now.day, 'month': _now.month, 'year': _now.year}
-                for _now in _nows
-            ]
-            _local_dates = [
-                _tz.localize(datetime(_dt['year'], _dt['month'], _dt['day']))
-                for _tz, _dt in zip(_timezones, _date_elements)
-            ]
-            _date_min = min(_local_dates).astimezone(pytz.utc)
-            _date_max = max(_local_dates).astimezone(pytz.utc)
-
-            rest_time_end = working_time_start = _date_min + timedelta(hours=8)
-            working_time_end = night_time_start = _date_max + timedelta(hours=17)
-            night_time_end = rest_time_start = _date_max + timedelta(hours=23)
-
-            is_weekend = all(_dt.weekday() in [5, 6] for _dt in _local_dates)
-            if rest_time_start <= utc_local or utc_local <= rest_time_end:
+            current_shifts = [shift.current for shift in shifts]
+            if all(shift == TimeShift.REST for shift in current_shifts):
                 _rested_time += 300
                 if _rested_time >= 10800:
                     break
-            elif night_time_start <= utc_local <= night_time_end or is_weekend:
+            elif all(shift >= TimeShift.NIGHT for shift in current_shifts):
                 _rested_time += 300
                 if _rested_time >= 3600:
                     break
-            elif working_time_start <= utc_local <= working_time_end:
+            else:
+                # if any(shift >= TimeShift.WORKING for shift in shifts):
                 break
 
     def malaysia(self):

@@ -35,6 +35,34 @@ class Subscription(Enum):
     ANNOUNCEMENT = 1000
 
 
+class TimeShift:
+    WORKING = 0
+    NIGHT = 1
+    WEEKEND = 2
+    REST = 3
+
+    def __init__(self, timezone: str):
+        self.timezone = pytz.timezone(timezone)
+
+    @property
+    def current(self) -> int:
+        """
+        08:00 -- 19:00: WORKING
+        19:00 -- 22:00: NIGHT
+        22:00 -- 00:00 -- 08:00: REST
+        Priority order: WORKING -> NIGHT -> WEEKEND -> REST
+        """
+        utcnow = datetime.utcnow()
+        now = utcnow.replace(tzinfo=pytz.utc).astimezone(self.timezone)
+        if now.hour >= 22 or now.hour <= 8:
+            return self.REST
+        if now.weekday() in [5, 6]:
+            return self.WEEKEND
+        elif now.hour >= 19:
+            return self.NIGHT
+        return self.WORKING
+
+
 def get_time(
     time_string: str,
     time_format: str,

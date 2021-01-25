@@ -9,18 +9,33 @@ class ConfigDB:
     def __init__(self) -> None:
         database = Database.load_database()
         self.config_table = database.load_configuration_table()
-
-    @cached_property
-    def scraper(self) -> Dict:
-        config = self.config_table.get_item(
+        self.scraper = self.config_table.get_item(
             partition_key='scraper',
             attributes_to_get=['configs', 'secret_keys']
         )
-        return config
+        self.default = self.config_table.get_item(partition_key='default')
+        self._dynamic: Dict = {}
 
-    @cached_property
-    def default(self) -> Dict:
-        return self.config_table.get_item(partition_key='default')
+    @property
+    def dynamic(self) -> Dict:
+        if not self._dynamic:
+            self._dynamic = self.get_dynamic()
+        return self._dynamic
+
+    def get_dynamic(self) -> Dict:
+        self._dynamic = self.config_table.get_item(partition_key='dynamic')
+        return self._dynamic
+
+    # UTILS
+    @property
+    def repo_updated(self) -> bool:
+        return self.dynamic.get('configs', {}).get(
+            'git', {}).get('repo_updated', False)
+
+    def reset_repo_updated(self) -> None:
+        if self.repo_updated:
+            self.dynamic['configs']['git']['repo_updated'] = False
+            self.config_table.put_item(self.dynamic)
 
     @cached_property
     def cipher_key(self) -> str:

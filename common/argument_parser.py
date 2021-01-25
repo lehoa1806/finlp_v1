@@ -1,5 +1,6 @@
 import argparse
 import logging
+import sys
 from datetime import datetime
 
 import pytz
@@ -23,6 +24,7 @@ class ArgumentParser(argparse.ArgumentParser):
             format=fmt,
             datefmt='%Y-%m-%d %I:%M:%S',
             level=logging.DEBUG if args.debug else logging.INFO,
+            handlers=[logging.StreamHandler(sys.stdout)],
         )
         return args
 

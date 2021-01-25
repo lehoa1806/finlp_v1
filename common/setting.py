@@ -41,6 +41,14 @@ class Setting(metaclass=Singleton):
         """
         return self.decrypt_json(encrypted, tuple())
 
+    # UTILS
+    @property
+    def repo_updated(self) -> bool:
+        return self.config_db.repo_updated
+
+    def reset_repo_updated(self) -> None:
+        self.config_db.reset_repo_updated()
+
     @cached_property
     def cipher_key(self) -> str:
         return self.config_db.cipher_key or self.config_file.cipher_key

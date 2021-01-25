@@ -8,6 +8,7 @@ import pytz
 
 from common.argument_parser import ArgumentParser
 from common.decorators import slack_notify
+from common.setting import Setting
 from news.malaysia.bursamalaysia.announcement_scraping_task import \
     BursaMalaysiaAnnouncement
 from news.malaysia.filter import Filter as MalaysiaFilter
@@ -241,6 +242,10 @@ class Worker:
 if __name__ == "__main__":
     worker = Worker()
     while True:
+        if Setting().repo_updated:
+            Setting().reset_repo_updated()
+            logging.warning('REPO UPDATED is triggered. Exiting ... !!!')
+            raise SystemExit(1)
         try:
             logging.info('Scrapping Malaysia news/announcements')
             worker.malaysia()

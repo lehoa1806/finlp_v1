@@ -1,8 +1,8 @@
 from typing import Dict, Iterator
 
-from common.setting import Setting
 from scraper.elements.button import Button
 from scraper.scraper import Scraper
+from utils.configs.setting import Setting
 
 
 class I3investorScraper(Scraper):

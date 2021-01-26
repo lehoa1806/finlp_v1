@@ -1,13 +1,13 @@
 import json
 from typing import Any, Dict, Tuple
 
-from common.cipher import CipherHelper
-from common.common import AWS_REGION, GLOBAL_ENV
-from common.config_db import ConfigDB
-from common.config_file import ConfigFile
-from common.functools import cached_property
-from common.singleton import Singleton
 from scraper.common import BrowserType
+from utils.common import AWS_REGION, GLOBAL_ENV
+from utils.configs.config_db import ConfigDB
+from utils.configs.config_file import ConfigFile
+from utils.decorators.functools import cached_property
+from utils.tools.cipher import CipherHelper
+from utils.tools.singleton import Singleton
 
 
 class Setting(metaclass=Singleton):
@@ -40,14 +40,6 @@ class Setting(metaclass=Singleton):
         SCRAPER_CREDENTIALS: '(username, password)'
         """
         return self.decrypt_json(encrypted, tuple())
-
-    # UTILS
-    @property
-    def repo_updated(self) -> bool:
-        return self.config_db.repo_updated
-
-    def reset_repo_updated(self) -> None:
-        self.config_db.reset_repo_updated()
 
     @cached_property
     def cipher_key(self) -> str:
@@ -119,3 +111,11 @@ class Setting(metaclass=Singleton):
     @cached_property
     def vietnam_channels(self) -> Dict:
         return self.get_attribute('vietnam_channels')
+
+    # UTILS
+    @property
+    def repo_updated(self) -> bool:
+        return self.config_db.repo_updated
+
+    def reset_repo_updated(self) -> None:
+        self.config_db.reset_repo_updated()

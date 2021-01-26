@@ -6,9 +6,6 @@ from typing import Dict, List
 
 import pytz
 
-from common.argument_parser import ArgumentParser
-from common.decorators import slack_notify
-from common.setting import Setting
 from news.malaysia.bursamalaysia.announcement_scraping_task import \
     BursaMalaysiaAnnouncement
 from news.malaysia.filter import Filter as MalaysiaFilter
@@ -29,6 +26,9 @@ from news.vietnam.filter import Filter as VietnamFilter
 from news.vietnam.fireant_vn.fireant_scraping_task import FireAntTask
 from news.vietnam.tinnhanhchungkhoan.tnck_scraping_task import TNCKTask
 from news.vietnam.vietstock.vietstock_scraping_task import VietStockTask
+from utils.argument_parser import ArgumentParser
+from utils.configs.setting import Setting
+from utils.decorators.slack_notify import slack_notify
 
 
 class Worker:

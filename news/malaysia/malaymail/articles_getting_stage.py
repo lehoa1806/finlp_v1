@@ -2,9 +2,9 @@ import logging
 from typing import Any, Dict, Iterator
 
 from aws_apis.dynamodb.database import Database
-from common.url_tracker import UrlTracker
 from news.malaysia.malaymail.scraper.malaymail_scraper import MalayMailScraper
 from news.utils.common import MY_TIMEZONE, get_time
+from utils.url_tracker import UrlTracker
 from workflow.stage import Stage
 
 TIME_FORMAT = '%A, %d %b %Y %I:%M %p'

@@ -1,9 +1,9 @@
 from configparser import ConfigParser, ExtendedInterpolation
 from typing import Dict, Optional
 
-from common.common import GLOBAL_ENV
-from common.functools import cached_property
 from scraper.common import BrowserType
+from utils.common import GLOBAL_ENV
+from utils.decorators.functools import cached_property
 
 
 class ConfigFile:

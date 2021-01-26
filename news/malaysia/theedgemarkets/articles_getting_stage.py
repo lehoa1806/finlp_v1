@@ -3,10 +3,10 @@ from datetime import datetime
 from typing import Dict, Iterator, Optional
 
 from aws_apis.dynamodb.database import Database
-from common.url_tracker import UrlTracker
 from news.malaysia.theedgemarkets.scraper.theedgemarkets_scraper import \
     TheEdgeMarketsScraper
 from news.utils.common import MY_TIMEZONE, get_time
+from utils.url_tracker import UrlTracker
 from workflow.stage import Stage
 
 TIME_FORMAT = '%Y %d %b %I:%M%p'

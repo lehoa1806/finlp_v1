@@ -6,7 +6,7 @@ from urllib.error import URLError
 from slack.web.client import WebClient
 from slack.web.slack_response import SlackResponse
 
-from common.setting import Setting
+from utils.configs.setting import Setting
 
 from .slack_message import SlackMessage
 

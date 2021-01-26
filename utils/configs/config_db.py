@@ -1,10 +1,10 @@
 from typing import Any, Dict, Optional
 
 from aws_apis.dynamodb.database import Database
-from common.common import GLOBAL_CACHE
-from common.decorators.function_cache import cached
-from common.functools import cached_property
 from scraper.common import BrowserType
+from utils.common import GLOBAL_CACHE
+from utils.decorators.function_cache import cached
+from utils.decorators.functools import cached_property
 
 CONFIG_TABLE = Database.load_database().load_configuration_table()
 

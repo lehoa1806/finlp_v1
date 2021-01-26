@@ -1,7 +1,7 @@
 from selenium.webdriver.remote.webelement import WebElement
 
-from common.decorators import do_and_sleep
 from scraper.common import wait_for_change
+from utils.decorators.do_and_sleep import do_and_sleep
 
 
 class Button:

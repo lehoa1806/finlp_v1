@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Dict
 
-from common.setting import Setting
 from google_apis.gmail import Gmail
+from utils.configs.setting import Setting
 from workflow.consumer import Consumer
 
 MESSAGE_TEMPLATE = '''<br /><b>{count}</b>.

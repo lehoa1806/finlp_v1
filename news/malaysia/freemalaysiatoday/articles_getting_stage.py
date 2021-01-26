@@ -1,10 +1,10 @@
 from typing import Dict, Iterator
 
 from aws_apis.dynamodb.database import Database as DynamoDB
-from common.url_tracker import UrlTracker
 from news.malaysia.freemalaysiatoday.scraper.freemalaysiatoday_scraper import \
     FreeMalaysiaTodayScraper
 from news.utils.common import MY_TIMEZONE, get_time
+from utils.url_tracker import UrlTracker
 from workflow.stage import Stage
 
 TIME_FORMAT = '%b %d, %Y %I:%M %p'

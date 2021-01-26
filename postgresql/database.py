@@ -2,7 +2,7 @@ from typing import Any, Dict, Iterable, Iterator, Tuple
 
 import psycopg2
 
-from common.setting import Setting
+from utils.configs.setting import Setting
 
 from .connection import Connection
 from .table import Table

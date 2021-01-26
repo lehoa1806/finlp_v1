@@ -1,7 +1,7 @@
 from typing import Dict
 
-from common.setting import Setting
 from slackbot.slack_bot import SlackBot
+from utils.configs.setting import Setting
 from workflow.consumer import Consumer
 
 

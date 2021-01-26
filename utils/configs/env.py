@@ -1,8 +1,8 @@
 import os
 from typing import Dict
 
-from common.functools import cached_property
 from scraper.common import BrowserType
+from utils.decorators.functools import cached_property
 
 
 class Env:

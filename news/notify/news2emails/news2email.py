@@ -1,11 +1,11 @@
 from argparse import Namespace
 
-from common.argument_parser import ArgumentParser
 from google_apis.auth import GoogleAuth
 from google_apis.gmail import Gmail
 from machine.google_email_sender import EmailSender
 from machine.postgres_batch_delete import PostgresBatchDelete
 from news.utils.common import MY_TIMEZONE
+from utils.argument_parser import ArgumentParser
 from workflow.filter import Filter
 from workflow.hybrid_consumer import HybridConsumer
 from workflow.job import Job

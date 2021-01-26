@@ -1,7 +1,7 @@
 
 from selenium.webdriver.remote.webdriver import WebDriver
 
-from common.setting import Setting
+from utils.configs.setting import Setting
 
 
 class Browser:

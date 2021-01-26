@@ -1,8 +1,8 @@
 import functools
 import json
 
-from common.common import GLOBAL_CACHE
-from common.json_encoder import CustomJSONEncoder
+from utils.common import GLOBAL_CACHE
+from utils.json_encoder import CustomJSONEncoder
 
 
 def cached(

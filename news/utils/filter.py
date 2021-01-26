@@ -1,8 +1,8 @@
 from typing import Dict, Set
 
-from common.functools import cached_property
 from news.utils.common import Subscription
 from postgresql.database import Database
+from utils.decorators.functools import cached_property
 
 
 class Filter:

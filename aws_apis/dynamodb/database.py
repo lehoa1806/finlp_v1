@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 import boto3
 from botocore.config import Config
 
-from common.common import AWS_REGION
+from utils.common import AWS_REGION
 
 from .table import Table
 

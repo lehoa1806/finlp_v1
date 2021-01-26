@@ -1,7 +1,7 @@
 from argparse import Namespace
 
-from common.argument_parser import ArgumentParser
 from machine.postgres_batch_insert import PostgresBatchInsert
+from utils.argument_parser import ArgumentParser
 from workflow.consumer import Consumer
 from workflow.job import Job
 from workflow.pipeline import Pipeline

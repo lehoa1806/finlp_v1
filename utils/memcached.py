@@ -60,11 +60,6 @@ class Cache:
         :return: True if the command was successful
         """
         _key = self.prefix + key
-        print(_key)
-        import logging
-        logging.info(_key)
-        logging.info(value)
-        logging.info(expire)
         return self.memcached.set(key, value, expire=expire)
 
     def delete(self, key: str) -> bool:

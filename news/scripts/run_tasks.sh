@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # external sources
-source "${HOME}"/finlp/common/common.sh
+source "${HOME}"/finlp/utils/common.sh
 
 
 ### Main:

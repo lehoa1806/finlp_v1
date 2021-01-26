@@ -2,8 +2,8 @@ import logging
 from typing import Dict, Iterator
 
 from aws_apis.dynamodb.database import Database
-from common.url_tracker import UrlTracker
 from news.utils.common import VN_TIMEZONE, get_time
+from utils.url_tracker import UrlTracker
 from workflow.stage import Stage
 
 from .scraper.tnck_scraper import TTCKScraper

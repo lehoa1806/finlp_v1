@@ -4,7 +4,7 @@ import pickle
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-from common.setting import Setting
+from utils.configs.setting import Setting
 
 SCOPES = [
     'https://www.googleapis.com/auth/drive',

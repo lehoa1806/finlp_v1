@@ -100,7 +100,7 @@ class Worker:
         slack_notify(
             BursaMalaysiaAnnouncement.process_task,
             func_type='task',
-            name='BursaMalaysiaAnnouncement.process_task',
+            func_name='BursaMalaysiaAnnouncement.process_task',
         )(
             ft=malaysia_filter,
             start_time=start_time,
@@ -127,7 +127,7 @@ class Worker:
         slack_notify(
             I3investorPriceTargetTask.process_task,
             func_type='task',
-            name='I3investorPriceTargetTask.process_task',
+            func_name='I3investorPriceTargetTask.process_task',
         )(
             ft=malaysia_filter,
             start_time=start_time,
@@ -139,7 +139,7 @@ class Worker:
         slack_notify(
             MalayMailScrapingTask.process_task,
             func_type='task',
-            name='MalayMailScrapingTask.process_task',
+            func_name='MalayMailScrapingTask.process_task',
         )(
             ft=malaysia_filter,
             start_time=start_time,
@@ -151,7 +151,7 @@ class Worker:
         slack_notify(
             TheEdgeMarketsScrapingTask.process_task,
             func_type='task',
-            name='TheEdgeMarketsScrapingTask.process_task',
+            func_name='TheEdgeMarketsScrapingTask.process_task',
         )(
             ft=malaysia_filter,
             start_time=start_time,
@@ -163,7 +163,7 @@ class Worker:
         slack_notify(
             TheStarScrapingTask.process_task,
             func_type='task',
-            name='TheStarScrapingTask.process_task',
+            func_name='TheStarScrapingTask.process_task',
         )(
             ft=malaysia_filter,
             start_time=start_time,
@@ -181,7 +181,7 @@ class Worker:
         slack_notify(
             DauTuCoPhieuAnnouncement.process_task,
             func_type='task',
-            name='DauTuCoPhieuAnnouncement.process_task',
+            func_name='DauTuCoPhieuAnnouncement.process_task',
         )(
             ft=vietnam_filter,
             start_time=start_time,
@@ -193,7 +193,7 @@ class Worker:
         slack_notify(
             FireAntTask.process_task,
             func_type='task',
-            name='FireAntTask.process_task',
+            func_name='FireAntTask.process_task',
         )(
             ft=vietnam_filter,
             start_time=start_time,
@@ -205,7 +205,7 @@ class Worker:
         slack_notify(
             TNCKTask.process_task,
             func_type='task',
-            name='TNCKTask.process_task',
+            func_name='TNCKTask.process_task',
         )(
             ft=vietnam_filter,
             start_time=start_time,
@@ -217,7 +217,7 @@ class Worker:
         slack_notify(
             CafefTask.process_task,
             func_type='task',
-            name='CafefTask.process_task',
+            func_name='CafefTask.process_task',
         )(
             ft=vietnam_filter,
             start_time=start_time,
@@ -229,7 +229,7 @@ class Worker:
         slack_notify(
             VietStockTask.process_task,
             func_type='task',
-            name='VietStockTask.process_task',
+            func_name='VietStockTask.process_task',
         )(
             ft=vietnam_filter,
             start_time=start_time,

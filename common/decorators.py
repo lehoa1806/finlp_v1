@@ -49,7 +49,10 @@ def logged(
     :param func_name: A customized name of the function
     """
     if func is None:
-        return functools.partial(logged, level=level, name=name, message=message)
+        return functools.partial(
+            logged, level=level, name=name, message=message,
+            func_name=func_name,
+        )
     logger = logging.getLogger(name)
 
     @functools.wraps(func)
@@ -66,26 +69,28 @@ def logged(
     return wrapper_logged
 
 
-def slack_notify(func=None, *, func_type=None, name=None):
+def slack_notify(func=None, *, func_type=None, func_name=None):
     """
     A decorator to send execution status to slack
     :param func: Function to be decorated
     :param func_type: Type of function to be decorated (task, job, function)
-    :param name: A customized name of the function
+    :param func_name: A customized name of the function
     """
     if func is None:
-        return functools.partial(slack_notify, func_type=func_type)
+        return functools.partial(
+            slack_notify, func_type=func_type, func_name=func_name,
+        )
     table = DynamoDB.load_database().get_tracking_table()
     slack_bot = SlackBot()
 
     @functools.wraps(func)
     def wrapper_alarm(*args, **kwargs):
-        func_name = name or func.__qualname__
+        name = func_name or func.__qualname__
         track_info = table.get_item(
-            partition_key=func_name,
+            partition_key=name,
             sort_key=func_type,
         ) or {
-            'track_id': func_name,
+            'track_id': name,
             'track_type': func_type,
         } if func_type is not None else {}
 
@@ -95,9 +100,9 @@ def slack_notify(func=None, *, func_type=None, name=None):
             value = func(*args, **kwargs)
             if len(warn) <= 0 and status.get('last_status') == 'failed':
                 message = SlackMessage(
-                    title=f'Slack notification: {func_name}',
+                    title=f'Slack notification: {name}',
                 ).add_header(
-                    text=f':shamrock:   {func_name} is back to normal   :shamrock:',
+                    text=f':shamrock:   {name} is back to normal   :shamrock:',
                 ).add_divider()
                 slack_bot.chat_post(
                     channel='development',
@@ -109,9 +114,9 @@ def slack_notify(func=None, *, func_type=None, name=None):
                     table.put_item(item=track_info)
             elif len(warn) > 0 and status.get('last_status') != 'failed':
                 message = SlackMessage(
-                    title=f'Slack notification: {func_name}',
+                    title=f'Slack notification: {name}',
                 ).add_header(
-                    text=f':bomb:   {func_name} failed   :bomb:',
+                    text=f':bomb:   {name} failed   :bomb:',
                 ).add_context(
                     elements=[TextObject(
                         text=f':pushpin: Description: \n*{warn[0].message}*',
@@ -128,9 +133,9 @@ def slack_notify(func=None, *, func_type=None, name=None):
                     table.put_item(item=track_info)
             elif len(warn) > 0 and status.get('last_status') == 'failed':
                 message = SlackMessage(
-                    title=f'Slack notification: {func_name}',
+                    title=f'Slack notification: {name}',
                 ).add_header(
-                    text=f':boom:   {func_name} failed again   :boom:',
+                    text=f':boom:   {name} failed again   :boom:',
                 ).add_divider()
                 slack_bot.chat_post(
                     channel='development',

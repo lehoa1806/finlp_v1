@@ -1,41 +1,36 @@
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from aws_apis.dynamodb.database import Database
+from common.common import GLOBAL_CACHE
+from common.decorators.function_cache import cached
 from common.functools import cached_property
 from scraper.common import BrowserType
+
+CONFIG_TABLE = Database.load_database().load_configuration_table()
+
+
+@cached(memcached=GLOBAL_CACHE, expire=900, func_name='ConfigDB.get_config')
+def get_config(
+    partition_key: str,
+    sort_key: Any = None,
+):
+    return CONFIG_TABLE.get_item(
+        partition_key=partition_key,
+        sort_key=sort_key,
+    )
 
 
 class ConfigDB:
     def __init__(self) -> None:
-        database = Database.load_database()
-        self.config_table = database.load_configuration_table()
-        self.scraper = self.config_table.get_item(
+        self.scraper = CONFIG_TABLE.get_item(
             partition_key='scraper',
             attributes_to_get=['configs', 'secret_keys']
         )
-        self.default = self.config_table.get_item(partition_key='default')
-        self._dynamic: Dict = {}
+        self.default = CONFIG_TABLE.get_item(partition_key='default')
 
     @property
     def dynamic(self) -> Dict:
-        if not self._dynamic:
-            self._dynamic = self.get_dynamic()
-        return self._dynamic
-
-    def get_dynamic(self) -> Dict:
-        self._dynamic = self.config_table.get_item(partition_key='dynamic')
-        return self._dynamic
-
-    # UTILS
-    @property
-    def repo_updated(self) -> bool:
-        return self.dynamic.get('configs', {}).get(
-            'git', {}).get('repo_updated', False)
-
-    def reset_repo_updated(self) -> None:
-        if self.repo_updated:
-            self._dynamic['configs']['git']['repo_updated'] = False
-            self.config_table.put_item(self._dynamic)
+        return get_config(partition_key='dynamic')
 
     @cached_property
     def cipher_key(self) -> str:
@@ -109,3 +104,21 @@ class ConfigDB:
     def vietnam_channels(self) -> Dict:
         channels = self.default.get('vietnam_channels', {})
         return {int(v): k for k, v in channels.items()}
+
+    # UTILS
+    @classmethod
+    def reset_dynamic(cls) -> bool:
+        # Dirty trick to reset cached dynamic value
+        return GLOBAL_CACHE.delete(
+            key='ConfigDB.get_config{"partition_key":_"dynamic"}')
+
+    @property
+    def repo_updated(self) -> bool:
+        return self.dynamic.get('configs', {}).get(
+            'git', {}).get('repo_updated', False)
+
+    def reset_repo_updated(self) -> None:
+        if self.repo_updated:
+            self.dynamic['configs']['git']['repo_updated'] = False
+            CONFIG_TABLE.put_item(self.dynamic)
+            self.reset_dynamic()

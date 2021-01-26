@@ -7,7 +7,8 @@ apt-get update:
 install packages:
   pkg.installed:
     - pkgs:
-      - salt-minion
+      - awscli
+      - memcached
       - python3
       - python3-pip
-      - awscli
+      - salt-minion

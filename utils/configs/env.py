@@ -32,8 +32,12 @@ class Env:
 
     # Slack
     @cached_property
-    def slack_token_code(self) -> str:
-        return self.get_environment_variable('FINLP_SLACK_TOKEN_CODE')
+    def devbot_token_code(self) -> str:
+        return self.get_environment_variable('FINLP_DEVBOT_TOKEN_CODE')
+
+    @cached_property
+    def newsbot_token_code(self) -> str:
+        return self.get_environment_variable('FINLP_NEWSBOT_TOKEN_CODE')
 
     # Scraper
     @cached_property

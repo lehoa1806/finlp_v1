@@ -71,8 +71,13 @@ class Setting(metaclass=Singleton):
         return self.parse_credentials(encrypted)
 
     @cached_property
-    def slack_token(self) -> str:
-        encrypted = self.get_attribute('slack_token_code')
+    def devbot_token(self) -> str:
+        encrypted = self.get_attribute('devbot_token_code')
+        return self.decrypt_json(encrypted, '')
+
+    @cached_property
+    def newsbot_token(self) -> str:
+        encrypted = self.get_attribute('newsbot_token_code')
         return self.decrypt_json(encrypted, '')
 
     @cached_property

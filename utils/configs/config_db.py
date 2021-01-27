@@ -46,8 +46,12 @@ class ConfigDB:
         return self.scraper.get('secret_keys', {}).get('i3investor_creds_code')
 
     @cached_property
-    def slack_token_code(self) -> str:
-        return self.scraper.get('secret_keys', {}).get('slack_token_code')
+    def devbot_token_code(self) -> str:
+        return self.scraper.get('secret_keys', {}).get('devbot_token_code')
+
+    @cached_property
+    def newsbot_token_code(self) -> str:
+        return self.scraper.get('secret_keys', {}).get('newsbot_token_code')
 
     @cached_property
     def postgresql_creds_code(self) -> str:

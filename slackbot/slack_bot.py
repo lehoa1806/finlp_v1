@@ -6,8 +6,6 @@ from urllib.error import URLError
 from slack.web.client import WebClient
 from slack.web.slack_response import SlackResponse
 
-from utils.configs.setting import Setting
-
 from .slack_message import SlackMessage
 
 
@@ -17,8 +15,9 @@ class SlackBot:
 
     def __init__(
         self,
+        token: str,
     ) -> None:
-        self.client = WebClient(token=Setting().slack_token)
+        self.client = WebClient(token=token)
         self.channels: Dict[str, str] = dict(self.get_channels())
 
     def get_channels(

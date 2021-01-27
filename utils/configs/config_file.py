@@ -12,11 +12,17 @@ class ConfigFile:
     cipher_key: 123
     rakuten_creds_code: xyz
     i3investor_creds_code: abc
-    slack_token_code: 0987
+    newsbot_token_code: 0987
+    devbot_token_code: 1234
     """
     def __init__(self) -> None:
-        self.parser = ConfigParser(interpolation=ExtendedInterpolation())
-        self.parser.read(GLOBAL_ENV.config_file)
+        self.parser = self._parser if GLOBAL_ENV.config_file else {}
+
+    @cached_property
+    def _parser(self) -> Dict:
+        _parser = ConfigParser(interpolation=ExtendedInterpolation())
+        _parser.read(GLOBAL_ENV.config_file)
+        return dict(_parser)
 
     @cached_property
     def scraper(self) -> Dict:
@@ -45,8 +51,12 @@ class ConfigFile:
         return self.scraper.get('i3investor_creds_code')
 
     @cached_property
-    def slack_token_code(self) -> str:
-        return self.scraper.get('slack_token_code')
+    def devbot_token_code(self) -> str:
+        return self.scraper.get('devbot_token_code')
+
+    @cached_property
+    def newsbot_token_code(self) -> str:
+        return self.scraper.get('newsbot_token_code')
 
     @cached_property
     def postgresql_creds_code(self) -> str:

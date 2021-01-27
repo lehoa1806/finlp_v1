@@ -9,8 +9,8 @@ class SlackChatPost(Consumer):
     def __init__(
         self,
     ) -> None:
-        self.bot = SlackBot()
         self.setting = Setting()
+        self.bot = SlackBot(self.setting.newsbot_token)
 
     def process(self, item: Dict) -> None:
         raise NotImplementedError

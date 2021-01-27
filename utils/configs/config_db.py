@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Any, Dict, Optional
 
 from aws_apis.dynamodb.database import Database
@@ -119,6 +120,7 @@ class ConfigDB:
 
     def reset_repo_updated(self) -> None:
         if self.repo_updated:
-            self.dynamic['configs']['git']['repo_updated'] = False
-            CONFIG_TABLE.put_item(self.dynamic)
+            _dynamic = deepcopy(self.dynamic)
+            _dynamic['configs']['git']['repo_updated'] = False
+            CONFIG_TABLE.put_item(_dynamic)
             self.reset_dynamic()

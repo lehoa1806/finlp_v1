@@ -106,7 +106,9 @@ class Filter:
 
     @cached_property
     def holding_names(self):
-        return set(self.stocks[k] for k in self.holding_ids)
+        return set(
+            self.stocks[k] for k in self.holding_ids if self.stocks.get(k)
+        )
 
     @cached_property
     def excludes(self):

@@ -22,15 +22,15 @@ class Env:
     def config_file(self) -> str:
         return self.get_environment_variable('FINLP_CONFIG_FILE', '')
 
-    @cached_property
-    def rakuten_creds_code(self) -> str:
-        return self.get_environment_variable('RAKUTEN_CREDS_CODE')
-
-    @cached_property
-    def i3investor_credentials(self) -> str:
-        return self.get_environment_variable('I3INVESTOR_CREDS_CODE')
-
+    # =========================================================================
+    # GLOBAL
+    # =========================================================================
     # Slack
+    @cached_property
+    def devbot_signing_secret_code(self) -> str:
+        return self.get_environment_variable(
+            'FINLP_DEVBOT_SIGNING_SECRET_CODE')
+
     @cached_property
     def devbot_token_code(self) -> str:
         return self.get_environment_variable('FINLP_DEVBOT_TOKEN_CODE')
@@ -38,20 +38,6 @@ class Env:
     @cached_property
     def newsbot_token_code(self) -> str:
         return self.get_environment_variable('FINLP_NEWSBOT_TOKEN_CODE')
-
-    # Scraper
-    @cached_property
-    def headless(self) -> bool:
-        headless = self.get_environment_variable('SCRAPER_HEADLESS')
-        return headless in {'True', 'true'}
-
-    @cached_property
-    def browser_type(self) -> BrowserType:
-        """
-        SCRAPER_BROWSER_TYPE: CHROME or FIREFOX
-        """
-        return BrowserType(
-            self.get_environment_variable('SCRAPER_BROWSER_TYPE', 'Chrome'))
 
     # PostgreSQL
     @cached_property
@@ -70,23 +56,9 @@ class Env:
     def postgresql_creds_code(self) -> str:
         return self.get_environment_variable('POSTGRESQL_CREDS_CODE')
 
-    ########
-    @cached_property
-    def google_credentials_path(self) -> str:
-        return self.get_environment_variable('GOOGLE_CREDENTIALS_PATH')
-
-    @cached_property
-    def google_token_path(self) -> str:
-        return self.get_environment_variable('GOOGLE_TOKEN_PATH')
-
-    @cached_property
-    def email_receiver(self) -> str:
-        return self.get_environment_variable('GOOGLE_EMAIL_SENDER')
-
-    @cached_property
-    def email_sender(self) -> str:
-        return self.get_environment_variable('GOOGLE_EMAIL_RECEIVER')
-
+    # =========================================================================
+    # DEFAULT
+    # =========================================================================
     @cached_property
     def malaysia_channels(self) -> Dict:
         """
@@ -112,3 +84,43 @@ class Env:
             int(channel.split(':')[1]): channel.split(':')[0]
             for channel in channels
         }
+
+    # =========================================================================
+    # SCRAPER
+    # =========================================================================
+    @cached_property
+    def browser_type(self) -> BrowserType:
+        """
+        SCRAPER_BROWSER_TYPE: CHROME or FIREFOX
+        """
+        return BrowserType(
+            self.get_environment_variable('SCRAPER_BROWSER_TYPE', 'Chrome'))
+
+    @cached_property
+    def email_receiver(self) -> str:
+        return self.get_environment_variable('GOOGLE_EMAIL_SENDER')
+
+    @cached_property
+    def email_sender(self) -> str:
+        return self.get_environment_variable('GOOGLE_EMAIL_RECEIVER')
+
+    @cached_property
+    def google_credentials_path(self) -> str:
+        return self.get_environment_variable('GOOGLE_CREDENTIALS_PATH')
+
+    @cached_property
+    def google_token_path(self) -> str:
+        return self.get_environment_variable('GOOGLE_TOKEN_PATH')
+
+    @cached_property
+    def headless(self) -> bool:
+        headless = self.get_environment_variable('SCRAPER_HEADLESS')
+        return headless in {'True', 'true'}
+
+    @cached_property
+    def i3investor_credentials(self) -> str:
+        return self.get_environment_variable('I3INVESTOR_CREDS_CODE')
+
+    @cached_property
+    def rakuten_creds_code(self) -> str:
+        return self.get_environment_variable('RAKUTEN_CREDS_CODE')

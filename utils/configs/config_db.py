@@ -38,37 +38,37 @@ class ConfigDB:
     # configs
     @cached_property
     def postgresql_host(self) -> str:
-        return self._scraper.get('configs', {}).get('postgresql_host')
+        return self._global.get('configs', {}).get('postgresql_host')
 
     @cached_property
     def postgresql_port(self) -> int:
-        return self._scraper.get('configs', {}).get('postgresql_port')
+        return self._global.get('configs', {}).get('postgresql_port')
 
     @cached_property
     def postgresql_database(self) -> str:
-        return self._scraper.get('configs', {}).get('postgresql_database')
+        return self._global.get('configs', {}).get('postgresql_database')
 
     # secrets
     @cached_property
     def cipher_key(self) -> str:
-        return self._scraper.get('secret_keys', {}).get('cipher_key')
+        return self._global.get('secret_keys', {}).get('cipher_key')
 
     @cached_property
     def devbot_signing_secret_code(self) -> str:
-        return self._scraper.get(
+        return self._global.get(
             'secret_keys', {}).get('devbot_signing_secret_code')
 
     @cached_property
     def devbot_token_code(self) -> str:
-        return self._scraper.get('secret_keys', {}).get('devbot_token_code')
+        return self._global.get('secret_keys', {}).get('devbot_token_code')
 
     @cached_property
     def newsbot_token_code(self) -> str:
-        return self._scraper.get('secret_keys', {}).get('newsbot_token_code')
+        return self._global.get('secret_keys', {}).get('newsbot_token_code')
 
     @cached_property
     def postgresql_creds_code(self) -> str:
-        return self._scraper.get(
+        return self._global.get(
             'secret_keys', {}).get('postgresql_creds_code')
 
     # =========================================================================

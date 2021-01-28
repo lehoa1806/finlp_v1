@@ -2,10 +2,10 @@
 include:
   - common
 
-api_gateway_name: subscription
+api_gateway_name: example
 api_gateway_description: A RESTful API Gateway endpoint
 api_gateway_resources:
-  list:
+  restful:
     - get
     - post
 

@@ -1,5 +1,4 @@
 ---
-
 install git:
   pkg.installed:
     - pkgs:

@@ -1,7 +1,4 @@
 ---
-
-{% set secret_bucket = 'finulp-secrets' %}
-
 create {{ grains.boxname.lower() }} security group:
   boto_secgroup.present:
     - name: {{ grains.boxname.lower() }}-security-group
@@ -39,7 +36,7 @@ create {{ grains.boxname.lower() }} security group:
             cd {{ pillar.project_home }}
             sudo -u {{ pillar.user_name }} git submodule update --recursive
             pip3 install -r requirements.txt
-            aws s3 cp {{ secret_bucket }}/minion /etc/salt/minion
+            aws s3 cp {{ pillar.s3_secret_bucket }}/minion /etc/salt/minion
             cd {{ pillar.project_home }}/deploy/devbox
             salt-call --local state.apply -l debug
     - min_size: 1

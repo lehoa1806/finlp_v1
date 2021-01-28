@@ -1,5 +1,4 @@
 ---
-
 include:
   - ssh
   - packages

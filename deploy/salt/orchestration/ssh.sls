@@ -1,11 +1,8 @@
 ---
-
-{% set secret_bucket = 's3://finulp-secrets' %}
-
 copy authorized_keys to local:
   cmd.run:
     - names:
-        - /usr/bin/aws s3 cp {{ secret_bucket }}/authorized_keys /home/{{ pillar.user_name }}/.ssh/authorized_keys
+        - /usr/bin/aws s3 cp s3://{{ pillar.secret_bucket }}/authorized_keys /home/{{ pillar.user_name }}/.ssh/authorized_keys
     - runas: {{ pillar.user_name }}
 
 correct .ssh/authorized_keys permissions:

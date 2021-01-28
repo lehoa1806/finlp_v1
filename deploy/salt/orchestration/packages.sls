@@ -1,5 +1,4 @@
 ---
-
 apt-get update:
   cmd.wait:
     - name: apt-get update
@@ -12,3 +11,4 @@ install packages:
       - python3
       - python3-pip
       - salt-minion
+      - zip

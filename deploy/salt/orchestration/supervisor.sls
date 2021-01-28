@@ -1,5 +1,4 @@
 ---
-
 install supervisor:
   cmd.run:
     - name: /usr/bin/python3 -m pip install supervisor

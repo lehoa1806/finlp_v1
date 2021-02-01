@@ -1,6 +1,6 @@
 import logging
 from argparse import Namespace
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import sleep
 from typing import Dict, List
 
@@ -52,13 +52,13 @@ class Worker:
         local_timezone = pytz.timezone(timezone)
         now = datetime.utcnow()
         local_now = now.replace(tzinfo=pytz.utc).astimezone(local_timezone)
-        local_year = local_now.year
-        local_month = local_now.month
-        local_day = local_now.day
+        _year = local_now.year
+        _month = local_now.month
+        _day = local_now.day
         start_time = local_timezone.localize(
-            datetime(local_year, local_month, local_day - 1, 23))
+            datetime(_year, _month, _day, 23) - timedelta(days=1))
         end_time = local_timezone.localize(
-            datetime(local_year, local_month, local_day, 23, 59, 59))
+            datetime(_year, _month, _day, 23, 59, 59))
         return {
             'start_time': start_time,
             'end_time': end_time,

@@ -52,13 +52,9 @@ class Worker:
         local_timezone = pytz.timezone(timezone)
         now = datetime.utcnow()
         local_now = now.replace(tzinfo=pytz.utc).astimezone(local_timezone)
-        _year = local_now.year
-        _month = local_now.month
-        _day = local_now.day
-        start_time = local_timezone.localize(
-            datetime(_year, _month, _day, 23) - timedelta(days=1))
-        end_time = local_timezone.localize(
-            datetime(_year, _month, _day, 23, 59, 59))
+        start_time = local_now.replace(hour=23) - timedelta(days=1)
+        end_time = local_now.replace(hour=23, minute=59, second=59)
+
         return {
             'start_time': start_time,
             'end_time': end_time,

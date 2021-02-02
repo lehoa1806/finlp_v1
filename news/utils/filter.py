@@ -125,8 +125,8 @@ class Filter:
 
     @cached_property
     def holding_keys(self):
-        _holding_names = set(f' {k} ' for k in self.holding_names)
-        _holding_ids = set(f' {k} ' for k in self.holding_ids)
+        _holding_names = set(f'{k}' for k in self.holding_names)
+        _holding_ids = set(f'{k}' for k in self.holding_ids)
         return _holding_names.union(_holding_ids).difference(self.excludes)
 
     @cached_property

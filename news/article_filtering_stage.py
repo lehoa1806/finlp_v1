@@ -47,8 +47,8 @@ class ArticleFilteringStage(Stage):
         category_to_filter = category.lower()
         title_to_filter = title.lower()
         if self.holding_rule({
-            'category': category_to_filter,
             'content': content_to_filter,
+            'title': title_to_filter,
         }):
             yield {
                 'subscription': Subscription.HOLDING,

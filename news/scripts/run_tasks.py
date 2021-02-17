@@ -93,6 +93,7 @@ class Worker:
         start_time = times.get('start_time')
         end_time = times.get('end_time')
 
+        '''
         slack_notify(
             BursaMalaysiaAnnouncement.process_task,
             func_type='task',
@@ -104,6 +105,7 @@ class Worker:
             headless=self.args.headless
         )
         sleep(5)
+        '''
 
         '''
         slack_notify(

@@ -23,19 +23,3 @@ index e259ce2..d169a9b 100644
                      break
              else:
                  # if any(shift >= TimeShift.WORKING for shift in shifts):
-@@ -93,7 +93,6 @@ class Worker:
-         start_time = times.get('start_time')
-         end_time = times.get('end_time')
-
--        '''
-         slack_notify(
-             BursaMalaysiaAnnouncement.process_task,
-             func_type='task',
-@@ -105,7 +104,6 @@ class Worker:
-             headless=self.args.headless
-         )
-         sleep(5)
--        '''
-
-         '''
-         slack_notify(

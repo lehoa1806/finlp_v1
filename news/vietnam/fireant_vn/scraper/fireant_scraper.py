@@ -46,7 +46,7 @@ class FireAntScraper(Scraper):
                 self.scroll()
                 articles = self.find_elements_by_css_selector(
                     css_selector='#root > div > div > div > div > div > div > '
-                                 'div > div > div > div.sc-fzonZV.fjLydT'
+                                 'div > div > div > div.sc-pIJJz.kEDzdV'
                 )
                 if len(articles) > 100:
                     break
@@ -63,14 +63,14 @@ class FireAntScraper(Scraper):
                 category = 'N/A'
                 try:
                     stocks = article.find_elements_by_css_selector(
-                        'div.sc-prOVx.nbRcd > span'
+                        'div.sc-pJurq.cTjcEC > span'
                     )
                     stock_ids = [stock.text for stock in stocks]
                     category = ", ".join(stock_ids)
                 except NoSuchElementException:
                     pass
                 link_elem = article.find_element_by_css_selector(
-                    'div.sc-fzqyOu.heoxZf > a'
+                    'div.sc-pRFjI.dWPMSi > a'
                 )
                 title = link_elem.text.strip()
                 url = link_elem.get_attribute("href")
@@ -81,7 +81,7 @@ class FireAntScraper(Scraper):
                 except NoSuchElementException:
                     try:
                         time = article.find_element_by_css_selector(
-                            'div.sc-pANHa.iGPRRc > div > span'
+                            'div.sc-oTbqq.fsuEer > div > span'
                         ).text.strip()
                     except NoSuchElementException:
                         time = ''

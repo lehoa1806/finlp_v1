@@ -56,6 +56,9 @@ function setup_git() {
   for patch in "${HOME}/finlp/deploy/patchs"/*
   do
     log "Applying ${patch} ..."
+    if [[ "${patch}" == *"0002"*  ]]; then
+      continue
+    fi
     git apply "${patch}"
   done
   log "Git setup is done ..."

@@ -10,7 +10,7 @@ from scraper.scraper import Scraper
 
 class CafefScraper(Scraper):
     def load_cafef_home(self):
-        url = 'https://cafef.vn/thi-truong-chung-khoan.chn/'
+        url = 'https://cafef.vn/thi-truong-chung-khoan.chn'
         self.load_url(url)
 
     @classmethod

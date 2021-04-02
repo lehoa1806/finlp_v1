@@ -92,6 +92,23 @@ CREATE TABLE IF NOT EXISTS "vietnam_articles" (
 );
 GRANT SELECT, INSERT, DELETE ON "vietnam_articles" TO xxxxx_user;
 
+-- vietnam_warrants
+CREATE TABLE IF NOT EXISTS "vietnam_warrants" (
+  "modified" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "datetime" TIMESTAMP WITH TIME ZONE,
+  "warrant" TEXT NOT NULL,
+  "provider" TEXT,
+  "expired_date" TIMESTAMP WITH TIME ZONE,
+  "volume" INT,
+  "price" INT,
+  "share_price" INT,
+  "exercise_price" INT,
+  "exercise_ratio" TEXT,
+  "foreign_buy" INT,
+  CONSTRAINT "vietnam_warrants_datetime_warrant" PRIMARY KEY ("datetime", "warrant")
+);
+GRANT SELECT, INSERT, DELETE ON "vietnam_warrants" TO xxxxx_user;
+
 -- vietnam_companies
 CREATE TABLE IF NOT EXISTS "vietnam_companies" (
   "stock_id" TEXT UNIQUE NOT NULL,

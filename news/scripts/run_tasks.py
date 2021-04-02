@@ -6,8 +6,8 @@ from typing import Dict, List
 
 import pytz
 
-from news.malaysia.bursamalaysia.announcement_scraping_task import \
-    BursaMalaysiaAnnouncement
+# from news.malaysia.bursamalaysia.announcement_scraping_task import \
+#    BursaMalaysiaAnnouncement
 from news.malaysia.filter import Filter as MalaysiaFilter
 # from ..freemalaysiatoday.freemalaysiatoday_scraping_task import \
 #    FreeMalaysiaTodayScrapingTask

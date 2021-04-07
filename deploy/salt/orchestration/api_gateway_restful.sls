@@ -36,9 +36,14 @@ append {{ resource_name }} to swagger file:
           /{{ resource_name }}:
 
 {% for method in methods %}
-append {{ method }} to {{ resource_name }}:
+create a temporary file for {{ swagger_file }}_{{ method }}_{{ resource_name }}:
+  cmd.run:
+    - name: touch {{ swagger_file }}_{{ method }}_{{ resource_name }}
+    - runas: {{ pillar.user_name }}
+
+append {{ method }} to {{ resource_name }} temporary file:
   file.append:
-    - name: {{ swagger_file }}
+    - name: {{ swagger_file }}_{{ method }}_{{ resource_name }}
     - text: |2
             {{ method }}:
               consumes:
@@ -99,6 +104,11 @@ append {{ method }} to {{ resource_name }}:
                     statusCode: "403"
                   .*Internal Server Error.*:
                     statusCode: "500"
+
+append {{ method }}_{{ resource_name }} temporary file to swagger file:
+  cmd.run:
+    - name: cat {{ swagger_file }}_{{ method }}_{{ resource_name }} >> {{ swagger_file }}
+    - runas: {{ pillar.user_name }}
 {% endfor %}
 
 append option to {{ resource_name }}:

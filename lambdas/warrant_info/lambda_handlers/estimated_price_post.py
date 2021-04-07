@@ -1,49 +1,12 @@
 import logging
 import os
+from typing import Dict
 
-from lambdas.utils.exceptions import UnauthorizedException
+from lambdas.utils.exceptions import BadRequestException, UnauthorizedException
 from postgresql.database import Database
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-
-QUERY = """\
-SELECT
-  "warrant",
-  "provider",
-  TO_CHAR("expired_date", 'Mon-DD-YYYY'),
-  "volume",
-  "price",
-  "share_price",
-  "exercise_price",
-  "exercise_ratio",
-  "foreign_buy"
-FROM
-  (
-    SELECT
-      *
-    FROM
-      "vietnam_warrants"
-    WHERE
-      "datetime" > current_date + INTERVAL '-1 day'
-  ) AS t1
-  INNER JOIN (
-    SELECT
-      "warrant",
-      MAX("datetime") AS "datetime"
-    FROM
-      "vietnam_warrants"
-    WHERE
-      "datetime" > current_date + INTERVAL '-1 day'
-    GROUP BY
-      "warrant"
-  ) AS t2
-    USING (
-    "warrant",
-    "datetime"
-  )
-ORDER BY "warrant";\
-"""
 
 
 def lambda_handler(event, context):
@@ -56,6 +19,14 @@ def lambda_handler(event, context):
     if not user:
         raise UnauthorizedException('Invalid AWS credentials !.')
 
+    body_params = event.get('body_params')
+    if not body_params:
+        raise BadRequestException('No data in the request.')
+    if not isinstance(body_params, Dict) or not body_params.get('prices'):
+        raise BadRequestException('No valid data in the request.')
+
+    prices = body_params.get('prices')
+
     credentials = {
         'host': os.getenv('POSTGRESQL_HOST'),
         'user': os.getenv('POSTGRESQL_USER'),
@@ -64,7 +35,9 @@ def lambda_handler(event, context):
         'port': int(os.getenv('POSTGRESQL_PORT')),
     }
     database = Database.load_database(config=credentials)
-    keys = ('warrant', 'provider', 'expirationDate', 'volume', 'price', 'sharePrice', 'exercisePrice', 'ratio',
-            'foreignBuy')
-    data = list(database.query(QUERY, keys))
-    return {'warrants': data}
+    table = database.load_table('vietnam_estimated_prices')
+    table.batch_insert(prices)
+    return {
+        'statusCode': 200,
+        'body': 'Success.',
+    }

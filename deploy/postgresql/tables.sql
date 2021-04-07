@@ -109,6 +109,14 @@ CREATE TABLE IF NOT EXISTS "vietnam_warrants" (
 );
 GRANT SELECT, INSERT, DELETE ON "vietnam_warrants" TO xxxxx_user;
 
+-- vietnam_estimated_prices
+CREATE TABLE IF NOT EXISTS "vietnam_estimated_prices" (
+  "modified" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "name" TEXT NOT NULL PRIMARY KEY,
+  "price" INT
+ );
+GRANT SELECT, INSERT, DELETE ON "vietnam_estimated_prices" TO xxxxx_user;
+
 -- vietnam_companies
 CREATE TABLE IF NOT EXISTS "vietnam_companies" (
   "stock_id" TEXT UNIQUE NOT NULL,

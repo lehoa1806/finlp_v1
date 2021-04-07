@@ -1,4 +1,4 @@
 ---
 base:
   '*':
-    - warrant_info
+    - warrant

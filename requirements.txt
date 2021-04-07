@@ -2,9 +2,11 @@ awscli==1.18.217
 boto==2.49.0
 boto3==1.16.57
 botocore==1.19.57
+flake8==3.9.0
 google-api-python-client==1.12.8
 google-auth-httplib2==0.0.4
 google-auth-oauthlib==0.4.2
+isort==5.8.0
 mypy-extensions==0.4.3
 mypy==0.782
 pymemcache==3.4.0

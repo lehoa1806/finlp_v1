@@ -30,6 +30,14 @@ class Database:
         return Connection(psycopg2_client=connection)
 
     @classmethod
+    def load_database(
+        cls,
+        config: Dict[str, str],
+    ) -> 'Database':
+        database_connection = cls.create_db_connection(config)
+        return cls(database_connection)
+
+    @classmethod
     def load_default_database(cls) -> 'Database':
         setting = Setting()
         config = {
@@ -39,8 +47,7 @@ class Database:
             'dbname': setting.postgresql_database,
             'port': setting.postgresql_port,
         }
-        database_connection = cls.create_db_connection(config)
-        return cls(database_connection)
+        return cls.load_database(config)
 
     def get_tables(self) -> Iterable[Tuple[str, Table]]:
         query = 'SELECT tablename FROM pg_catalog.pg_tables'

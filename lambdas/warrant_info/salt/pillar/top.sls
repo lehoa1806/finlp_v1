@@ -1,0 +1,4 @@
+---
+base:
+  '*':
+    - warrant_info

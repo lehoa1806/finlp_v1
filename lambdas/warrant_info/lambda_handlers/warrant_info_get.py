@@ -57,7 +57,7 @@ def lambda_handler(event, context):
 
     credentials = {
         'host': os.getenv('POSTGRESQL_HOST'),
-        'username': os.getenv('POSTGRESQL_USER'),
+        'user': os.getenv('POSTGRESQL_USER'),
         'password': os.getenv('POSTGRESQL_PASSWD'),
         'dbname': os.getenv('POSTGRESQL_DB'),
         'port': int(os.getenv('POSTGRESQL_PORT')),

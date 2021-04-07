@@ -11,7 +11,7 @@ QUERY = """\
 SELECT
   "warrant",
   "provider",
-  "expired_date",
+  TO_CHAR("expired_date", 'Mon-DD-YYYY'),
   "volume",
   "price",
   "share_price",
@@ -41,7 +41,9 @@ FROM
     USING (
     "warrant",
     "datetime"
-  ) ;\
+  )
+ORDER BY "warrant";
+\
 """
 
 

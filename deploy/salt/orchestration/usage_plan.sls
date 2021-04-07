@@ -1,5 +1,5 @@
 ---
-Ensure Usage plan of {{ pillar.api_name }} exists:
+Ensure Usage plan of {{ pillar.api_gateway_name }} exists:
   boto_apigateway.usage_plan_present:
     - plan_name: {{ pillar.usage_plan_name }}
     - throttle:

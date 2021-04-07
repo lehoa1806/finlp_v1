@@ -1,8 +1,8 @@
 ---
 base:
   '*':
+    - lambda_zip
     - warrant_info
-    - prepare_swagger
-    - api_gateway
+    - api_gateway_restful
     - usage_plan
     - usage_plan_association

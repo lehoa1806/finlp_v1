@@ -1,8 +1,7 @@
 import logging
 import os
-from typing import Dict
 
-from lambdas.utils.exceptions import BadRequestException, UnauthorizedException
+from lambdas.utils.exceptions import UnauthorizedException
 from postgresql.database import Database
 
 logger = logging.getLogger()
@@ -49,15 +48,12 @@ FROM
 def lambda_handler(event, context):
     logger.info('Requested event: {}'.format(event))
 
-    header_params = event.get('header_params', {})
-    api_key = header_params.get('x-api-key', '')
-    if not api_key:
-        raise UnauthorizedException('No content sent in the request.')
-    body_params = event.get('body_params')
-    if not body_params:
-        raise BadRequestException('No content sent in the request.')
-    if not isinstance(body_params, Dict) or not body_params.get('ivy_id'):
-        raise BadRequestException('Please provide the User ID.')
+    aws_identity = event.get('apigw_context', {}).get('identity', {})
+    user_arn = aws_identity.get('userArn', '')
+    arn_parts = user_arn.split('user/') if 'arn:aws:iam' in user_arn else []
+    user = arn_parts[1] if len(arn_parts) == 2 else ''
+    if not user:
+        raise UnauthorizedException('Invalid AWS credentials !.')
 
     credentials = {
         'host': os.getenv('POSTGRESQL_HOST'),

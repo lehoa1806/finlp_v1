@@ -10,9 +10,10 @@ logger.setLevel(logging.INFO)
 QUERY = """\
 SELECT
   "name",
-  "price"
+  MAX("price")
 FROM
-  "vietnam_estimated_prices";\
+  "vietnam_estimated_prices"
+GROUP BY "name";\
 """
 
 
@@ -37,5 +38,5 @@ def lambda_handler(event, context):
     keys = ('name', 'price')
     data = {}
     for item in database.query(QUERY, keys):
-        data.update({})
+        data.update({item['name']: item['price']})
     return {'prices': data}

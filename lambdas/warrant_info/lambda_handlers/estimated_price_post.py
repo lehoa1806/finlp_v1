@@ -35,8 +35,19 @@ def lambda_handler(event, context):
         'port': int(os.getenv('POSTGRESQL_PORT')),
     }
     database = Database.load_database(config=credentials)
-    table = database.load_table('vietnam_estimated_prices')
-    table.batch_insert(prices)
+    with database.connection.psycopg2_client.cursor() as cursor:
+        values_to_insert = ', '.join(
+            cursor.mogrify('(%s, %s)', [name, price]).decode('utf-8')
+            for name, price in prices.items()
+        )
+    logging.info(
+        f'Inserting {len(prices)} records to vietnam_estimated_prices.')
+    command = (
+        f'INSERT INTO "vietnam_estimated_prices" ("name", "price") '
+        f'VALUES {values_to_insert} ON CONFLICT ("name")'
+        f'DO UPDATE SET price = EXCLUDED.price'
+    )
+    database.connection.execute(command)
     return {
         'statusCode': 200,
         'body': 'Success.',

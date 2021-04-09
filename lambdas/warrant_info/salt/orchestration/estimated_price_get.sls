@@ -1,7 +1,4 @@
 ---
-include:
-  - iam_lambda_role
-
 Ensure {{ pillar.estimated_price_get_lambda_name }}_post lambda exists:
   boto_lambda.function_present:
     - FunctionName: {{ pillar.estimated_price_get_lambda_name }}

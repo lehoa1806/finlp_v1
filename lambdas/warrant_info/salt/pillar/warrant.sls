@@ -10,6 +10,8 @@ api_gateway_resources:
   estimatedPrice:
     - get
     - post
+  dashboard:
+    - get
 
 usage_plan_name: web_warrant_basic
 
@@ -17,6 +19,10 @@ usage_plan_name: web_warrant_basic
 warrant_info_get_lambda_name: warrant_info_get
 warrant_info_get_lambda_handler: lambdas.warrant_info.lambda_handlers.warrant_info_get.lambda_handler
 warrant_info_get_lambda_description: Get data for Warrant Dashboard
+
+warrant_dashboard_get_lambda_name: warrant_dashboard_get
+warrant_dashboard_get_lambda_handler: lambdas.warrant_info.lambda_handlers.warrant_dashboard_get.lambda_handler
+warrant_dashboard_get_lambda_description: Get initial data for Warrant Dashboard
 
 estimated_price_get_lambda_name: warrant_estimatedprice_get
 estimated_price_get_lambda_handler: lambdas.warrant_info.lambda_handlers.estimated_price_get.lambda_handler

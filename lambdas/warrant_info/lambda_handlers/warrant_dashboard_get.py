@@ -9,10 +9,38 @@ logger.setLevel(logging.INFO)
 
 QUERY = """\
 SELECT
-  "name",
-  "price"
+  t1."warrant",
+  t1."provider",
+  t1.TO_CHAR("expired_date", 'Mon-DD-YYYY'),
+  t1."volume",
+  t1."price",
+  t1."share_price",
+  t1."exercise_price",
+  t1."exercise_ratio",
+  t1."foreign_buy",
+  t3."estimated_price"
 FROM
-  "vietnam_estimated_prices";\
+  (
+    SELECT
+      *
+    FROM
+      "vietnam_warrants"
+    WHERE
+      "datetime" > current_date + INTERVAL '-1 day'
+  ) AS t1
+  INNER JOIN (
+    SELECT
+      "warrant",
+      MAX("datetime") AS "datetime"
+    FROM
+      "vietnam_warrants"
+    WHERE
+      "datetime" > current_date + INTERVAL '-1 day'
+    GROUP BY
+      "warrant"
+  ) AS t2 USING ("warrant", "datetime")
+  LEFT JOIN "vietnam_estimated_prices" AS t3 ON t1."warrant" = t3."name"
+ORDER BY t1."warrant";\
 """
 
 
@@ -34,8 +62,7 @@ def lambda_handler(event, context):
         'port': int(os.getenv('POSTGRESQL_PORT')),
     }
     database = Database.load_database(config=credentials)
-    keys = ('name', 'price')
-    data = {}
-    for item in database.query(QUERY, keys):
-        data.update({})
-    return {'prices': data}
+    keys = ('warrant', 'provider', 'expirationDate', 'volume', 'price', 'sharePrice', 'exercisePrice', 'ratio',
+            'foreignBuy', 'estimatedPrice')
+    data = list(database.query(QUERY, keys))
+    return {'warrants': data}

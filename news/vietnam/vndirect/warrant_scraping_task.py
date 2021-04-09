@@ -1,5 +1,3 @@
-import subprocess
-
 from machine.postgres_batch_insert import PostgresBatchInsert
 from workflow.consumer import Consumer
 from workflow.pipeline import Pipeline
@@ -58,10 +56,3 @@ class WarrantScraperTask(Task):
             headless=headless,
             **kwargs,
         ).main()
-
-    def teardown(self) -> None:
-        cmd = 'pkill -9 chrome'
-        subprocess.check_call(cmd.split())
-        cmd = 'pkill -9 chromedriver'
-        subprocess.check_call(cmd.split())
-        super().teardown()

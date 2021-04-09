@@ -21,11 +21,12 @@ class VnDirectScraper(Scraper):
     def str2int(cls, in_data: str) -> int:
         if in_data.count('.') == 0:
             last_comma_index = in_data.rfind(',')
-            in_data = (
-                in_data[:last_comma_index] +
-                '.' +
-                in_data[last_comma_index + 1:]
-            )
+            if last_comma_index > -1:
+                in_data = (
+                    in_data[:last_comma_index] +
+                    '.' +
+                    in_data[last_comma_index + 1:]
+                )
         in_data = in_data.replace(',', '')
         return int(float(in_data)*1000)
 

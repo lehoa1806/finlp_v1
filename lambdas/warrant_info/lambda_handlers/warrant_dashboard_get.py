@@ -18,7 +18,7 @@ SELECT
   t1."exercise_price",
   t1."exercise_ratio",
   t1."foreign_buy",
-  t3."estimated_price"
+  t3."price"
 FROM
   (
     SELECT

@@ -11,7 +11,7 @@ QUERY = """\
 SELECT
   t1."warrant",
   t1."provider",
-  t1.TO_CHAR("expired_date", 'Mon-DD-YYYY'),
+  TO_CHAR(t1."expired_date", 'Mon-DD-YYYY'),
   t1."volume",
   t1."price",
   t1."share_price",

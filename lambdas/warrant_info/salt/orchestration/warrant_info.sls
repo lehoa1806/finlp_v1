@@ -1,5 +1,5 @@
 ---
-Ensure {{ pillar.warrant_info_get_lambda_name }}_post lambda exists:
+Ensure {{ pillar.warrant_info_get_lambda_name }} lambda exists:
   boto_lambda.function_present:
     - FunctionName: {{ pillar.warrant_info_get_lambda_name }}
     - Runtime: {{ pillar.lambda_runtime }}

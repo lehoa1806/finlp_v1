@@ -1,5 +1,5 @@
 ---
-Ensure {{ pillar.estimated_price_get_lambda_name }}_post lambda exists:
+Ensure {{ pillar.estimated_price_get_lambda_name }} lambda exists:
   boto_lambda.function_present:
     - FunctionName: {{ pillar.estimated_price_get_lambda_name }}
     - Runtime: {{ pillar.lambda_runtime }}

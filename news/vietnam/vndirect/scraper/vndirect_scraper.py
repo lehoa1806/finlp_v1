@@ -51,17 +51,28 @@ class VnDirectScraper(Scraper):
                     '%d/%m/%y',
                 ).replace(tzinfo=pytz.utc).astimezone(
                     local_timezone)
+                reference_price = self.str2int(
+                    warrant.find_element_by_css_selector(
+                        css_selector='td:nth-child(4)'
+                    ).text
+                )
                 volume = self.str2int(warrant.find_element_by_css_selector(
                     css_selector='td:nth-child(7) > span'
                 ).text)
-                price = self.str2int(warrant.find_element_by_css_selector(
-                    css_selector='td:nth-child(14) > span'
-                ).text)
-                share_price = self.str2int(
-                    warrant.find_element_by_css_selector(
-                        css_selector='td:nth-child(24) > span'
-                    ).text
-                )
+                try:
+                    price = self.str2int(warrant.find_element_by_css_selector(
+                        css_selector='td:nth-child(14) > span'
+                    ).text)
+                except (NoSuchElementException, TimeoutException, ValueError):
+                    price = ''
+                try:
+                    share_price = self.str2int(
+                        warrant.find_element_by_css_selector(
+                            css_selector='td:nth-child(24) > span'
+                        ).text
+                    )
+                except (NoSuchElementException, TimeoutException, ValueError):
+                    share_price = ''
                 exercise_price = self.str2int(
                     warrant.find_element_by_css_selector(
                         css_selector='td:nth-child(25) > span'
@@ -79,20 +90,22 @@ class VnDirectScraper(Scraper):
                             css_selector='td:nth-child(28) > span'
                         ).text
                     )
-                except (NoSuchElementException, TimeoutException):
+                except (NoSuchElementException, TimeoutException, ValueError):
                     foreign_buy = 0
-                yield {
-                    'datetime': timestamp,
-                    'warrant': name,
-                    'provider': provider,
-                    'expired_date': expired_date,
-                    'volume': volume,
-                    'price': price,
-                    'share_price': share_price,
-                    'exercise_price': exercise_price,
-                    'exercise_ratio': exercise_ratio,
-                    'foreign_buy': foreign_buy,
-                }
+                if price and share_price:
+                    yield {
+                        'datetime': timestamp,
+                        'warrant': name,
+                        'provider': provider,
+                        'expiredDate': expired_date,
+                        'exercisePrice': exercise_price,
+                        'referencePrice': reference_price,
+                        'volume': volume,
+                        'price': price,
+                        'sharePrice': share_price,
+                        'exerciseRatio': exercise_ratio,
+                        'foreignBuy': foreign_buy,
+                    }
             except StaleElementReferenceException as error:
                 logging.exception(error)
             except NoSuchElementException:

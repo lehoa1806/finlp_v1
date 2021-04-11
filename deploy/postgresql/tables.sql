@@ -98,13 +98,14 @@ CREATE TABLE IF NOT EXISTS "vietnam_warrants" (
   "datetime" TIMESTAMP WITH TIME ZONE,
   "warrant" TEXT NOT NULL,
   "provider" TEXT,
-  "expired_date" TIMESTAMP WITH TIME ZONE,
+  "expiredDate" TIMESTAMP WITH TIME ZONE,
+  "exercisePrice" INT,
+  "referencePrice" INT,
   "volume" INT,
   "price" INT,
-  "share_price" INT,
-  "exercise_price" INT,
-  "exercise_ratio" TEXT,
-  "foreign_buy" INT,
+  "sharePrice" INT,
+  "exerciseRatio" TEXT,
+  "foreignBuy" INT,
   CONSTRAINT "vietnam_warrants_datetime_warrant" PRIMARY KEY ("datetime", "warrant")
 );
 GRANT SELECT, INSERT, DELETE ON "vietnam_warrants" TO xxxxx_user;

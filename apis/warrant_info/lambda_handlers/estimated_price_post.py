@@ -2,7 +2,7 @@ import logging
 import os
 from typing import Dict
 
-from lambdas.utils.exceptions import BadRequestException, UnauthorizedException
+from apis.utils.exceptions import BadRequestException, UnauthorizedException
 from postgresql.database import Database
 
 logger = logging.getLogger()

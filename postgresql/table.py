@@ -39,7 +39,8 @@ class Table:
         columns = sorted(items[0].keys())
         value_tokens = ', '.join(['%s'] * len(columns))
         values = [[item[column] for column in columns] for item in items]
-        columns_to_insert = ', '.join(columns)
+        columns_to_insert = ', '.join(f'"{column}"' for column in columns)
+
         with self.connection.psycopg2_client.cursor() as cursor:
             values_to_insert = ', '.join(
                 cursor.mogrify(f'({value_tokens})', record).decode('utf-8')
@@ -96,7 +97,7 @@ class Table:
             return
         value_tokens = ', '.join(['%s'] * len(columns))
         values = [[item[column] for column in columns] for item in items]
-        columns_to_delete = ', '.join(columns)
+        columns_to_delete = ', '.join(f'"{column}"' for column in columns)
         with self.connection.psycopg2_client.cursor() as cursor:
             values_to_delete = ', '.join(
                 cursor.mogrify(f'({value_tokens})', record).decode('utf-8')

@@ -1,7 +1,7 @@
 import logging
 import os
 
-from lambdas.utils.exceptions import UnauthorizedException
+from apis.utils.exceptions import UnauthorizedException
 from postgresql.database import Database
 
 logger = logging.getLogger()

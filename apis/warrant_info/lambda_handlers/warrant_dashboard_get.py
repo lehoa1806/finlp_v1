@@ -1,7 +1,7 @@
 import logging
 import os
 
-from lambdas.utils.exceptions import UnauthorizedException
+from apis.utils.exceptions import UnauthorizedException
 from postgresql.database import Database
 
 logger = logging.getLogger()
@@ -9,15 +9,17 @@ logger.setLevel(logging.INFO)
 
 QUERY = """\
 SELECT
-  "warrant",
-  "provider",
-  TO_CHAR("expired_date", 'Mon-DD-YYYY'),
-  "volume",
-  "price",
-  "share_price",
-  "exercise_price",
-  "exercise_ratio",
-  "foreign_buy"
+  t1."warrant" AS "warrant",
+  t1."provider" AS "provider",
+  TO_CHAR(t1."expiredDate", 'Mon-DD-YYYY') AS "expiredDate",
+  t1."exercisePrice" AS "exercisePrice",
+  t1."exerciseRatio" AS "exerciseRatio",
+  t1."referencePrice" AS "referencePrice",
+  t1."volume" AS "volume",
+  t1."price" AS "price",
+  t1."sharePrice" AS "sharePrice",
+  t1."foreignBuy" AS "foreignBuy",
+  t3."price" AS "estimatedPrice"
 FROM
   (
     SELECT
@@ -37,12 +39,9 @@ FROM
       "datetime" > current_date + INTERVAL '-1 day'
     GROUP BY
       "warrant"
-  ) AS t2
-    USING (
-    "warrant",
-    "datetime"
-  )
-ORDER BY "warrant";\
+  ) AS t2 USING ("warrant", "datetime")
+  LEFT JOIN "vietnam_estimated_prices" AS t3 ON t1."warrant" = t3."name"
+ORDER BY t1."warrant";\
 """
 
 
@@ -64,7 +63,7 @@ def lambda_handler(event, context):
         'port': int(os.getenv('POSTGRESQL_PORT')),
     }
     database = Database.load_database(config=credentials)
-    keys = ('warrant', 'provider', 'expirationDate', 'volume', 'price', 'sharePrice', 'exercisePrice', 'ratio',
-            'foreignBuy')
+    keys = ('warrant', 'provider', 'expirationDate', 'exercisePrice', 'exerciseRatio', 'referencePrice',
+            'volume', 'price', 'sharePrice', 'foreignBuy', 'estimatedPrice')
     data = list(database.query(QUERY, keys))
     return {'warrants': data}

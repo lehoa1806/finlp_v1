@@ -56,9 +56,12 @@ class VnDirectScraper(Scraper):
                         css_selector='td:nth-child(4)'
                     ).text
                 )
-                volume = self.str2int(warrant.find_element_by_css_selector(
-                    css_selector='td:nth-child(7) > span'
-                ).text)
+                try:
+                    volume = self.str2int(warrant.find_element_by_css_selector(
+                        css_selector='td:nth-child(7) > span'
+                    ).text)
+                except (NoSuchElementException, TimeoutException, ValueError):
+                    volume = 0
                 try:
                     price = self.str2int(warrant.find_element_by_css_selector(
                         css_selector='td:nth-child(14) > span'

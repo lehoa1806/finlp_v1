@@ -11,7 +11,7 @@ class Cache:
         prefix: str = '',
     ) -> None:
         self.memcached = memcached or PooledClient(
-            ('localhost', 11211),
+            ('127.0.0.1', 11211),
             connect_timeout=1,
             timeout=1,
             ignore_exc=True,

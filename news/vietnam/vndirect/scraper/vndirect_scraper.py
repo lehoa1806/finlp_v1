@@ -14,7 +14,7 @@ from scraper.scraper import Scraper
 
 class VnDirectScraper(Scraper):
     @property
-    def _browser_type(self) -> BrowserType:
+    def browser_type(self) -> BrowserType:
         return BrowserType.FIREFOX
 
     def load_warrant_home(self):

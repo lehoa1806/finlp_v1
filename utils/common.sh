@@ -51,6 +51,7 @@ function setup_git() {
   log "Git pull ..."
   git pull --all
   log "Git pull submodules..."
+  git submodule update --init --recursive
   git pull --recurse-submodules
   log "Git apply patchs..."
   for patch in "${HOME}/finlp/deploy/patchs"/*

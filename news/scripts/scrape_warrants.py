@@ -55,18 +55,17 @@ class Worker:
                 logging.info('Weekend -- stop working and enjoy the sleep!!!')
                 sleep(21600)
                 continue
-            start_morning = now.replace(hour=9, minute=0, second=0)
+            start_morning = now.replace(hour=8, minute=55, second=0)
             end_morning = now.replace(hour=11, minute=30, second=0)
-            start_evening = now.replace(hour=13, minute=0, second=0)
+            start_evening = now.replace(hour=12, minute=55, second=0)
             end_evening = now.replace(hour=15, minute=0, second=0)
             if now < start_morning or now > end_evening:
                 logging.info('Non-working time -- back to sleep')
-                sleep(1800)
+                sleep(300)
             elif end_morning < now < start_evening:
                 logging.info('Lunch time -- let\'s eat')
                 sleep(300)
             else:
-                sleep(5)
                 break
 
     def scrape(self):
@@ -89,8 +88,8 @@ if __name__ == "__main__":
             logging.warning('REPO UPDATED is triggered. Exiting ... !!!')
             raise SystemExit(1)
         try:
-            worker.scrape()
             worker.take_a_break()
+            worker.scrape()
         except KeyboardInterrupt:
             logging.info('Stop scrapping VN warrants')
             break

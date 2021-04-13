@@ -32,15 +32,15 @@ class Scraper:
         self._browser_type = kwargs.get('browser_type')
 
     def __del__(self):
-        if hasattr(self, 'browser') and self.browser:
-            self.browser.close()
+        if hasattr(self, '_browser') and self._browser:
+            self._browser.close()
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, tb):
-        if hasattr(self, 'browser') and self.browser:
-            self.browser.quit()
+        if hasattr(self, '_browser') and self._browser:
+            self._browser.quit()
 
     @property
     def browser_type(self) -> BrowserType:
@@ -48,7 +48,8 @@ class Scraper:
 
     @property
     def browser(self) -> WebDriver:
-        return self._browser or self.get_browser(self.headless)
+        self._browser = self._browser or self.get_browser(self.headless)
+        return self._browser
 
     def get_browser(
         self,

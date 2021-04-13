@@ -19,11 +19,8 @@ class Firefox(Browser):
         options = Options()
         if headless:
             options.add_argument('--headless')
-            options.add_argument('--no-sandbox')
-            options.add_argument('--disable-dev-shm-usage')
-            options.add_argument('--remote-debugging-port=9222')
-        options.add_argument('--dns-prefetch-disable')
-        options.add_argument('--window-size=1920,1080')
+        options.add_argument("--width=1920")
+        options.add_argument("--height=1080")
         return options
 
     def get_browser(self, options, capabilities) -> WebDriver:

@@ -11,7 +11,7 @@ QUERY = """\
 SELECT
   t1."warrant" AS "warrant",
   t1."provider" AS "provider",
-  TO_CHAR(t1."expiredDate", 'Mon-DD-YYYY') AS "expiredDate",
+  TO_CHAR(t1."expiredDate", 'YYYY-MM-DD') AS "expiredDate",
   t1."exercisePrice" AS "exercisePrice",
   t1."exerciseRatio" AS "exerciseRatio",
   t1."referencePrice" AS "referencePrice",
@@ -19,7 +19,7 @@ SELECT
   t1."price" AS "price",
   t1."sharePrice" AS "sharePrice",
   t1."foreignBuy" AS "foreignBuy",
-  t3."price" AS "estimatedPrice"
+  t3."price" AS "estimatedSharePrice"
 FROM
   (
     SELECT
@@ -64,7 +64,7 @@ def lambda_handler(event, context):
     }
     database = Database.load_database(config=credentials)
     keys = ('warrant', 'provider', 'expirationDate', 'exercisePrice', 'exerciseRatio', 'referencePrice',
-            'volume', 'price', 'sharePrice', 'foreignBuy', 'estimatedPrice')
+            'volume', 'price', 'sharePrice', 'foreignBuy', 'estimatedSharePrice')
     data = {}
     for item in database.query(QUERY, keys):
         data.update({item.get('warrant', 'Unknown'): item})

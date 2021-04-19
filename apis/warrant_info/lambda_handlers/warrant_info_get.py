@@ -67,5 +67,7 @@ def lambda_handler(event, context):
     database = Database.load_database(config=credentials)
     keys = ('warrant', 'provider', 'expirationDate', 'exercisePrice', 'exerciseRatio', 'referencePrice',
             'volume', 'price', 'sharePrice', 'foreignBuy')
-    data = list(database.query(QUERY, keys))
+    data = {}
+    for item in database.query(QUERY, keys):
+        data.update({item.get('warrant', 'Unknown'): item})
     return {'warrants': data}

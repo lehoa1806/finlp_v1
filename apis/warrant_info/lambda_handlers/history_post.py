@@ -18,7 +18,7 @@ DO UPDATE SET "warrant" = EXCLUDED."warrant",
  "action" = EXCLUDED."action",
  "quantity" = EXCLUDED."quantity",
  "price" = EXCLUDED."price",
- "realizedLossProfit" = EXCLUDED."acquisitionPrice";\
+ "realizedLossProfit" = EXCLUDED."realizedLossProfit";\
 """
 DELETE_QUERY = """\
 DELETE FROM "users_history"

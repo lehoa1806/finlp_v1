@@ -56,7 +56,7 @@ def lambda_handler(event, context):
     if watchlists:
         with database.connection.psycopg2_client.cursor() as cursor:
             values_to_insert = ', '.join(
-                cursor.mogrify('(%s, %s)', [user, watchlist, json.dumps(warrants)]).decode('utf-8')
+                cursor.mogrify('(%s, %s, %s)', [user, watchlist, json.dumps(warrants)]).decode('utf-8')
                 for watchlist, warrants in watchlists.items()
             )
         logging.info(
@@ -68,7 +68,7 @@ def lambda_handler(event, context):
         with database.connection.psycopg2_client.cursor() as cursor:
             values_to_insert = ', '.join(
                 cursor.mogrify(
-                    '(%s, %s)',
+                    '(%s, %s, %s, %s)',
                     [user,
                      item.get('warrant'),
                      item.get('quantity'),

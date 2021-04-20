@@ -19,7 +19,7 @@ vpc:
 # API GATEWAY
 api_gateway_stage: prod
 api_key_required: false
-authorization_type: 'NONE'
+authorization_type: 'AWS_IAM'
 error_response_template:
   '"#set($errorMessage = $input.path(\"$.errorMessage\"))
   \n{\n\   \"message\": \"$errorMessage\"\n}\n"'

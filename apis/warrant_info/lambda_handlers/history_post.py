@@ -10,7 +10,7 @@ logger.setLevel(logging.INFO)
 
 INSERT_QUERY = """\
 INSERT INTO "users_history" (
-  "datetime", "user", "recordId", "warrant", "action", "quantity", "price", "realizedLossProfit"
+  "date", "user", "recordId", "warrant", "action", "quantity", "price", "realizedLossProfit"
 )
 VALUES {values_to_insert}
 ON CONFLICT ("user", "recordId")
@@ -49,7 +49,6 @@ def lambda_handler(event, context):
     '''
     action = records.get('action')
     record = records.get('record')
-
     credentials = {
         'host': os.getenv('POSTGRESQL_HOST'),
         'user': os.getenv('POSTGRESQL_USER'),
@@ -62,8 +61,8 @@ def lambda_handler(event, context):
         with database.connection.psycopg2_client.cursor() as cursor:
             values_to_insert = cursor.mogrify(
                     '(%s, %s, %s, %s, %s, %s, %s, %s)',
-                    [record.get('datetime'),
-                     record.get('user'),
+                    [record.get('date'),
+                     user,
                      record.get('recordId'),
                      record.get('warrant'),
                      record.get('action'),
@@ -75,7 +74,6 @@ def lambda_handler(event, context):
         command = INSERT_QUERY.format(values_to_insert=values_to_insert)
         database.connection.execute(command)
     elif action == 'delete':
-        user = record.get('user', 'Unknown')
         record_id = record.get('recordId', 'Unknown')
         command = DELETE_QUERY.format(user=user, record_id=record_id)
         database.connection.execute(command)

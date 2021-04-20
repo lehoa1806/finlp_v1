@@ -61,7 +61,7 @@ def lambda_handler(event, context):
     if action == 'insert':
         with database.connection.psycopg2_client.cursor() as cursor:
             values_to_insert = cursor.mogrify(
-                    '(%s, %s, %s, %s, %s, %s, %s, %s)',
+                    '(%s, %s, %s, %s, %s, %s, %s, %s, %s)',
                     [record.get('date'),
                      user,
                      record.get('recordId'),

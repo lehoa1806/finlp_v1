@@ -38,7 +38,7 @@ def lambda_handler(event, context):
     if not body_params:
         raise BadRequestException('No data in the request.')
     if not isinstance(body_params, Dict) or not (
-        body_params.get('watchlists') and body_params.get('portfolio')
+        body_params.get('watchlists') or body_params.get('portfolio')
     ):
         raise BadRequestException('No valid data in the request.')
 

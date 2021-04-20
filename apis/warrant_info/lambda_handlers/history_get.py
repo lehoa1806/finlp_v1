@@ -9,7 +9,7 @@ logger.setLevel(logging.INFO)
 
 QUERY = """\
 SELECT
-  TO_CHAR(t1."datetime", 'YYYY-MM-DD') AS "datetime",
+  TO_CHAR(t1."date", 'YYYY-MM-DD') AS "date",
   t1."user" AS "user",
   t1."recordId" AS "recordId",
   t1."warrant" AS "warrant",
@@ -46,14 +46,14 @@ def lambda_handler(event, context):
     database = Database.load_database(config=credentials)
 
     # History
-    keys = ('datetime', 'user', 'recordId', 'warrant', 'action', 'quantity', 'price', 'realizedLossProfit')
+    keys = ('date', 'user', 'recordId', 'warrant', 'action', 'quantity', 'price', 'realizedLossProfit')
     query = QUERY.format(user=user)
     if start_time:
-        query += f' AND t1."datetime" > \'{start_time}\''
+        query += f' AND t1."date" > \'{start_time}\''
         if end_time:
-            query += f' AND t1."datetime" < \'{end_time}\''
+            query += f' AND t1."date" < \'{end_time}\''
     else:
-        query += f' AND t1."datetime" > CURRENT_DATE - INTERVAL \'3 months\''
+        query += f' AND t1."date" > CURRENT_DATE - INTERVAL \'3 months\''
     query += ';'
     records = list(database.query(query, keys))
     return {'records': records}

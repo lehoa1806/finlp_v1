@@ -64,7 +64,7 @@ def lambda_handler(event, context):
     database = Database.load_database(config=credentials)
 
     # Watchlists
-    keys = ('warrant', 'quantity', 'acquisitionPrice')
+    keys = ('watchlist', 'warrants')
     query = PORTFOLIO_QUERY.format(user=user)
     watchlists = {}
     for item in database.query(query, keys):
@@ -73,7 +73,7 @@ def lambda_handler(event, context):
         watchlists.update({watchlist: warrants})
 
     # Portfolio
-    keys = ('watchlist', 'warrants')
+    keys = ('warrant', 'quantity', 'acquisitionPrice')
     query = WATCHLISTS_QUERY.format(user=user)
     portfolio = {}
     for item in database.query(query, keys):

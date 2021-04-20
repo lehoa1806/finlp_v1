@@ -131,7 +131,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON "users_watchlists" TO xxxxx_user;
 -- users_portfolio
 CREATE TABLE IF NOT EXISTS "users_portfolio" (
   "modified" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "datetime" TIMESTAMP WITH TIME ZONE,
   "user" TEXT NOT NULL,
   "warrant" TEXT NOT NULL,
   "quantity" INT NOT NULL,

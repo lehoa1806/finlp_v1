@@ -10,7 +10,7 @@ logger.setLevel(logging.INFO)
 
 INSERT_QUERY = """\
 INSERT INTO "users_history" (
-  "date", "user", "recordId", "warrant", "action", "quantity", "price", "realizedLossProfit"
+  "date", "user", "recordId", "warrant", "action", "quantity", "price", "acquisitionPrice", "realizedLossProfit"
 )
 VALUES {values_to_insert}
 ON CONFLICT ("user", "recordId")
@@ -18,6 +18,7 @@ DO UPDATE SET "warrant" = EXCLUDED."warrant",
  "action" = EXCLUDED."action",
  "quantity" = EXCLUDED."quantity",
  "price" = EXCLUDED."price",
+ "acquisitionPrice" = EXCLUDED."acquisitionPrice",
  "realizedLossProfit" = EXCLUDED."realizedLossProfit";\
 """
 DELETE_QUERY = """\
@@ -68,6 +69,7 @@ def lambda_handler(event, context):
                      record.get('action'),
                      record.get('quantity'),
                      record.get('price'),
+                     record.get('acquisitionPrice'),
                      record.get('realizedLossProfit')]).decode('utf-8')
         logging.info(
             f'Inserting data to to users_history.')

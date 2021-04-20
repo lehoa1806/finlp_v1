@@ -16,6 +16,7 @@ SELECT
   t1."action" AS "action",
   t1."quantity" AS "quantity",
   t1."price" AS "price",
+  t1."acquisitionPrice" AS "acquisitionPrice",
   t1."realizedLossProfit" AS "realizedLossProfit"
 FROM
   "users_history" AS t1
@@ -46,7 +47,8 @@ def lambda_handler(event, context):
     database = Database.load_database(config=credentials)
 
     # History
-    keys = ('date', 'user', 'recordId', 'warrant', 'action', 'quantity', 'price', 'realizedLossProfit')
+    keys = ('date', 'user', 'recordId', 'warrant', 'action', 'quantity', 'price',
+            'acquisitionPrice', 'realizedLossProfit')
     query = QUERY.format(user=user)
     if start_time:
         query += f' AND t1."date" > \'{start_time}\''

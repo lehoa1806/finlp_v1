@@ -149,7 +149,8 @@ CREATE TABLE IF NOT EXISTS "users_history" (
   "action" TEXT NOT NULL,
   "quantity" INT NOT NULL,
   "price" INT NOT NULL,
-  "realizedLossProfit" TEXT,
+  "acquisitionPrice" INT NOT NULL,
+  "realizedLossProfit" INT,
   CONSTRAINT "users_history_user_recordId" PRIMARY KEY ("user", "recordId")
 );
 GRANT SELECT, INSERT, UPDATE, DELETE ON "users_history" TO xxxxx_user;

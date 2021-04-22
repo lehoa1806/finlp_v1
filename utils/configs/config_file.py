@@ -116,6 +116,20 @@ class ConfigFile:
         return BrowserType(self._scraper.get('browser_type', 'Chrome'))
 
     @cached_property
+    def headless(self) -> Optional[bool]:
+        headless = self._scraper.get('headless')
+        if isinstance(headless, bool):
+            return headless
+        elif isinstance(headless, str):
+            return headless in {'True', 'true'}
+        return headless
+
+    @cached_property
+    def scraper_timeout(self) -> int:
+        scraper_timeout = self._scraper.get('scraper_timeout', 60)
+        return scraper_timeout
+
+    @cached_property
     def email_receiver(self) -> str:
         return self._scraper.get('email_receiver')
 
@@ -130,15 +144,6 @@ class ConfigFile:
     @cached_property
     def google_token_path(self) -> str:
         return self._scraper.get('google_token_path')
-
-    @cached_property
-    def headless(self) -> Optional[bool]:
-        headless = self._scraper.get('headless')
-        if isinstance(headless, bool):
-            return headless
-        elif isinstance(headless, str):
-            return headless in {'True', 'true'}
-        return headless
 
     @cached_property
     def rakuten_creds_code(self) -> str:

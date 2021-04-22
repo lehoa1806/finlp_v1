@@ -110,6 +110,15 @@ class Setting(metaclass=Singleton):
         return BrowserType.CHROME if browser_type is None else browser_type
 
     @cached_property
+    def headless(self) -> bool:
+        headless = self.get_attribute('headless')
+        return True if headless is None else headless
+
+    @cached_property
+    def scraper_timeout(self) -> int:
+        return int(self.get_attribute('scraper_timeout'))
+
+    @cached_property
     def email_receiver(self) -> str:
         return self.get_attribute('email_receiver')
 
@@ -124,11 +133,6 @@ class Setting(metaclass=Singleton):
     @cached_property
     def google_token_path(self) -> str:
         return self.get_attribute('google_token_path')
-
-    @cached_property
-    def headless(self) -> bool:
-        headless = self.get_attribute('headless')
-        return True if headless is None else headless
 
     @cached_property
     def i3investor_credentials(self) -> Tuple:

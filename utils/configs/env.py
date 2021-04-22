@@ -97,6 +97,16 @@ class Env:
             self.get_environment_variable('SCRAPER_BROWSER_TYPE', 'Chrome'))
 
     @cached_property
+    def headless(self) -> bool:
+        headless = self.get_environment_variable('SCRAPER_HEADLESS')
+        return headless in {'True', 'true'}
+
+    @cached_property
+    def scraper_timeout(self) -> int:
+        scraper_timeout = self.get_environment_variable('SCRAPER_TIMEOUT')
+        return int(scraper_timeout)
+
+    @cached_property
     def email_receiver(self) -> str:
         return self.get_environment_variable('GOOGLE_EMAIL_SENDER')
 
@@ -111,11 +121,6 @@ class Env:
     @cached_property
     def google_token_path(self) -> str:
         return self.get_environment_variable('GOOGLE_TOKEN_PATH')
-
-    @cached_property
-    def headless(self) -> bool:
-        headless = self.get_environment_variable('SCRAPER_HEADLESS')
-        return headless in {'True', 'true'}
 
     @cached_property
     def i3investor_credentials(self) -> str:

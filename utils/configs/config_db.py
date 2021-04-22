@@ -127,6 +127,20 @@ class ConfigDB:
             self._scraper.get('configs', {}).get('browser_type', 'Chrome'))
 
     @cached_property
+    def headless(self) -> Optional[bool]:
+        headless = self._scraper.get('configs', {}).get('headless')
+        if isinstance(headless, bool):
+            return headless
+        elif isinstance(headless, str):
+            return headless in {'True', 'true'}
+        return headless
+
+    @cached_property
+    def scraper_timeout(self) -> int:
+        scraper_timeout = self._scraper.get('configs', {}).get('scraper_timeout', 60)
+        return int(scraper_timeout)
+
+    @cached_property
     def email_receiver(self) -> str:
         return self._scraper.get('configs', {}).get('email_receiver')
 
@@ -141,15 +155,6 @@ class ConfigDB:
     @cached_property
     def google_token_path(self) -> str:
         return self._scraper.get('configs', {}).get('google_token_path')
-
-    @cached_property
-    def headless(self) -> Optional[bool]:
-        headless = self._scraper.get('configs', {}).get('headless')
-        if isinstance(headless, bool):
-            return headless
-        elif isinstance(headless, str):
-            return headless in {'True', 'true'}
-        return headless
 
     # secrets
     @cached_property

@@ -81,8 +81,8 @@ def lambda_handler(event, context):
                 with database.connection.psycopg2_client.cursor() as cursor:
                     values_to_update = cursor.mogrify(
                         '(%s, %s)', [new_name, json.dumps(watchlist.get('warrants'))]).decode('utf-8')
-                    condition = cursor.mogrify('(%s, %s)', [user, name]).decode('utf-8')
-                    command = WATCHLISTS_UPDATE.format(values_to_update=values_to_update, condition=condition)
+                    conditions = cursor.mogrify('(%s, %s)', [user, name]).decode('utf-8')
+                    command = WATCHLISTS_UPDATE.format(values_to_update=values_to_update, conditions=conditions)
                     database.connection.execute(command)
                     logging.info('Update 1 records to users_watchlists.')
             else:

@@ -1,7 +1,5 @@
-import json
 import logging
 import os
-from typing import Any
 
 from apis.utils.exceptions import UnauthorizedException
 from postgresql.database import Database
@@ -31,19 +29,6 @@ WHERE
 """
 
 
-def parse_json(
-    data: str = '',
-    default: Any = None,
-) -> Any:
-    if not data or not isinstance(data, str):
-        return default
-    try:
-        value = json.loads(data)
-        return type(default)(value) if default is not None else value
-    except (json.decoder.JSONDecodeError, TypeError):
-        return default
-
-
 def lambda_handler(event, context):
     logger.info('Requested event: {}'.format(event))
 
@@ -68,8 +53,8 @@ def lambda_handler(event, context):
     query = WATCHLISTS_QUERY.format(user=user)
     watchlists = {}
     for item in database.query(query, keys):
-        watchlist = item.get('watchlist', 'Unknown')
-        warrants = parse_json(item.get('warrants', ''), [])
+        watchlist = item.get('watchlist') or 'Unknown'
+        warrants = item.get('warrants') or []
         watchlists.update({watchlist: warrants})
 
     # Portfolio

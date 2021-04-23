@@ -92,7 +92,7 @@ def lambda_handler(event, context):
                 values_to_insert = ', '.join(
                     cursor.mogrify(
                         '(%s, %s, %s)', [user, item.get('name'), json.dumps(item.get('warrants'))]).decode('utf-8')
-                    for item in portfolio
+                    for item in watchlists_to_insert
                 )
             logging.info(
                 f'Inserting {len(watchlists)} records to users_watchlists.')

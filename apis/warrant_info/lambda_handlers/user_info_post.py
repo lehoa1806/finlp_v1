@@ -77,7 +77,7 @@ def lambda_handler(event, context):
         for watchlist in watchlists:
             name = watchlist.get('name')
             new_name = watchlist.get('newName')
-            if name != new_name:
+            if new_name and name != new_name:
                 with database.connection.psycopg2_client.cursor() as cursor:
                     values_to_update = cursor.mogrify(
                         '(%s, %s)', [new_name, json.dumps(watchlist.get('warrants'))]).decode('utf-8')

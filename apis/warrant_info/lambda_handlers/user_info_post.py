@@ -15,6 +15,11 @@ VALUES {values_to_insert}
 ON CONFLICT ("user", "watchlist")
 DO UPDATE SET "warrants" = EXCLUDED."warrants";\
 """
+WATCHLISTS_UPDATE = """\
+UPDATE "users_watchlists"
+SET ("watchlist", "warrants") = {values_to_update}
+WHERE ("user", "watchlist") = {conditions};\
+"""
 
 PORTFOLIO_QUERY = """\
 INSERT INTO "users_portfolio" ("user", "warrant", "quantity", "acquisitionPrice")
@@ -43,7 +48,21 @@ def lambda_handler(event, context):
         raise BadRequestException('No valid data in the request.')
 
     watchlists = body_params.get('watchlists')
+    '''
+    [{
+        name: WATCHLIST1,
+        warrants: ['WARRANT1', 'WARRANT2'],
+        newName: WATCHLIST2,
+    }]
+    '''
     portfolio = body_params.get('portfolio')
+    '''
+    [{
+        warrant: 'WARRANT0',
+        quantity: 100,
+        acquisitionPrice: 9999,
+    }]
+    '''
 
     credentials = {
         'host': os.getenv('POSTGRESQL_HOST'),
@@ -54,15 +73,31 @@ def lambda_handler(event, context):
     }
     database = Database.load_database(config=credentials)
     if watchlists:
-        with database.connection.psycopg2_client.cursor() as cursor:
-            values_to_insert = ', '.join(
-                cursor.mogrify('(%s, %s, %s)', [user, watchlist, json.dumps(warrants)]).decode('utf-8')
-                for watchlist, warrants in watchlists.items()
-            )
-        logging.info(
-            f'Inserting {len(watchlists)} records to users_watchlists.')
-        command = WATCHLISTS_QUERY.format(values_to_insert=values_to_insert)
-        database.connection.execute(command)
+        watchlists_to_insert = []
+        for watchlist in watchlists:
+            name = watchlist.get('name')
+            new_name = watchlist.get('newName')
+            if name != new_name:
+                with database.connection.psycopg2_client.cursor() as cursor:
+                    values_to_update = cursor.mogrify(
+                        '(%s, %s)', [new_name, json.dumps(watchlist.get('warrants'))]).decode('utf-8')
+                    condition = cursor.mogrify('(%s, %s)', [user, name]).decode('utf-8')
+                    command = WATCHLISTS_UPDATE.format(values_to_update=values_to_update, condition=condition)
+                    database.connection.execute(command)
+                    logging.info('Update 1 records to users_watchlists.')
+            else:
+                watchlists_to_insert.append(watchlist)
+        if watchlists_to_insert:
+            with database.connection.psycopg2_client.cursor() as cursor:
+                values_to_insert = ', '.join(
+                    cursor.mogrify(
+                        '(%s, %s, %s)', [user, item.get('name'), json.dumps(item.get('warrants'))]).decode('utf-8')
+                    for item in portfolio
+                )
+            logging.info(
+                f'Inserting {len(watchlists)} records to users_watchlists.')
+            command = WATCHLISTS_QUERY.format(values_to_insert=values_to_insert)
+            database.connection.execute(command)
 
     if portfolio:
         with database.connection.psycopg2_client.cursor() as cursor:

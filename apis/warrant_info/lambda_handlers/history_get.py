@@ -18,7 +18,7 @@ SELECT
   t1."price" AS "price",
   t1."acquisitionPrice" AS "acquisitionPrice",
   t1."realizedLossProfit" AS "realizedLossProfit",
-  t1."editable" AS "editable",
+  t1."editable" AS "editable"
 FROM
   "users_history" AS t1
 WHERE

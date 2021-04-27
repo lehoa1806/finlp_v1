@@ -43,25 +43,31 @@ def lambda_handler(event, context):
     if not body_params:
         raise BadRequestException('No data in the request.')
     if not isinstance(body_params, Dict) or not (
-        body_params.get('watchlists') or body_params.get('portfolio')
+        body_params.get('watchlist') or body_params.get('portfolio')
     ):
         raise BadRequestException('No valid data in the request.')
 
-    watchlists = body_params.get('watchlists')
+    watchlist = body_params.get('watchlist')
     '''
-    [{
-        name: WATCHLIST1,
-        warrants: ['WARRANT1', 'WARRANT2'],
-        newName: WATCHLIST2,
-    }]
+    {
+        'data': {
+            name: WATCHLIST1,
+            warrants: ['WARRANT1', 'WARRANT2'],
+            newName: WATCHLIST2,
+        },
+        'action': 'insert'  // 'update', 'delete'
+    }
     '''
     portfolio = body_params.get('portfolio')
     '''
-    [{
-        warrant: 'WARRANT0',
-        quantity: 100,
-        acquisitionPrice: 9999,
-    }]
+    {
+        'data': {
+            warrant: 'WARRANT0',
+            quantity: 100,
+            acquisitionPrice: 9999,
+        }
+        'action': 'insert'  // 'update', 'delete'
+    }
     '''
 
     credentials = {
@@ -72,48 +78,51 @@ def lambda_handler(event, context):
         'port': int(os.getenv('POSTGRESQL_PORT')),
     }
     database = Database.load_database(config=credentials)
-    if watchlists:
-        watchlists_to_insert = []
-        for watchlist in watchlists:
-            name = watchlist.get('name')
-            new_name = watchlist.get('newName')
+    if watchlist and isinstance(watchlist, dict):
+        action = watchlist.get('action')
+        data = watchlist.get('data', {})
+        name = data.get('name')
+        if name and action == 'insert':
+            with database.connection.psycopg2_client.cursor() as cursor:
+                values_to_insert = cursor.mogrify(
+                    '(%s, %s, %s)',
+                    [user, name, json.dumps(data.get('warrants'))]
+                ).decode('utf-8')
+            command = WATCHLISTS_QUERY.format(values_to_insert=values_to_insert)
+            database.connection.execute(command)
+            logging.info(f'Inserted {name} to users_watchlists.')
+
+        elif name and action == 'update':
+            new_name = data.get('newName')
             if new_name and name != new_name:
                 with database.connection.psycopg2_client.cursor() as cursor:
                     values_to_update = cursor.mogrify(
-                        '(%s, %s)', [new_name, json.dumps(watchlist.get('warrants'))]).decode('utf-8')
+                        '(%s, %s)', [new_name, json.dumps(data.get('warrants'))]).decode('utf-8')
                     conditions = cursor.mogrify('(%s, %s)', [user, name]).decode('utf-8')
-                    command = WATCHLISTS_UPDATE.format(values_to_update=values_to_update, conditions=conditions)
-                    database.connection.execute(command)
-                    logging.info('Update 1 records to users_watchlists.')
-            else:
-                watchlists_to_insert.append(watchlist)
-        if watchlists_to_insert:
-            with database.connection.psycopg2_client.cursor() as cursor:
-                values_to_insert = ', '.join(
-                    cursor.mogrify(
-                        '(%s, %s, %s)', [user, item.get('name'), json.dumps(item.get('warrants'))]).decode('utf-8')
-                    for item in watchlists_to_insert
-                )
-            logging.info(
-                f'Inserting {len(watchlists)} records to users_watchlists.')
-            command = WATCHLISTS_QUERY.format(values_to_insert=values_to_insert)
+                command = WATCHLISTS_UPDATE.format(values_to_update=values_to_update, conditions=conditions)
+                database.connection.execute(command)
+                logging.info(f'Updated {name} in users_watchlists.')
+        elif name and action == 'delete':
+            command = f'DELETE FROM users_watchlists WHERE ("user", "watchlist") = (\'{user}\', \'{name}\')'
             database.connection.execute(command)
-
-    if portfolio:
-        with database.connection.psycopg2_client.cursor() as cursor:
-            values_to_insert = ', '.join(
-                cursor.mogrify(
-                    '(%s, %s, %s, %s)',
-                    [user,
-                     item.get('warrant'),
-                     item.get('quantity'),
-                     str(item.get('acquisitionPrice'))]).decode('utf-8')
-                for item in portfolio
-            )
-        logging.info(
-            f'Inserting {len(portfolio)} records to users_portfolio.')
-        command = PORTFOLIO_QUERY.format(values_to_insert=values_to_insert)
-        database.connection.execute(command)
+            logging.info(f'Deleted {name} from users_watchlists.')
+    if portfolio and isinstance(portfolio, dict):
+        action = portfolio.get('action')
+        data = portfolio.get('data', {})
+        warrant = data.get('warrant')
+        if warrant and action == 'insert':
+            with database.connection.psycopg2_client.cursor() as cursor:
+                values_to_insert = cursor.mogrify(
+                        '(%s, %s, %s, %s)',
+                        [user, warrant, data.get('quantity'),
+                         data.get('acquisitionPrice')]).decode('utf-8')
+            command = PORTFOLIO_QUERY.format(values_to_insert=values_to_insert)
+            database.connection.execute(command)
+            logging.info(f'Inserting {warrant} to to users_portfolio.')
+        elif warrant and action == 'delete':
+            command = f'DELETE FROM users_portfolio WHERE ("user", "warrant") = (\'{user}\', \'{warrant}\')'
+            database.connection.execute(command)
+            logging.info(f'Deleted {warrant} from users_watchlists.')
 
     return {
         'statusCode': 200,

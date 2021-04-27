@@ -122,7 +122,7 @@ def lambda_handler(event, context):
         elif warrant and action == 'delete':
             command = f'DELETE FROM users_portfolio WHERE ("user", "warrant") = (\'{user}\', \'{warrant}\')'
             database.connection.execute(command)
-            logging.info(f'Deleted {warrant} from users_watchlists.')
+            logging.info(f'Deleted {warrant} from users_portfolio.')
 
     return {
         'statusCode': 200,

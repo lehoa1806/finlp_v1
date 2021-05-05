@@ -79,7 +79,7 @@ QUERY = """\
 SELECT
   t1."warrant" AS "warrant",
   t1."provider" AS "provider",
-  t1."expiredDate", 'YYYY-MM-DD') AS "expiredDate",
+  TO_CHAR(t1."expiredDate", 'YYYY-MM-DD') AS "expiredDate",
   t1."exercisePrice" AS "exercisePrice",
   t1."exerciseRatio" AS "exerciseRatio",
   t1."referencePrice" AS "referencePrice",

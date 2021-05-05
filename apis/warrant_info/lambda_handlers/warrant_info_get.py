@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import datetime
 
 from apis.utils.exceptions import UnauthorizedException
 from postgresql.database import Database
@@ -7,7 +8,8 @@ from postgresql.database import Database
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-QUERY = """\
+CREATE_TEMP_QUERY = """\
+CREATE TEMP TABLE "vietnam_warrants_snapshot_staging_{timestamp}" AS
 SELECT
   t1."warrant" AS "warrant",
   t1."provider" AS "provider",
@@ -26,7 +28,7 @@ FROM
     FROM
       "vietnam_warrants"
     WHERE
-      "datetime" > current_date + INTERVAL '-1 day'
+      "datetime" > current_date + INTERVAL '-4 hours'
   ) AS t1
   INNER JOIN (
     SELECT
@@ -35,15 +37,43 @@ FROM
     FROM
       "vietnam_warrants"
     WHERE
-      "datetime" > current_date + INTERVAL '-1 day'
+      "datetime" > current_date + INTERVAL '-4 hours'
     GROUP BY
       "warrant"
   ) AS t2
     USING (
     "warrant",
     "datetime"
-  )
-ORDER BY "warrant";\
+  );\
+"""
+INSERT_TEMP_QUERY = """\
+INSERT INTO "vietnam_warrants_snapshot_staging_{timestamp}"
+SELECT
+  *
+FROM
+  "vietnam_warrants_snapshot" AS t1
+WHERE
+  NOT EXISTS (
+    SELECT
+      1
+    FROM
+      "vietnam_warrants_snapshot_staging_{timestamp}"
+    WHERE
+      warrant = t1.warrant
+  );\
+"""
+TRUNCATE_SNAPSHOT_QUERY = """\
+TRUNCATE TABLE "vietnam_warrants_snapshot";\
+"""
+INSERT_SNAPSHOT_QUERY = """\
+INSERT INTO "vietnam_warrants_snapshot"
+SELECT * FROM "vietnam_warrants_snapshot_staging_{timestamp}";\
+"""
+DROP_TEMP_QUERY = """\
+DROP TABLE "vietnam_warrants_snapshot_staging_{timestamp}";\
+"""
+SELECT_DATA_QUERY = """\
+SELECT * FROM "vietnam_warrants_snapshot";\
 """
 
 
@@ -57,6 +87,7 @@ def lambda_handler(event, context):
     if not user:
         raise UnauthorizedException('Invalid AWS credentials !.')
 
+    timestamp = datetime.utcnow().strftime('%Y%m%d%H%M%S%f')
     credentials = {
         'host': os.getenv('POSTGRESQL_HOST'),
         'user': os.getenv('POSTGRESQL_USER'),
@@ -65,9 +96,14 @@ def lambda_handler(event, context):
         'port': int(os.getenv('POSTGRESQL_PORT')),
     }
     database = Database.load_database(config=credentials)
+    database.execute(CREATE_TEMP_QUERY.format(timestamp=timestamp))
+    database.execute(INSERT_TEMP_QUERY.format(timestamp=timestamp))
+    database.execute(TRUNCATE_SNAPSHOT_QUERY)
+    database.execute(INSERT_SNAPSHOT_QUERY.format(timestamp=timestamp))
+
     keys = ('warrant', 'provider', 'expirationDate', 'exercisePrice', 'exerciseRatio', 'referencePrice',
             'volume', 'price', 'sharePrice', 'foreignBuy')
     data = {}
-    for item in database.query(QUERY, keys):
+    for item in database.query(SELECT_DATA_QUERY, keys):
         data.update({item.get('warrant', 'Unknown'): item})
     return {'warrants': data}

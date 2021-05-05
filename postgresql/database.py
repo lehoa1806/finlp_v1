@@ -65,6 +65,13 @@ class Database:
                 'query_start')
         yield from self.connection.query(query, keys)
 
+    def execute(
+        self,
+        command: str,
+        params: Iterable[Any] = None,
+    ) -> None:
+        self.connection.execute(command=command, params=params)
+
     def query(
         self,
         query: str,

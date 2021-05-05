@@ -13,7 +13,7 @@ CREATE TEMP TABLE "vietnam_warrants_snapshot_staging_{timestamp}" AS
 SELECT
   t1."warrant" AS "warrant",
   t1."provider" AS "provider",
-  TO_CHAR(t1."expiredDate", 'YYYY-MM-DD') AS "expiredDate",
+  t1."expiredDate" AS "expiredDate",
   t1."exercisePrice" AS "exercisePrice",
   t1."exerciseRatio" AS "exerciseRatio",
   t1."referencePrice" AS "referencePrice",
@@ -73,7 +73,19 @@ DROP_TEMP_QUERY = """\
 DROP TABLE "vietnam_warrants_snapshot_staging_{timestamp}";\
 """
 SELECT_DATA_QUERY = """\
-SELECT * FROM "vietnam_warrants_snapshot";\
+SELECT
+  t1."warrant" AS "warrant",
+  t1."provider" AS "provider",
+  t1."expiredDate", 'YYYY-MM-DD') AS "expiredDate",
+  t1."exercisePrice" AS "exercisePrice",
+  t1."exerciseRatio" AS "exerciseRatio",
+  t1."referencePrice" AS "referencePrice",
+  t1."volume" AS "volume",
+  t1."price" AS "price",
+  t1."sharePrice" AS "sharePrice",
+  t1."foreignBuy" AS "foreignBuy"
+FROM
+  "vietnam_warrants_snapshot" AS t1;\
 """
 
 

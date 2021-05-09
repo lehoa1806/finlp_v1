@@ -1,7 +1,7 @@
 from typing import Dict, Iterator
 
+from machine.scraper import Scraper
 from scraper.elements.button import Button
-from scraper.scraper import Scraper
 from utils.configs.setting import Setting
 
 

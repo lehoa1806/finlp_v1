@@ -4,8 +4,8 @@ from typing import Dict, Iterator
 import pytz
 from selenium.common.exceptions import NoSuchElementException
 
+from machine.scraper import Scraper
 from news.utils.common import VN_TIMEZONE
-from scraper.scraper import Scraper
 
 
 class CafefScraper(Scraper):

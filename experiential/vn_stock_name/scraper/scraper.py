@@ -1,6 +1,6 @@
 from typing import Dict, Iterator
 
-from scraper.scraper import Scraper
+from machine.scraper import Scraper
 
 
 class CafeFLiveBoardScraper(Scraper):

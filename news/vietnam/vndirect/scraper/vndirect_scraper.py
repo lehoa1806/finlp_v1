@@ -7,8 +7,8 @@ from selenium.common.exceptions import (NoSuchElementException,
                                         StaleElementReferenceException,
                                         TimeoutException)
 
+from machine.scraper import Scraper
 from news.utils.common import VN_TIMEZONE
-from scraper.scraper import Scraper
 
 
 class VnDirectScraper(Scraper):

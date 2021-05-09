@@ -2,7 +2,7 @@ from typing import Dict, Iterator, List
 
 from selenium.common.exceptions import NoSuchElementException
 
-from scraper.scraper import Scraper
+from machine.scraper import Scraper
 
 
 class TheStarScraper(Scraper):

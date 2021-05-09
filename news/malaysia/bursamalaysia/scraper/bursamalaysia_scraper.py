@@ -3,7 +3,7 @@ from typing import Dict, Iterator
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.remote.webelement import WebElement
 
-from scraper.scraper import Scraper
+from machine.scraper import Scraper
 
 
 class BursaMalaysiaScraper(Scraper):

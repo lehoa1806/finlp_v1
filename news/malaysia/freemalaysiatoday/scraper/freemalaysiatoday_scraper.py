@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from scraper.scraper import Scraper
+from machine.scraper import Scraper
 
 
 class FreeMalaysiaTodayScraper(Scraper):

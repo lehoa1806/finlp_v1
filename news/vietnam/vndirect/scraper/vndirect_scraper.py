@@ -8,15 +8,10 @@ from selenium.common.exceptions import (NoSuchElementException,
                                         TimeoutException)
 
 from news.utils.common import VN_TIMEZONE
-from scraper.common import BrowserType
 from scraper.scraper import Scraper
 
 
 class VnDirectScraper(Scraper):
-    @property
-    def browser_type(self) -> BrowserType:
-        return BrowserType.FIREFOX
-
     def load_warrant_home(self):
         url = 'https://trade.vndirect.com.vn/chung-khoan/chung-quyen'
         self.load_url(url)

@@ -6,20 +6,17 @@ from workflow.task import Task
 
 from .scraper.vndirect_scraper import VnDirectScraper
 from .warrant_getting_stage import WarrantGettingStage
+from .warrant_scheduling_stage import WarrantSchedulingStage
 
 
 class WarrantScraperTask(Task):
     def __init__(
         self,
-        cool_down: int = 60,
-        break_period: int = 3600,
         headless: bool = False,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.headless = headless
-        self.cool_down = cool_down
-        self.break_period = break_period
 
     @property
     def consumer(self) -> Consumer:
@@ -31,10 +28,10 @@ class WarrantScraperTask(Task):
     @property
     def pipeline(self) -> Pipeline:
         return Pipeline(
+            stage=WarrantSchedulingStage()
+        ).add_stage(
             stage=WarrantGettingStage(
                 scraper=VnDirectScraper(headless=False, timeout=15),
-                cool_down=self.cool_down,
-                break_period=self.break_period,
             )
         )
 
@@ -45,14 +42,7 @@ class WarrantScraperTask(Task):
     @classmethod
     def process_task(
         cls,
-        cool_down: int = 60,
-        break_period: int = 3600,
         headless: bool = False,
         **kwargs,
     ) -> None:
-        cls(
-            cool_down=cool_down,
-            break_period=break_period,
-            headless=headless,
-            **kwargs,
-        ).main()
+        cls(headless=headless, **kwargs).main()

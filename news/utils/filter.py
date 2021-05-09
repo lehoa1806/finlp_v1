@@ -1,7 +1,7 @@
 from typing import Dict, Set
 
 from news.utils.common import Subscription
-from postgresql.database import Database
+from utils.postgresql.database import Database
 from utils.decorators.functools import cached_property
 
 

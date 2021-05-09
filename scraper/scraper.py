@@ -58,7 +58,7 @@ class Scraper:
         if self.browser_type == BrowserType.CHROME:
             return Chrome(headless=headless).browser
         else:
-            return Firefox(headless=headless).browser
+            return Firefox(headless=False).browser
 
     @do_and_sleep
     def short_sleep(self) -> None:

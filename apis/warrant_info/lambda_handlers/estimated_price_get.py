@@ -2,7 +2,7 @@ import logging
 import os
 
 from apis.utils.exceptions import UnauthorizedException
-from postgresql.database import Database
+from utils.postgresql.database import Database
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

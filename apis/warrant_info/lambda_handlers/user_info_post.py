@@ -4,7 +4,7 @@ import os
 from typing import Dict
 
 from apis.utils.exceptions import BadRequestException, UnauthorizedException
-from postgresql.database import Database
+from utils.postgresql.database import Database
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

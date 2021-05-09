@@ -32,7 +32,7 @@ class WarrantScraperTask(Task):
     def pipeline(self) -> Pipeline:
         return Pipeline(
             stage=WarrantGettingStage(
-                scraper=VnDirectScraper(headless=self.headless, timeout=15),
+                scraper=VnDirectScraper(headless=False, timeout=15),
                 cool_down=self.cool_down,
                 break_period=self.break_period,
             )

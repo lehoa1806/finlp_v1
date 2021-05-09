@@ -1,3 +1,6 @@
 [submodule "workflow"]
 	path = workflow
 	url = https://github.com/lehoa1806/workflow.git
+[submodule "postgresql_wrapper"]
+	path = postgresql_wrapper
+	url = https://github.com/lehoa1806/postgresql_wrapper.git

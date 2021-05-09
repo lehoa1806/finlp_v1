@@ -1,7 +1,7 @@
 from typing import Any, Dict, Iterator
 
 from news.utils.common import NEWS_QUERY
-from postgresql.database import Database
+from utils.postgresql.database import Database
 from workflow.stage import Stage
 
 

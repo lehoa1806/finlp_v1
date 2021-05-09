@@ -1,10 +1,6 @@
-from typing import Any, Dict, Iterable, Iterator, Tuple
-
-import psycopg2
-
 from utils.configs.setting import Setting
 
-from postgresql_wrapper import Database as PostgreSQL
+from postgresql_wrapper.database import Database as PostgreSQL
 
 
 class Database(PostgreSQL):

@@ -1,6 +1,6 @@
 from typing import Dict, Generator
 
-from utils.postgresql.database import Database
+from utils.postgresql import Database
 from workflow.consumer import Consumer
 
 

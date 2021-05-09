@@ -7,3 +7,6 @@
 [submodule "slackbot"]
 	path = slackbot
 	url = https://github.com/lehoa1806/slackbot.git
+[submodule "scraper"]
+	path = scraper
+	url = https://github.com/lehoa1806/scraper.git

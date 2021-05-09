@@ -9,7 +9,7 @@
 	url = https://github.com/lehoa1806/slackbot.git
 [submodule "scraper"]
 	path = scraper
-	url = https://github.com/lehoa1806/scraper.git
+	url = https://github.com/lehoa1806/selenium_scraper.git
 [submodule "aws_wrappers"]
 	path = aws_wrappers
 	url = https://github.com/lehoa1806/aws_wrappers.git

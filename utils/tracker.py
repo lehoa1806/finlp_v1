@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional
 
-from aws_apis.dynamodb.database import Database
+from utils.dynamodb import Database
 
 
 class Tracker:

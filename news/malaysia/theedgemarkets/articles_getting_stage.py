@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 from typing import Dict, Iterator, Optional
 
-from aws_apis.dynamodb.database import Database
+from utils.dynamodb import Database
 from news.malaysia.theedgemarkets.scraper.theedgemarkets_scraper import \
     TheEdgeMarketsScraper
 from news.utils.common import MY_TIMEZONE, get_time

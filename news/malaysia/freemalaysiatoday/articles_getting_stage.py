@@ -1,6 +1,6 @@
 from typing import Dict, Iterator
 
-from aws_apis.dynamodb.database import Database as DynamoDB
+from utils.dynamodb import Database as DynamoDB
 from news.malaysia.freemalaysiatoday.scraper.freemalaysiatoday_scraper import \
     FreeMalaysiaTodayScraper
 from news.utils.common import MY_TIMEZONE, get_time

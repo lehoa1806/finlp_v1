@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from time import sleep
 from typing import Generator
 
-from aws_apis.dynamodb.database import Database
+from utils.dynamodb import Database
 
 from .tracker import Tracker
 

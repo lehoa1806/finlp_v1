@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, Iterator
 
-from aws_apis.dynamodb.database import Database
+from utils.dynamodb import Database
 from news.malaysia.thestar.scraper.thestar_scraper import TheStarScraper
 from news.utils.common import MY_TIMEZONE, get_time
 from utils.url_tracker import UrlTracker

@@ -1,6 +1,6 @@
 from typing import Dict, Iterator
 
-from aws_apis.dynamodb.database import Database
+from utils.dynamodb import Database
 from utils.url_tracker import UrlTracker
 from workflow.stage import Stage
 

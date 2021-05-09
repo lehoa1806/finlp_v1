@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import Any, Dict, Optional
 
-from aws_apis.dynamodb.database import Database
+from utils.dynamodb import Database
 from scraper.common import BrowserType
 from utils.common import GLOBAL_CACHE
 from utils.decorators.function_cache import cached

@@ -3,7 +3,7 @@ import warnings
 
 from slack.web.classes.objects import TextObject
 
-from aws_apis.dynamodb.database import Database as DynamoDB
+from utils.dynamodb import Database as DynamoDB
 from slackbot.slack_bot import SlackBot
 from slackbot.slack_message import SlackMessage
 from utils.configs.setting import Setting

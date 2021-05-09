@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, Iterator
 
-from aws_apis.dynamodb.database import Database
+from utils.dynamodb import Database
 from news.malaysia.i3investor.scraper.i3investor_scraper import \
     I3investorScraper
 from news.utils.common import MY_TIMEZONE, Subscription, get_time

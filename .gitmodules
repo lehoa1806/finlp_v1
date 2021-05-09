@@ -10,3 +10,6 @@
 [submodule "scraper"]
 	path = scraper
 	url = https://github.com/lehoa1806/scraper.git
+[submodule "aws_wrappers"]
+	path = aws_wrappers
+	url = https://github.com/lehoa1806/aws_wrappers.git

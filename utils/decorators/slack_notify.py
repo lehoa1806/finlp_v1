@@ -3,7 +3,7 @@ import warnings
 
 from slack.web.classes.objects import TextObject
 
-from utils.dynamodb import Database as DynamoDB
+from utils.dynamodb import Database
 from slackbot.slack_bot import SlackBot
 from slackbot.slack_message import SlackMessage
 from utils.configs.setting import Setting
@@ -20,7 +20,7 @@ def slack_notify(func=None, *, func_type=None, func_name=None):
         return functools.partial(
             slack_notify, func_type=func_type, func_name=func_name,
         )
-    table = DynamoDB.load_database().get_tracking_table()
+    table = Database().get_tracking_table()
     slack_bot = SlackBot(Setting().devbot_token)
 
     @functools.wraps(func)

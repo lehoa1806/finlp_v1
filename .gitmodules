@@ -4,3 +4,6 @@
 [submodule "postgresql_wrapper"]
 	path = postgresql_wrapper
 	url = https://github.com/lehoa1806/postgresql_wrapper.git
+[submodule "slackbot"]
+	path = slackbot
+	url = https://github.com/lehoa1806/slackbot.git

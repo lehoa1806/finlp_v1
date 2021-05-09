@@ -19,7 +19,7 @@ class ArticlesGettingStage(Stage):
         super().__init__('The Star Getting')
         self.scraper = scraper
         self.max_pages_to_load = max_pages_to_load
-        self.page_tracker = UrlTracker(Database.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict[str, Any]]:
         for page in range(1, self.max_pages_to_load):

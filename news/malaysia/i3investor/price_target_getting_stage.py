@@ -18,7 +18,7 @@ class PriceTargetGettingStage(Stage):
     ) -> None:
         super().__init__('I3investor Price Target')
         self.scraper = scraper
-        self.page_tracker = UrlTracker(Database.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict[str, Any]]:
         for announcement in self.scraper.get_price_targets():

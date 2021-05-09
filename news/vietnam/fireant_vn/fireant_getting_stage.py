@@ -18,7 +18,7 @@ class FireAntGettingStage(Stage):
     ) -> None:
         super().__init__('FireAnt news')
         self.scraper = scraper
-        self.page_tracker = UrlTracker(Database.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict]:
         self.scraper.load_fireant_home()

@@ -18,7 +18,7 @@ class VietStockGettingStage(Stage):
     ) -> None:
         super().__init__('VietStockGettingStage news')
         self.scraper = scraper
-        self.page_tracker = UrlTracker(Database.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict]:
         self.scraper.load_vietstock_home()

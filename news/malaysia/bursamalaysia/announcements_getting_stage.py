@@ -20,7 +20,7 @@ class AnnouncementsGettingStage(Stage):
         super().__init__('BursaMalaysia Announcements')
         self.scraper = scraper
         self.max_pages_to_load = max_pages_to_load
-        self.page_tracker = UrlTracker(Database.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict]:
         for page in range(1, self.max_pages_to_load):

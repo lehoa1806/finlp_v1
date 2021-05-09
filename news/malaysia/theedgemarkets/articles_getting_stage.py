@@ -21,7 +21,7 @@ class ArticlesGettingStage(Stage):
         super().__init__()
         self.scraper = scraper
         self.max_pages_to_load = max_pages_to_load
-        self.page_tracker = UrlTracker(Database.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator:
         for page in range(self.max_pages_to_load):

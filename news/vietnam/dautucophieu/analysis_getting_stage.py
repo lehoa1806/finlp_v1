@@ -18,7 +18,7 @@ class AnalysisGettingStage(Stage):
     ) -> None:
         super().__init__('dautucophieu.net Analysis')
         self.scraper = scraper
-        self.page_tracker = UrlTracker(Database.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict]:
         self.scraper.load_phantichchungkhoan_page()

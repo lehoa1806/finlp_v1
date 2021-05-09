@@ -7,7 +7,7 @@ from utils.common import GLOBAL_CACHE
 from utils.decorators.function_cache import cached
 from utils.decorators.functools import cached_property
 
-CONFIG_TABLE = Database.load_database().load_configuration_table()
+CONFIG_TABLE = Database().load_configuration_table()
 
 
 @cached(memcached=GLOBAL_CACHE, expire=900, func_name='ConfigDB.get_config')

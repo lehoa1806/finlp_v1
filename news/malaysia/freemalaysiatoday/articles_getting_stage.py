@@ -1,6 +1,6 @@
 from typing import Dict, Iterator
 
-from utils.dynamodb import Database as DynamoDB
+from utils.dynamodb import Database
 from news.malaysia.freemalaysiatoday.scraper.freemalaysiatoday_scraper import \
     FreeMalaysiaTodayScraper
 from news.utils.common import MY_TIMEZONE, get_time
@@ -18,7 +18,7 @@ class ArticlesGettingStage(Stage):
     ) -> None:
         super().__init__()
         self.scraper = scraper
-        self.page_tracker = UrlTracker(DynamoDB.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict]:
         start_time = item['start_time']

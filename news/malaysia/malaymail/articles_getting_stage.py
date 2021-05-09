@@ -17,7 +17,7 @@ class ArticlesGettingStage(Stage):
     ) -> None:
         super().__init__('MalayMail Getting')
         self.scraper = scraper
-        self.page_tracker = UrlTracker(Database.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict[str, Any]]:
         end_time = item['end_time']

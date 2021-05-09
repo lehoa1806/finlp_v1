@@ -16,7 +16,7 @@ class StockIdGettingStage(Stage):
     ) -> None:
         super().__init__('StockIdGettingStage news')
         self.scraper = scraper
-        self.page_tracker = UrlTracker(Database.load_database())
+        self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict]:
         urls = [

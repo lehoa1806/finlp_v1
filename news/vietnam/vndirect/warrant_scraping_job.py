@@ -38,7 +38,7 @@ class WarrantScraperJob(Job):
     def pipeline(self) -> Pipeline:
         return Pipeline(
             stage=WarrantGettingStage(
-                scraper=VnDirectScraper(headless=self.args.headless, timeout=15),
+                scraper=VnDirectScraper(headless=self.args.headless, timeout=60),
             )
         )
 

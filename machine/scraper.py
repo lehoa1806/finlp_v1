@@ -12,6 +12,8 @@ class Scraper(WebScraper):
         browser: WebDriver = None,
         **kwargs,
     ) -> None:
-        headless = kwargs.get('headless') or Setting().headless
         timeout = kwargs.get('timeout') or Setting().scraper_timeout
+        headless = kwargs.get('headless')
+        if headless is None:
+            headless = Setting().headless
         super().__init__(browser=browser, headless=headless, timeout=timeout)

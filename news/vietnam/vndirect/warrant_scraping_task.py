@@ -31,7 +31,7 @@ class WarrantScraperTask(Task):
             stage=WarrantSchedulingStage()
         ).add_stage(
             stage=WarrantGettingStage(
-                scraper=VnDirectScraper(headless=False, timeout=15),
+                scraper=VnDirectScraper(headless=self.headless, timeout=60),
             )
         )
 

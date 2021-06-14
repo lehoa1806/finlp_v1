@@ -1,6 +1,6 @@
 ---
 
-{% set envs = salt['cmd.shell']('aws dynamodb get-item --table-name notes --key '{"key":{"S":"api_environment"}}' | python3 -c "import json, sys; print(json.load(sys.stdin)[\'Item\'][\'data\'][\'M\'])"')|load_json() %}  # noqa: 204
+{% set envs = salt['cmd.shell']('aws dynamodb get-item --table-name notes --key \'{"key":{"S":"api_environment"}}\' | python3 -c "import json, sys; print(json.load(sys.stdin)[\'Item\'][\'data\'][\'M\'])"')|load_json() %}  # noqa: 204
 
 Ensure {{ pillar.warrant_dashboard_get_lambda_name }} lambda exists:
   boto_lambda.function_present:

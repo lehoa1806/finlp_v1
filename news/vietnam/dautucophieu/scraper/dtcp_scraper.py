@@ -19,8 +19,11 @@ class DauTuCoPhieuScraper(Scraper):
                 title = url_title_el.text.strip()
                 description_el = row.find_element_by_css_selector('div > p')
                 description = description_el.text.strip()
-                company_el = row.find_element_by_css_selector('div > a')
-                company = company_el.text.strip()
+                try:
+                    company_el = row.find_element_by_css_selector('div > a')
+                    company = company_el.text.strip()
+                except NoSuchElementException:
+                    company = ''
                 date_el = row.find_elements_by_css_selector(
                     'div > div > time')[0]
                 date = date_el.text.strip()

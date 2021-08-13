@@ -98,7 +98,7 @@ class VnDirectScraper(Scraper):
                     )
                 except (NoSuchElementException, TimeoutException, ValueError):
                     foreign_buy = 0
-                if price and share_price:
+                if price and share_price and exercise_price:
                     yield {
                         'datetime': timestamp,
                         'warrant': name,

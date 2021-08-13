@@ -76,11 +76,14 @@ class VnDirectScraper(Scraper):
                     )
                 except (NoSuchElementException, TimeoutException, ValueError):
                     share_price = ''
-                exercise_price = self.str2int(
-                    warrant.find_element_by_css_selector(
-                        css_selector='td:nth-child(25) > span'
-                    ).text
-                )
+                try:
+                    exercise_price = self.str2int(
+                        warrant.find_element_by_css_selector(
+                            css_selector='td:nth-child(25) > span'
+                        ).text
+                    )
+                except (NoSuchElementException, TimeoutException, ValueError):
+                    exercise_price = 0
                 ratio_texts = warrant.find_element_by_css_selector(
                     css_selector='td:nth-child(26) > span'
                 ).text.split(':')

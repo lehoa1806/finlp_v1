@@ -92,7 +92,7 @@ class VnDirectScraper(Scraper):
                         float(ratio_texts[0])/float(ratio_texts[1])
                     )[:6]
                 except (NoSuchElementException, TimeoutException, ValueError):
-                    exercise_price = 0
+                    exercise_ratio = 0
                 try:
                     foreign_buy = self.str2int(
                         warrant.find_element_by_css_selector(

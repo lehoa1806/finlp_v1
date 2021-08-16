@@ -11,7 +11,7 @@ from scraper.elements.button import Button
 
 
 class TTCKScraper(Scraper):
-    def load_fireant_home(self):
+    def load_tnck_home(self):
         url = 'https://tinnhanhchungkhoan.vn/chung-khoan/'
         self.load_url(url)
 
@@ -33,16 +33,16 @@ class TTCKScraper(Scraper):
     def get_highlight(self):
         try:
             article = self.find_element_by_css_selector(
-                'body > div.wrapper.category-page > div > div > div > '
-                'div > div.main-column > div.category-highlight > div > '
-                'div > article > h2 > a'
+                'body > div.wrapper.category-page > div > div.container > '
+                'div > div > div.main-column > div.category-highlight > div > '
+                'div.rank-1 > article > h2 > a'
             )
             url = article.get_attribute('href')
             title = article.text.strip()
             time = self.find_element_by_css_selector(
-                'body > div.wrapper.category-page > div > div > div > div '
-                '> div.main-column > div.category-highlight > div > div > '
-                'article > div > time'
+                'body > div.wrapper.category-page > div > div.container > '
+                'div > div > div.main-column > div.category-highlight > '
+                'div > div.rank-1 > article > div.story__meta > time'
             ).text.strip()
             timestamp = self.get_time(time)
             yield {
@@ -56,7 +56,7 @@ class TTCKScraper(Scraper):
     def get_rank2_articles(self):
         try:
             articles = self.find_elements_by_css_selector(
-                'body > div.wrapper.category-page > div > div > '
+                'body > div.wrapper.category-page > div > div.container > '
                 'div > div > div.main-column > div.category-highlight > '
                 'div > div.rank-2 > article'
             )
@@ -88,7 +88,7 @@ class TTCKScraper(Scraper):
                 pass
         try:
             for article in self.find_elements_by_css_selector(
-                'body > div.wrapper.category-page > div > div > '
+                'body > div.wrapper.category-page > div > div.container > '
                 'div > div > div.main-column > div.category-timeline > '
                 'div.box-content > article'
             ):

@@ -21,7 +21,7 @@ class TNCKGettingStage(Stage):
         self.page_tracker = UrlTracker(Database())
 
     def process(self, item: Dict) -> Iterator[Dict]:
-        self.scraper.load_fireant_home()
+        self.scraper.load_tnck_home()
         for articles in [
             self.scraper.get_highlight(),
             self.scraper.get_rank2_articles(),

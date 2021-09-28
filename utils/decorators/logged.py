@@ -29,7 +29,7 @@ def logged(
     def wrapper_logged(*args, **kwargs):
         f_name = func_name or func.__qualname__
         if level == logging.DEBUG and not message:
-            logger.log(level, f'Leave: {f_name}')
+            logger.log(level, f'Enter: {f_name}')
         else:
             logger.log(level, message)
         value = func(*args, **kwargs)

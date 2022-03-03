@@ -136,7 +136,7 @@ class Worker:
         '''
 
         # self.scrape_vn30_warrants()
-
+        '''
         slack_notify(
             I3investorPriceTargetTask.process_task,
             func_type='task',
@@ -148,8 +148,8 @@ class Worker:
             headless=self.args.headless
         )
         sleep(5)
-
-        self.scrape_vn30_warrants()
+        '''
+        #self.scrape_vn30_warrants()
 
         slack_notify(
             MalayMailScrapingTask.process_task,
